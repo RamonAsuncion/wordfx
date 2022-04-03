@@ -14,7 +14,7 @@ getting a minor in Mathematics and Computer Science.
 Alvin Huynh is currently a Junior majoring in Computer Engineering\
 at Bucknell University. Alvin is getting a minor in Management.
 
-Ramon Assuncion is Freshman that is currently undeclared at Bucknel University. 
+Ramon Asuncion is currently a Freshman that is undeclared at Bucknel University. 
 
 Olivia Peters...
 
