@@ -5,12 +5,12 @@
  *
  * Name: Pedro Carneiro Passos
  * Section: 02 - 11AM
- * Date: 4/3/22
- * Time: 4:54 PM
+ * Date: 4/6/22
+ * Time: 11:38 AM
  *
  * Project: csci205_final_project
  * Package: main
- * Class: Main
+ * Class: WordleView
  *
  * Description:
  *
@@ -18,8 +18,5 @@
  */
 package main;
 
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, Java!");
-    }
+public class WordleView {
 }
