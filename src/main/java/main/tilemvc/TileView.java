@@ -22,10 +22,14 @@ package main.tilemvc;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.concurrent.Flow;
 
 public class TileView {
 
@@ -37,6 +41,12 @@ public class TileView {
 
     /** Individual tile to be added to our root */
     private Rectangle rect;
+
+    /** Play again button */
+    private Button playAgainBtn;
+
+    /** List of topPanes */
+    private ArrayList<Rectangle> rectList;
 
     /**
      * @return the root node for our scene graph
@@ -58,6 +68,8 @@ public class TileView {
         root.setSpacing(10);
         root.setPadding(new Insets(50, 50, 50, 50));
 
+        playAgainBtn = new Button("Play Again!");
+
         // Loop through 6 rows and 5 columns
         for (int i = 0; i < 6; ++i) {
 
@@ -65,7 +77,7 @@ public class TileView {
 
                 // Create new tile and add to top pane
                 rect = new Rectangle(60, 60);
-                rect.getStyleClass().add("input-box");
+                rect.getStyleClass().add("tile");
                 topPane.getChildren().add(rect);
 
             }
@@ -77,6 +89,7 @@ public class TileView {
             topPane.setAlignment(Pos.CENTER);
         }
 
+        root.getChildren().add(playAgainBtn);
         root.setAlignment(Pos.TOP_CENTER);
 
     }

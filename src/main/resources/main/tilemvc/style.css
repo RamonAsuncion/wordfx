@@ -1,29 +1,30 @@
-.input-box {
+.root {
+    -background-color: white;
+    -letter-color: white;
+    -black: #121213;
+    -wrong: #3a3a3c;
+    -misplaced: #b59f3b;
+    -exact: #538d4e;
+}
+
+.tile {
     -fx-fill: white;
     -fx-stroke: #d0d0d0;
-    -fx-stroke-width: 4px;
+    -fx-stroke-width: 2px;
     -fx-pref-tile-width: 60px;
     -fx-pref-tile-height: 60px;
     -fx-font-family: Arial, Helvetica, sans-serif;
     -fx-font-size: 2.4;
 }
 
-.input-box.wrong {
-    -fx-background-color: #3a3a3c;
+.tile.wrong {
+    -fx-fill: -wrong;
 }
 
-.input-box.misplaced {
-    -fx-background-color: #b59f3b;
+.tile.misplaced {
+    -fx-fill: -misplaced;
 }
 
-.input-box.correct {
-    -fx-background-color: #538d4e;
+.tile.exact {
+    -fx-fill: -exact;
 }
-
-/*:root {*/
-/*    --black: #121213;*/
-/*    --wrong: #3a3a3c;*/
-/*    --misplaced: #b59f3b;*/
-/*    --exact: #538d4e;*/
-/*}*/
-
