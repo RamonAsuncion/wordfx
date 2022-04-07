@@ -16,6 +16,7 @@ public class TileMain extends Application {
     public void init() throws Exception {
         super.init();
         this.theView = new TileView();
+
     }
 
     @Override

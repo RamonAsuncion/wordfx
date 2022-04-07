@@ -30,7 +30,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Flow;
 
 public class TileView {
@@ -53,12 +55,17 @@ public class TileView {
     /** List of topPanes */
     private ArrayList<Rectangle> rectList;
 
+    /**  */
+    private OnScreenKeyboard osk;
+
+
     /**
      * @return the root node for our scene graph
      */
     public VBox getRoot() { return root; }
 
     public TileView() {
+        this.osk = new OnScreenKeyboard();
         initSceneGraph();
     }
 
@@ -69,7 +76,7 @@ public class TileView {
 
         // Set up the root for our scene graph
         root = new VBox();
-        root.setId("tileRoot");
+        root.setId("root");
 
         title = new Label("Wordle");
         title.getStyleClass().add("title");
@@ -80,6 +87,48 @@ public class TileView {
         createTilePane();
 
         root.getChildren().add(playAgainBtn);
+
+        createVirtualKeyboard();
+
+    }
+
+    /**
+     * Creates the virtual keyboard by going through every single
+     * key on the keyboard. Each key is a button.
+     */
+    private void createVirtualKeyboard() {
+        ArrayList<Character> topKeyboard = new ArrayList<>(
+                Arrays.asList('Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P')
+        );
+        ArrayList<Character> midKeyboard = new ArrayList<>(
+                Arrays.asList('A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L')
+        );
+        ArrayList<Character> bottomKeyboard = new ArrayList<>(
+                Arrays.asList('Z', 'X', 'C', 'V', 'B', 'N', 'M')
+        );
+
+        topPane = new HBox();
+        topPane.setId("topPane");
+        for (int i = 0; i < topKeyboard.size(); i++) {
+            topPane.getChildren().add(this.osk.createKey(topKeyboard.get(i)));
+        }
+        root.getChildren().add(topPane);
+
+        topPane = new HBox();
+        topPane.setId("topPane");
+        for (int i = 0; i < midKeyboard.size(); i++) {
+            topPane.getChildren().add(this.osk.createKey(midKeyboard.get(i)));
+        }
+        root.getChildren().add(topPane);
+
+        topPane = new HBox();
+        topPane.setId("topPane");
+        topPane.getChildren().add(this.osk.createEnterKey("Enter"));
+        for (int i = 0; i < bottomKeyboard.size(); i++) {
+            topPane.getChildren().add(this.osk.createKey(bottomKeyboard.get(i)));
+        }
+        topPane.getChildren().add(this.osk.createDeleteKey("Delete"));
+        root.getChildren().add(topPane);
     }
 
     /**
