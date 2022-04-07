@@ -86,7 +86,7 @@ public class TileView {
 
         createTilePane();
 
-        root.getChildren().add(playAgainBtn);
+        //root.getChildren().add(playAgainBtn);
 
         createVirtualKeyboard();
 
@@ -123,11 +123,11 @@ public class TileView {
 
         topPane = new HBox();
         topPane.setId("topPane");
-        topPane.getChildren().add(this.osk.createEnterKey("Enter"));
+        topPane.getChildren().add(this.osk.createEnterKey("ENTER"));
         for (int i = 0; i < bottomKeyboard.size(); i++) {
             topPane.getChildren().add(this.osk.createKey(bottomKeyboard.get(i)));
         }
-        topPane.getChildren().add(this.osk.createDeleteKey("Delete"));
+        topPane.getChildren().add(this.osk.createDeleteKey("DELETE"));
         root.getChildren().add(topPane);
     }
 

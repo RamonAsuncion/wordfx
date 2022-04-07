@@ -58,7 +58,7 @@
 .keyboard-letter {
     -fx-background-color: lightgrey;
     -fx-text-fill: black;
-    -fx-font-size: 30px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-padding: 0,0,0,0;
     -fx-pref-width: 44;
@@ -66,23 +66,26 @@
 }
 
 .keyboard-letter.enter {
-    -fx-font-size: 20px;
+    -fx-font-size: 15px;
     -fx-pref-width: 55;
 }
 
 .keyboard-letter.delete {
-    -fx-font-size: 20px;
+    -fx-font-size: 15px;
     -fx-pref-width: 63;
 }
 
 .keyboard-letter.exact {
     -fx-background-color: -exact;
+    -fx-text-fill: white;
 }
 
 .keyboard-letter.misplaced {
     -fx-background-color: -misplaced;
+    -fx-text-fill: white;
 }
 
 .keyboard-letter.wrong {
     -fx-background-color: -wrong;
+    -fx-text-fill: white;
 }
