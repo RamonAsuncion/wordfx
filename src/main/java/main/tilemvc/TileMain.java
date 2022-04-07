@@ -30,7 +30,7 @@ public class TileMain extends Application {
         primaryStage.setScene(scene);
 
         // Set the title for the main window
-        primaryStage.setTitle("Wordle Game");
+        primaryStage.setTitle("Wordle");
 
         // Display the scene
         primaryStage.show();

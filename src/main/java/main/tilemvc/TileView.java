@@ -23,6 +23,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -45,6 +47,9 @@ public class TileView {
     /** Play again button */
     private Button playAgainBtn;
 
+    /** "Wordle" title */
+    private Label title;
+
     /** List of topPanes */
     private ArrayList<Rectangle> rectList;
 
@@ -60,16 +65,28 @@ public class TileView {
     private void initSceneGraph() {
         // Set up the topPane node for our scene graph
         topPane = new HBox();
-        topPane.setSpacing(10);
-        topPane.setAlignment(Pos.CENTER);
+        topPane.setId("topPane");
 
         // Set up the root for our scene graph
         root = new VBox();
-        root.setSpacing(10);
-        root.setPadding(new Insets(50, 50, 50, 50));
+        root.setId("tileRoot");
+
+        title = new Label("Wordle");
+        title.getStyleClass().add("title");
+        root.getChildren().addAll(title, new Separator());
 
         playAgainBtn = new Button("Play Again!");
 
+        createTilePane();
+
+        root.getChildren().add(playAgainBtn);
+    }
+
+    /**
+     * Creates the pane made up of the 30 tiles, meaning 6 guesses of 5-letter
+     * words. Tiles (rectangles) are styled using css.
+     */
+    private void createTilePane() {
         // Loop through 6 rows and 5 columns
         for (int i = 0; i < 6; ++i) {
 
@@ -85,12 +102,7 @@ public class TileView {
 
             // Create new top pane, meaning new guess on a new horizontal box
             topPane = new HBox();
-            topPane.setSpacing(10);
-            topPane.setAlignment(Pos.CENTER);
+            topPane.setId("topPane");
         }
-
-        root.getChildren().add(playAgainBtn);
-        root.setAlignment(Pos.TOP_CENTER);
-
     }
 }
