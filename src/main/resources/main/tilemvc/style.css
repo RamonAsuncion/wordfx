@@ -74,3 +74,15 @@
     -fx-font-size: 20px;
     -fx-pref-width: 63;
 }
+
+.keyboard-letter.exact {
+    -fx-background-color: -exact;
+}
+
+.keyboard-letter.misplaced {
+    -fx-background-color: -misplaced;
+}
+
+.keyboard-letter.wrong {
+    -fx-background-color: -wrong;
+}
