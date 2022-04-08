@@ -20,8 +20,6 @@ package main.tilemvc;
 
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -30,10 +28,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.Flow;
 
 public class TileView {
 
@@ -78,9 +74,15 @@ public class TileView {
         root = new VBox();
         root.setId("root");
 
+        // TODO: Temporary for testing
+        createSetting();
+
         title = new Label("WORDLE");
         title.setId("titleLabel");
         root.getChildren().addAll(title, new Separator());
+
+
+
 
         playAgainBtn = new Button("Play Again!");
 
@@ -89,7 +91,6 @@ public class TileView {
         //root.getChildren().add(playAgainBtn);
 
         createVirtualKeyboard();
-
     }
 
     /**
@@ -109,23 +110,23 @@ public class TileView {
 
         topPane = new HBox();
         topPane.setId("topPane");
-        for (int i = 0; i < topKeyboard.size(); i++) {
-            topPane.getChildren().add(this.osk.createKey(topKeyboard.get(i)));
+        for (Character character : topKeyboard) {
+            topPane.getChildren().add(this.osk.createKey(character));
         }
         root.getChildren().add(topPane);
 
         topPane = new HBox();
         topPane.setId("topPane");
-        for (int i = 0; i < midKeyboard.size(); i++) {
-            topPane.getChildren().add(this.osk.createKey(midKeyboard.get(i)));
+        for (Character value : midKeyboard) {
+            topPane.getChildren().add(this.osk.createKey(value));
         }
         root.getChildren().add(topPane);
 
         topPane = new HBox();
         topPane.setId("topPane");
         topPane.getChildren().add(this.osk.createEnterKey("ENTER"));
-        for (int i = 0; i < bottomKeyboard.size(); i++) {
-            topPane.getChildren().add(this.osk.createKey(bottomKeyboard.get(i)));
+        for (Character character : bottomKeyboard) {
+            topPane.getChildren().add(this.osk.createKey(character));
         }
         topPane.getChildren().add(this.osk.createDeleteKey());
         root.getChildren().add(topPane);
@@ -153,5 +154,43 @@ public class TileView {
             topPane = new HBox();
             topPane.setId("topPane");
         }
+    }
+
+    private void createSetting() {
+        // I'm an idiot I'm adding them to a vertical box that's why they don't align.
+
+
+        // TODO: Creating a setting button
+        Button setting = new Button();
+
+        // TODO: Change the size
+        setting.setPrefWidth(45);
+
+        // TODO: Move the button to the top right. (not best way to do it?)
+
+
+        // TODO: Create a menu that overlaps the whole game (StackPane)?
+        setting.setOnAction(event -> {
+            System.out.println("Button clicked!");
+        });
+
+        // TODO: Create an X to exit out of the menu
+
+        // TODO: Create an option of 'Dark Mode' and 'Light Mode'
+
+        setting.getStyleClass().add("setting-button");
+
+
+        // TODO: This needs proper encapsulation (this is so I can see how full tool bar looks)
+        Button histogram = new Button();
+        Button questionMark = new Button();
+
+        histogram.getStyleClass().add("histogram-button");
+        questionMark.getStyleClass().add("question-mark-button");
+
+        histogram.setPrefWidth(45);
+        questionMark.setPrefWidth(45);
+
+        root.getChildren().addAll(setting, histogram, questionMark);
     }
 }
