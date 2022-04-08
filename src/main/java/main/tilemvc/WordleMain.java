@@ -2,31 +2,37 @@ package main.tilemvc;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class TileMain extends Application {
+public class WordleMain extends Application {
 
-    private TileView theView;
+    /** The view of our Wordle game */
+    private WordleView theView;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    /* The onscreen keyboard */
+    private VirtualKeyboard keyboardView;
+
+    private VirtualKeyboardController keyboardController;
+
+    public static void main(String[] args) { launch(args); }
 
     @Override
     public void init() throws Exception {
         super.init();
-        this.theView = new TileView();
-
+        this.theView = new WordleView();
+        this.keyboardView = new VirtualKeyboard();
     }
 
     @Override
     public void start(Stage primaryStage) {
+
         // Create new scene and use css resources from style.css
-        Scene scene = new Scene(theView.getRoot());
+        Scene scene = new Scene(this.theView.getRoot());
         scene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
+
+        keyboardController = new VirtualKeyboardController(this.keyboardView);
 
         // Add the scene graph to the stage
         primaryStage.setScene(scene);

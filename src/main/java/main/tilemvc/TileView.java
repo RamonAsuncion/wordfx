@@ -82,8 +82,6 @@ public class TileView {
         root.getChildren().addAll(title, new Separator());
 
 
-
-
         playAgainBtn = new Button("Play Again!");
 
         createTilePane();
@@ -146,7 +144,6 @@ public class TileView {
                 rect = new Rectangle(57, 57);
                 rect.setId("tile");
                 topPane.getChildren().add(rect);
-
             }
             root.getChildren().add(topPane);
 
@@ -157,9 +154,6 @@ public class TileView {
     }
 
     private void createSetting() {
-        // I'm an idiot I'm adding them to a vertical box that's why they don't align.
-
-
         // TODO: Creating a setting button
         Button setting = new Button();
 
