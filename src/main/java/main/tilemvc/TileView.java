@@ -78,8 +78,8 @@ public class TileView {
         root = new VBox();
         root.setId("root");
 
-        title = new Label("Wordle");
-        title.getStyleClass().add("title");
+        title = new Label("WORDLE");
+        title.setId("titleLabel");
         root.getChildren().addAll(title, new Separator());
 
         playAgainBtn = new Button("Play Again!");
@@ -127,7 +127,7 @@ public class TileView {
         for (int i = 0; i < bottomKeyboard.size(); i++) {
             topPane.getChildren().add(this.osk.createKey(bottomKeyboard.get(i)));
         }
-        topPane.getChildren().add(this.osk.createDeleteKey("DELETE"));
+        topPane.getChildren().add(this.osk.createDeleteKey());
         root.getChildren().add(topPane);
     }
 
@@ -142,8 +142,8 @@ public class TileView {
             for (int j = 0; j < 5; ++j) {
 
                 // Create new tile and add to top pane
-                rect = new Rectangle(60, 60);
-                rect.getStyleClass().add("tile");
+                rect = new Rectangle(57, 57);
+                rect.setId("tile");
                 topPane.getChildren().add(rect);
 
             }

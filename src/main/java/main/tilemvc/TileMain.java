@@ -2,6 +2,7 @@ package main.tilemvc;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class TileMain extends Application {

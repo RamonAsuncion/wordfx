@@ -1,14 +1,15 @@
 .root {
     -background-color: white;
     -letter-color: white;
-    -black: #121213;
-    -wrong: #3a3a3c;
+    -wrong: #787c7e;
     -misplaced: #b59f3b;
     -exact: #538d4e;
+    -key-default: #d3d6da;
+    -fx-font-family: 'Clean Sans', 'Helvetica Neue', Arial, sans-serif
 }
 
 .scene {
-    -fx-background-color: -background-color;
+    -fx-background-color: white;
 }
 
 #topPane {
@@ -25,54 +26,51 @@
     -fx-alignment: center;
 }
 
-.title {
-    -fx-font-family: 'Helvetica';
+#titleLabel {
+    -fx-font-family: Arial;
     -fx-font-size: 37px;
     -fx-font-weight: 700;
-    -fx-text-fill: -black;
+    -fx-text-fill: black;
     -fx-alignment: top-center;
 }
 
-.tile {
+#tile {
     -fx-fill: white;
     -fx-stroke: #d0d0d0;
     -fx-stroke-width: 2px;
-    -fx-pref-tile-width: 60px;
-    -fx-pref-tile-height: 60px;
-    -fx-font-family: Arial, Helvetica, sans-serif;
-    -fx-font-size: 2.4;
 }
 
-.tile.wrong {
+#tileWrong {
     -fx-fill: -wrong;
 }
 
-.tile.misplaced {
+#tileMisplaced {
     -fx-fill: -misplaced;
 }
 
-.tile.exact {
+#tileExact {
     -fx-fill: -exact;
 }
 
 .keyboard-letter {
-    -fx-background-color: lightgrey;
+    -fx-font-family: 'Arial';
+    -fx-background-color: #d3d6da;
     -fx-text-fill: black;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-padding: 0,0,0,0;
-    -fx-pref-width: 44;
-    -fx-pref-height: 58;
+    -fx-pref-width: 40;
+    -fx-pref-height: 55;
 }
 
 .keyboard-letter.enter {
-    -fx-font-size: 15px;
-    -fx-pref-width: 55;
+    -fx-font-size: 13px;
+    -fx-pref-width: 60;
 }
 
 .keyboard-letter.delete {
-    -fx-font-size: 15px;
-    -fx-pref-width: 63;
+    -fx-graphic: url("https://img.icons8.com/material-outlined/50/000000/clear-symbol--v1.png");
+    -fx-pref-width: 65;
 }
 
 .keyboard-letter.exact {

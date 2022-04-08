@@ -42,10 +42,10 @@ public class OnScreenKeyboard {
         return enterKey;
     }
 
-    public Button createDeleteKey(String delete) {
-        Button enterKey = new Button(delete);
-        enterKey.getStyleClass().add("keyboard-letter");
-        enterKey.getStyleClass().add("delete");
-        return enterKey;
+    public Button createDeleteKey() {
+        Button delKey = new Button();
+        delKey.getStyleClass().add("keyboard-letter");
+        delKey.getStyleClass().add("delete");
+        return delKey;
     }
 }
