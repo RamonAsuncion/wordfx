@@ -18,6 +18,7 @@
  */
 package main.tilemvc;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
@@ -33,6 +34,15 @@ public class Header {
 
     /** The word "Wordle" */
     private Label title;
+
+    /** Histogram icon button */
+    private Button histogram;
+
+    /** Setting icon button */
+    private Button setting;
+
+    /** Question mark icon button */
+    private Button questionMark;
 
     /**
      * @return the headerSection including title and separator
@@ -57,6 +67,66 @@ public class Header {
      * Creates the header section
      */
     public void createHeader() {
-        this.headerSection.getChildren().addAll(this.title, new Separator());
+        // Create all the button in the header.
+        this.createSettingButton();
+        this.createHistogramButton();
+        this.createQuestionMarkButton();
+
+        this.headerSection.getChildren().addAll(this.setting, this.histogram,
+                this.questionMark, this.title, new Separator());
+    }
+
+    private void createSettingButton() {
+        setting = new Button();
+
+        // TODO: Change the size
+        setting.setPrefWidth(45);
+
+        // TODO: Move the button to the top right. (not best way to do it?)
+        setting.setTranslateX(0);
+        setting.setTranslateY(0);
+
+        // TODO: Create a menu that overlaps the whole game (StackPane)?
+        setting.setOnAction(event -> {
+            System.out.println("Button clicked!");
+        });
+
+        // TODO: Create an X to exit out of the menu
+
+        // TODO: Create an option of 'Dark Mode' and 'Light Mode'
+
+        setting.getStyleClass().add("setting-button");
+    }
+
+    /**
+     * Create a histogram button to show the user their statistics.
+     */
+    private void createHistogramButton() {
+        // Initialize a new button
+        histogram = new Button();
+        histogram.getStyleClass().add("histogram-button");
+
+        // The width of button
+        histogram.setPrefWidth(45);
+
+        // Location of button
+        setting.setTranslateX(0);
+        setting.setTranslateY(0);
+    }
+
+    /**
+     * Create a question mark button to show the user the help menu.
+     */
+    private void createQuestionMarkButton() {
+        // Initialize a new button
+        questionMark = new Button();
+        questionMark.getStyleClass().add("question-mark-button");
+
+        // The width of button
+        questionMark.setPrefWidth(45);
+
+        // Location of button
+        setting.setTranslateX(0);
+        setting.setTranslateY(0);
     }
 }

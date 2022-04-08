@@ -31,6 +31,7 @@
     -fx-font-weight: 700;
     -fx-text-fill: black;
     -fx-alignment: center;
+    -fx-background-color: yellow; /* FIXME: debug, remove this line of code */
 }
 
 #header {

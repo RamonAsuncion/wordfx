@@ -74,9 +74,6 @@ public class TileView {
         root = new VBox();
         root.setId("root");
 
-        // TODO: Temporary for testing
-        createSetting();
-
         title = new Label("WORDLE");
         title.setId("titleLabel");
         root.getChildren().addAll(title, new Separator());
@@ -151,40 +148,5 @@ public class TileView {
             topPane = new HBox();
             topPane.setId("topPane");
         }
-    }
-
-    private void createSetting() {
-        // TODO: Creating a setting button
-        Button setting = new Button();
-
-        // TODO: Change the size
-        setting.setPrefWidth(45);
-
-        // TODO: Move the button to the top right. (not best way to do it?)
-
-
-        // TODO: Create a menu that overlaps the whole game (StackPane)?
-        setting.setOnAction(event -> {
-            System.out.println("Button clicked!");
-        });
-
-        // TODO: Create an X to exit out of the menu
-
-        // TODO: Create an option of 'Dark Mode' and 'Light Mode'
-
-        setting.getStyleClass().add("setting-button");
-
-
-        // TODO: This needs proper encapsulation (this is so I can see how full tool bar looks)
-        Button histogram = new Button();
-        Button questionMark = new Button();
-
-        histogram.getStyleClass().add("histogram-button");
-        questionMark.getStyleClass().add("question-mark-button");
-
-        histogram.setPrefWidth(45);
-        questionMark.setPrefWidth(45);
-
-        root.getChildren().addAll(setting, histogram, questionMark);
     }
 }

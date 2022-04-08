@@ -26,9 +26,6 @@ import java.util.Arrays;
 public class OnScreenKeyboard {
 
 
-    public OnScreenKeyboard() {
-    }
-
     public Button createKey(Character letter) {
         Button key = new Button(letter.toString());
         key.getStyleClass().add("keyboard-letter");
