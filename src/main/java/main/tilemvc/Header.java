@@ -58,10 +58,8 @@ public class Header {
      * respective css id's
      */
     public Header() {
-        // TODO: Make a borderpane (since I can organize by left, right, center...etc) as root 
-        //  and the buttons as containers
-
         // Initialize the title
+        // FIXME: the title being not centered is driving me nuts.
         this.title = new Label("Wordle");
         this.title.setId("titleLabel");
 
@@ -84,26 +82,29 @@ public class Header {
         this.createQuestionMarkButton();
 
         // Add items to the header.
+        this.headerSection.setLeft(this.questionMark);
         this.headerSection.setCenter(this.title);
         this.headerSection.setBottom(new Separator());
-        this.headerSection.setLeft(this.questionMark);
 
         // Add multiple items to the right side of the header.
         this.rightHeaderSection.getChildren().addAll(this.histogram, this.setting);
         this.headerSection.setRight(this.rightHeaderSection);
     }
 
+    /**
+     * Create a setting button to show the user the game options.
+     */
     private void createSettingButton() {
+        // Initialize a new button
         setting = new Button();
 
-        // TODO: Change the size
+        // Add styling to the button
+        setting.getStyleClass().add("setting-button");
+
+        // The width of button FIXME: Unsure if this actually does something...
         setting.setPrefWidth(45);
 
-        // TODO: Move the button to the top right. (not best way to do it?)
-        setting.setTranslateX(0);
-        setting.setTranslateY(0);
-
-        // TODO: Create a menu that overlaps the whole game (StackPane)?
+        // TODO: Open a new scene on-top of the existing one... StackPane?
         setting.setOnAction(event -> {
             System.out.println("Settings - Button clicked!");
         });
@@ -112,7 +113,6 @@ public class Header {
 
         // TODO: Create an option of 'Dark Mode' and 'Light Mode'
 
-        setting.getStyleClass().add("setting-button");
     }
 
     /**
@@ -121,14 +121,12 @@ public class Header {
     private void createHistogramButton() {
         // Initialize a new button
         histogram = new Button();
+
+        // Add styling to the button
         histogram.getStyleClass().add("histogram-button");
 
         // The width of button
         histogram.setPrefWidth(45);
-
-        // Location of button
-        setting.setTranslateX(0);
-        setting.setTranslateY(0);
     }
 
     /**
@@ -137,13 +135,11 @@ public class Header {
     private void createQuestionMarkButton() {
         // Initialize a new button
         questionMark = new Button();
+
+        // Add styling to the button
         questionMark.getStyleClass().add("question-mark-button");
 
         // The width of button
         questionMark.setPrefWidth(45);
-
-        // Location of button
-        setting.setTranslateX(0);
-        setting.setTranslateY(0);
     }
 }
