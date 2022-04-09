@@ -31,11 +31,11 @@
     -fx-font-weight: 700;
     -fx-text-fill: black;
     -fx-alignment: center;
-    -fx-background-color: yellow; /* FIXME: debug, remove this line of code */
 }
 
 #header {
     -fx-alignment: center;
+    -fx-padding: 5, 5, 5, 5;
 }
 
 #tile {
@@ -110,18 +110,15 @@
 
 .setting-button {
     -fx-graphic: url("https://i.ibb.co/c6zvk3p/setting-2.png");
-    /*-fx-background-color: transparent;*/
-    -fx-background-color: yellow; /* FIXME: debug, remove this line of code */
+    -fx-background-color: transparent;
 }
 
 .histogram-button {
     -fx-graphic: url("https://i.ibb.co/Lxgt1gN/histrogram.png");
-    /*-fx-background-color: transparent;*/
-    -fx-background-color: yellow; /* FIXME: debug, remove this line of code */
+    -fx-background-color: transparent;
 }
 
 .question-mark-button {
     -fx-graphic: url("https://i.ibb.co/NnLxTfy/question-mark.png");
-    /*-fx-background-color: transparent;*/
-    -fx-background-color: yellow; /* FIXME: debug, remove this line of code */
+    -fx-background-color: transparent;
 }

@@ -122,15 +122,15 @@ public class VirtualKeyboard {
         );
 
         // Create top row of virtual keyboard
-        for (int i = 0; i < topKeyboard.size(); i++) {
-            topPane.getChildren().add(createKey(topKeyboard.get(i)));
+        for (Character value : topKeyboard) {
+            topPane.getChildren().add(createKey(value));
         }
         keyboard.getChildren().add(topPane);
 
         // Create middle row of virtual keyboard
         newTopPane();
-        for (int i = 0; i < midKeyboard.size(); i++) {
-            topPane.getChildren().add(createKey(midKeyboard.get(i)));
+        for (Character character : midKeyboard) {
+            topPane.getChildren().add(createKey(character));
         }
         keyboard.getChildren().add(topPane);
 
@@ -138,8 +138,8 @@ public class VirtualKeyboard {
         // in this order.
         newTopPane();
         topPane.getChildren().add(createEnterKey("ENTER"));
-        for (int i = 0; i < bottomKeyboard.size(); i++) {
-            topPane.getChildren().add(createKey(bottomKeyboard.get(i)));
+        for (Character character : bottomKeyboard) {
+            topPane.getChildren().add(createKey(character));
         }
         topPane.getChildren().add(createDeleteKey());
         keyboard.getChildren().add(topPane);

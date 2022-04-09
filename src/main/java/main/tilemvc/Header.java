@@ -3,7 +3,7 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Pedro Carneiro Passos and Ramon Asuncion
  * Section: 02 - 11AM
  * Date: 4/8/22
  * Time: 8:13 AM
@@ -21,7 +21,8 @@ package main.tilemvc;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 /**
  * Header class to create the header section, which includes the "Wordle" header
@@ -30,10 +31,13 @@ import javafx.scene.layout.VBox;
 public class Header {
 
     /** Wordle header section */
-    private VBox headerSection;
+    private final BorderPane headerSection;
+
+    /** Wordle header section (right side for multiple items) */
+    private final HBox rightHeaderSection;
 
     /** The word "Wordle" */
-    private Label title;
+    private final Label title;
 
     /** Histogram icon button */
     private Button histogram;
@@ -47,24 +51,31 @@ public class Header {
     /**
      * @return the headerSection including title and separator
      */
-    public VBox getHeaderSection() { return headerSection; }
+    public BorderPane getHeaderSection() { return headerSection; }
 
     /**
      * Simple constructor to initialize the title and header section, and their
      * respective css id's
      */
     public Header() {
+        // TODO: Make a borderpane (since I can organize by left, right, center...etc) as root 
+        //  and the buttons as containers
+
         // Initialize the title
         this.title = new Label("Wordle");
         this.title.setId("titleLabel");
 
         // Initialize header section
-        this.headerSection = new VBox();
+        this.headerSection = new BorderPane();
         this.headerSection.setId("header");
+
+        // Initialize the right header section as a Horizontal Box.
+        this.rightHeaderSection = new HBox();
     }
 
     /**
-     * Creates the header section
+     * Creates the header section using a {@BorderPane} as
+     * the container and {@HBox} to horizontally line the buttons.
      */
     public void createHeader() {
         // Create all the button in the header.
@@ -72,8 +83,14 @@ public class Header {
         this.createHistogramButton();
         this.createQuestionMarkButton();
 
-        this.headerSection.getChildren().addAll(this.setting, this.histogram,
-                this.questionMark, this.title, new Separator());
+        // Add items to the header.
+        this.headerSection.setCenter(this.title);
+        this.headerSection.setBottom(new Separator());
+        this.headerSection.setLeft(this.questionMark);
+
+        // Add multiple items to the right side of the header.
+        this.rightHeaderSection.getChildren().addAll(this.histogram, this.setting);
+        this.headerSection.setRight(this.rightHeaderSection);
     }
 
     private void createSettingButton() {
@@ -88,7 +105,7 @@ public class Header {
 
         // TODO: Create a menu that overlaps the whole game (StackPane)?
         setting.setOnAction(event -> {
-            System.out.println("Button clicked!");
+            System.out.println("Settings - Button clicked!");
         });
 
         // TODO: Create an X to exit out of the menu
