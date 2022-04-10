@@ -20,9 +20,6 @@ package main.tilemvc;
 
 import javafx.scene.control.Button;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class OnScreenKeyboard {
 
 

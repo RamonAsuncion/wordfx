@@ -18,11 +18,16 @@
  */
 package main.tilemvc;
 
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.stage.Popup;
 
 /**
  * Header class to create the header section, which includes the "Wordle" header
@@ -81,7 +86,7 @@ public class Header {
         this.createHistogramButton();
         this.createQuestionMarkButton();
 
-        // Add items to the header.
+        // Organize items in the header.
         this.headerSection.setLeft(this.questionMark);
         this.headerSection.setCenter(this.title);
         this.headerSection.setBottom(new Separator());
@@ -101,16 +106,14 @@ public class Header {
         // Add styling to the button
         setting.getStyleClass().add("setting-button");
 
-        // The width of button FIXME: Unsure if this actually does something...
+        // The width of button
         setting.setPrefWidth(45);
 
-        // TODO: Open a new scene on-top of the existing one... StackPane?
         setting.setOnAction(event -> {
             System.out.println("Settings - Button clicked!");
         });
 
         // TODO: Create an X to exit out of the menu
-
         // TODO: Create an option of 'Dark Mode' and 'Light Mode'
 
     }
@@ -127,6 +130,10 @@ public class Header {
 
         // The width of button
         histogram.setPrefWidth(45);
+
+        histogram.setOnAction(event -> {
+            System.out.println("Histogram - Button clicked!");
+        });
     }
 
     /**
@@ -141,5 +148,9 @@ public class Header {
 
         // The width of button
         questionMark.setPrefWidth(45);
+
+        questionMark.setOnAction(event -> {
+            System.out.println("Question Mark - Button clicked!");
+        });
     }
 }

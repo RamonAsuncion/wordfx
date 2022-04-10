@@ -42,8 +42,6 @@ public class VirtualKeyboardController {
         }
 
         // If typed on physical keyboard
-        scene.setOnKeyPressed(event -> {
-            System.out.print(event.getCode());
-        });
+        scene.setOnKeyPressed(event -> System.out.print(event.getCode()));
     }
 }
