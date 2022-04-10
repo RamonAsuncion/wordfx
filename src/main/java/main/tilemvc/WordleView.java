@@ -18,7 +18,11 @@
  */
 package main.tilemvc;
 
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class WordleView {
 
@@ -33,6 +37,12 @@ public class WordleView {
 
     /** The root node containing all three nodes above */
     private BorderPane root;
+
+    private ArrayList<Button> l;
+
+    public ArrayList<Button> getL() {
+        return l;
+    }
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -61,6 +71,8 @@ public class WordleView {
         this.header.createHeader();
         this.tiles.createTilePane();
         this.vk.createVirtualKeyboard();
+
+        l = this.vk.getLetters();
 
         // Set the scene accordingly
         this.root.setCenter(this.tiles.getTiles());

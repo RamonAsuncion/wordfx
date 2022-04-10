@@ -22,14 +22,17 @@ import javafx.scene.control.Button;
 
 public class VirtualKeyboardController {
     private VirtualKeyboard theView;
+    private WordleView wv;
 
     public VirtualKeyboardController(VirtualKeyboard theView) {
         this.theView = theView;
+        wv = new WordleView();
         initEventHandlers();
     }
 
     private void initEventHandlers() {
-        for (Button b : this.theView.getLetters()) {
+        for (Button b : wv.getL()) {
+            System.out.println(b.isPressed());
             b.setOnMouseClicked(event -> {
                 System.out.println("hello");
             });
