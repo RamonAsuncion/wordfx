@@ -21,8 +21,6 @@ package main.tilemvc;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,9 +32,13 @@ public class VirtualKeyboard {
     /** The {@HBox} to be added as every row of the virtual keyboard */
     private HBox topPane;
 
+    /** List with all the letters contained in our virtual keyboard */
     private ArrayList<Button> letters;
 
-    public ArrayList<Button> getLetters() { return letters; }
+    /**
+     * @return all the letters contained in our keyboard (buttons)
+     */
+    public ArrayList<Button> getLetters() { return this.letters; }
 
     /**
      * @return the keyboard node
@@ -54,7 +56,7 @@ public class VirtualKeyboard {
         topPane = new HBox();
         topPane.setId("topPane");
 
-        letters = new ArrayList<>();
+        this.letters = new ArrayList<>();
     }
 
     /**
@@ -65,7 +67,7 @@ public class VirtualKeyboard {
      */
     public Button createKey(Character letter) {
         Button key = new Button(letter.toString());
-        letters.add(key);
+        this.letters.add(key);
         key.getStyleClass().add("keyboard-letter");
         key.getStyleClass().add("exact");
         return key;
