@@ -41,7 +41,7 @@ public class Tile {
     private Rectangle rect;
 
     // I added
-    private StackPane Stackpane;
+    private StackPane stackPane;
     private Text text;
 
     /**
@@ -81,18 +81,14 @@ public class Tile {
 
                 // Alvin added
                 text = new Text("W");
-                Stackpane = new StackPane();
+                text.setId("tileLetter");
+                stackPane = new StackPane();
 
                 //Alvin added
-                Stackpane.getChildren().addAll(rect,text);
-                topPane.getChildren().add(Stackpane);
-                Stackpane.setLayoutX(30);
-                Stackpane.setLayoutY(30);
+                stackPane.getChildren().addAll(rect, text);
+                topPane.getChildren().add(stackPane);
             }
             tiles.getChildren().add(topPane);
-            //tiles.getChildren().add(Stackpane);
-
-
 
             // Create new top pane, meaning new guess on a new horizontal box
             topPane = new HBox();
