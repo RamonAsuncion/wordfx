@@ -19,9 +19,12 @@
 package main.tilemvc;
 
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 /**
  * Tile class that creates the 30 tiles where the guesses will be typed on
@@ -36,6 +39,10 @@ public class Tile {
 
     /** Individual tile to be added to our tiles */
     private Rectangle rect;
+
+    // I added
+    private StackPane Stackpane;
+    private Text text;
 
     /**
      * @return the 30 tiles representing all the guesses
@@ -72,12 +79,25 @@ public class Tile {
                 rect.setId("tile");
                 topPane.getChildren().add(rect);
 
+                // Alvin added
+                text = new Text("W");
+                Stackpane = new StackPane();
+
+                //Alvin added
+                Stackpane.getChildren().addAll(rect,text);
+                topPane.getChildren().add(Stackpane);
+                Stackpane.setLayoutX(30);
+                Stackpane.setLayoutY(30);
             }
             tiles.getChildren().add(topPane);
+            //tiles.getChildren().add(Stackpane);
+
+
 
             // Create new top pane, meaning new guess on a new horizontal box
             topPane = new HBox();
             topPane.setId("topPane");
+
         }
     }
 }
