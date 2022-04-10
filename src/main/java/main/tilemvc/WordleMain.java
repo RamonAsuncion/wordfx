@@ -31,7 +31,7 @@ public class WordleMain extends Application {
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        keyboardController = new VirtualKeyboardController(this.keyboardView);
+        this.keyboardController = new VirtualKeyboardController(this.keyboardView, this.theView);
 
         // Add the scene graph to the stage
         primaryStage.setScene(scene);

@@ -19,23 +19,26 @@
 package main.tilemvc;
 
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 
 public class VirtualKeyboardController {
-    private VirtualKeyboard theView;
-    private WordleView wv;
 
-    public VirtualKeyboardController(VirtualKeyboard theView) {
+    private VirtualKeyboard theView;
+
+    private WordleView wordleView;
+
+    private KeyEvent ke;
+
+    public VirtualKeyboardController(VirtualKeyboard theView, WordleView wordleView) {
         this.theView = theView;
-        wv = new WordleView();
+        this.wordleView = wordleView;
         initEventHandlers();
     }
 
     private void initEventHandlers() {
-        for (Button b : wv.getL()) {
-            System.out.println(b.isPressed());
-            b.setOnMouseClicked(event -> {
-                System.out.println("hello");
-            });
+        for (Button b : wordleView.getL()) {
+            b.setOnMouseClicked(event -> System.out.println(b.getText()));
         }
+
     }
 }
