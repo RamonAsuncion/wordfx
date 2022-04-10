@@ -18,16 +18,11 @@
  */
 package main.tilemvc;
 
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
 
 /**
  * Header class to create the header section, which includes the "Wordle" header
@@ -41,6 +36,9 @@ public class Header {
     /** Wordle header section (right side for multiple items) */
     private final HBox rightHeaderSection;
 
+    /** Wordle header section (left side for multiple items) */
+    private final HBox leftHeaderSection;
+
     /** The word "Wordle" */
     private final Label title;
 
@@ -53,6 +51,9 @@ public class Header {
     /** Question mark icon button */
     private Button questionMark;
 
+    /** Menu three dash icon button */
+    private Button menuThreeDashes;
+
     /**
      * @return the headerSection including title and separator
      */
@@ -64,7 +65,6 @@ public class Header {
      */
     public Header() {
         // Initialize the title
-        // FIXME: the title being not centered is driving me nuts.
         this.title = new Label("Wordle");
         this.title.setId("titleLabel");
 
@@ -72,8 +72,9 @@ public class Header {
         this.headerSection = new BorderPane();
         this.headerSection.setId("header");
 
-        // Initialize the right header section as a Horizontal Box.
+        // Initialize the right header and left header section as a Horizontal Box.
         this.rightHeaderSection = new HBox();
+        this.leftHeaderSection = new HBox();
     }
 
     /**
@@ -85,11 +86,15 @@ public class Header {
         this.createSettingButton();
         this.createHistogramButton();
         this.createQuestionMarkButton();
+        this.createThreeDashMenu();
 
         // Organize items in the header.
-        this.headerSection.setLeft(this.questionMark);
         this.headerSection.setCenter(this.title);
         this.headerSection.setBottom(new Separator());
+
+        // Add multiple items to the right side of the header.
+        this.leftHeaderSection.getChildren().addAll(this.menuThreeDashes, this.questionMark);
+        this.headerSection.setLeft(this.leftHeaderSection);
 
         // Add multiple items to the right side of the header.
         this.rightHeaderSection.getChildren().addAll(this.histogram, this.setting);
@@ -151,6 +156,21 @@ public class Header {
 
         questionMark.setOnAction(event -> {
             System.out.println("Question Mark - Button clicked!");
+        });
+    }
+
+    private void createThreeDashMenu() {
+        // Initialize a new button
+        menuThreeDashes = new Button();
+
+        // Add styling to the button
+        menuThreeDashes.getStyleClass().add("menu-three-button");
+
+        // The width of button
+        menuThreeDashes.setPrefWidth(45);
+
+        menuThreeDashes.setOnAction(event -> {
+            System.out.println("Three dash menu - Button clicked!");
         });
     }
 }

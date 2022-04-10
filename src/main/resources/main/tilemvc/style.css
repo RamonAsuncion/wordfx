@@ -129,3 +129,8 @@
     -fx-graphic: url("https://i.ibb.co/NnLxTfy/question-mark.png");
     -fx-background-color: transparent;
 }
+
+.menu-three-button {
+    -fx-graphic: url("https://img.icons8.com/ios-glyphs/30/000000/menu-rounded.png");
+    -fx-background-color: transparent;
+}
