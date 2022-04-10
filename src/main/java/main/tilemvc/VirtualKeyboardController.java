@@ -20,29 +20,28 @@ package main.tilemvc;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
 
 public class VirtualKeyboardController {
 
-    private VirtualKeyboard theView;
-
+    /** The view of our Wordle implementation */
     private WordleView wordleView;
 
+    /** The scene, to take care of keyboard typing */
     private Scene scene;
 
-    private KeyEvent ke;
-
-    public VirtualKeyboardController(VirtualKeyboard theView, WordleView wordleView, Scene scene) {
-        this.theView = theView;
+    public VirtualKeyboardController(WordleView wordleView, Scene scene) {
         this.wordleView = wordleView;
         this.scene = scene;
         initEventHandlers();
     }
 
     private void initEventHandlers() {
-        for (Button b : wordleView.getL()) {
+        // If virtual keyboard is clicked
+        for (Button b : wordleView.getLetterList()) {
             b.setOnMouseClicked(event -> System.out.println(b.getText()));
         }
+
+        // If typed on physical keyboard
         scene.setOnKeyPressed(event -> {
             System.out.print(event.getCode());
         });

@@ -9,12 +9,11 @@ public class WordleMain extends Application {
     /** The view of our Wordle game */
     private WordleView theView;
 
-    private VirtualKeyboard keyboardView;
-
+    /** The virtual keyboard controller for handling events like typing */
     private VirtualKeyboardController keyboardController;
-    private Scene scene;
 
-    public Scene getScene() { return scene; }
+    /** Our Wordle scene where everything is displayed */
+    private Scene scene;
 
     public static void main(String[] args) { launch(args); }
 
@@ -22,19 +21,17 @@ public class WordleMain extends Application {
     public void init() throws Exception {
         super.init();
         this.theView = new WordleView();
-        this.keyboardView = new VirtualKeyboard();
     }
 
     @Override
     public void start(Stage primaryStage) {
-
         // Create new scene and use css resources from style.css
         scene = new Scene(this.theView.getRoot());
         scene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        this.keyboardController = new VirtualKeyboardController(this.keyboardView, this.theView, scene);
+        keyboardController = new VirtualKeyboardController(this.theView, scene);
 
         // Add the scene graph to the stage
         primaryStage.setScene(scene);

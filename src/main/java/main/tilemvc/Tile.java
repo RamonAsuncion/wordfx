@@ -19,18 +19,9 @@
 package main.tilemvc;
 
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Tile class that creates the 30 tiles where the guesses will be typed on
