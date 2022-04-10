@@ -12,6 +12,9 @@ public class WordleMain extends Application {
     private VirtualKeyboard keyboardView;
 
     private VirtualKeyboardController keyboardController;
+    private Scene scene;
+
+    public Scene getScene() { return scene; }
 
     public static void main(String[] args) { launch(args); }
 
@@ -26,12 +29,12 @@ public class WordleMain extends Application {
     public void start(Stage primaryStage) {
 
         // Create new scene and use css resources from style.css
-        Scene scene = new Scene(this.theView.getRoot());
+        scene = new Scene(this.theView.getRoot());
         scene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        this.keyboardController = new VirtualKeyboardController(this.keyboardView, this.theView);
+        this.keyboardController = new VirtualKeyboardController(this.keyboardView, this.theView, scene);
 
         // Add the scene graph to the stage
         primaryStage.setScene(scene);
