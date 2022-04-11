@@ -40,10 +40,6 @@ public class Tile {
     /** Individual tile to be added to our tiles */
     private Rectangle rect;
 
-    // I added
-    private StackPane stackPane;
-    private Text text;
-
     /**
      * @return the 30 tiles representing all the guesses
      */
@@ -79,14 +75,6 @@ public class Tile {
                 rect.setId("tile");
                 topPane.getChildren().add(rect);
 
-                // Alvin added
-                text = new Text("W");
-                text.setId("tileLetter");
-                stackPane = new StackPane();
-
-                //Alvin added
-                stackPane.getChildren().addAll(rect, text);
-                topPane.getChildren().add(stackPane);
             }
             tiles.getChildren().add(topPane);
 
