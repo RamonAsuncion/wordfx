@@ -51,9 +51,7 @@
     -fx-stroke-width: 2px;
     -fx-spacing: 10;
     -fx-alignment: center;
-    /*-fx-border-color: darkgray;*/
-    -fx-pref-height: 57;
-    -fx-pref-width: 57;
+    -fx-border-color: darkgray;
 }
 
 #tileWrong {
