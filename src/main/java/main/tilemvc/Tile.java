@@ -40,11 +40,14 @@ public class Tile {
     /** Individual tile to be added to our tiles */
     private Label rect;
 
+<<<<<<< HEAD
     // I added
     private StackPane stackPane;
 
     private Text text;
 
+=======
+>>>>>>> f471f92da0fd3efd90b0b32767c803e8d6f846ec
     /**
      * @return the 30 tiles representing all the guesses
      */
@@ -81,6 +84,7 @@ public class Tile {
                 rect.setPrefSize(57, 57);
                 topPane.getChildren().add(rect);
 
+<<<<<<< HEAD
                 // Create the text letter
                 text = new Text("");
                 text.setId("tileLetter");
@@ -89,6 +93,8 @@ public class Tile {
                 // Add text to rectangle to the Scene
                 stackPane.getChildren().addAll(rect, text);
                 topPane.getChildren().add(stackPane);
+=======
+>>>>>>> f471f92da0fd3efd90b0b32767c803e8d6f846ec
             }
             tiles.getChildren().add(topPane);
 
