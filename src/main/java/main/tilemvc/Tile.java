@@ -38,10 +38,11 @@ public class Tile {
     private HBox topPane;
 
     /** Individual tile to be added to our tiles */
-    private Rectangle rect;
+    private Label rect;
 
     // I added
     private StackPane stackPane;
+
     private Text text;
 
     /**
@@ -75,16 +76,17 @@ public class Tile {
             for (int j = 0; j < 5; ++j) {
 
                 // Create new tile and add to top pane
-                rect = new Rectangle(57, 57);
+                rect = new Label();
                 rect.setId("tile");
+                rect.setPrefSize(57, 57);
                 topPane.getChildren().add(rect);
 
-                // Alvin added
-                text = new Text("W");
+                // Create the text letter
+                text = new Text("");
                 text.setId("tileLetter");
                 stackPane = new StackPane();
 
-                //Alvin added
+                // Add text to rectangle to the Scene
                 stackPane.getChildren().addAll(rect, text);
                 topPane.getChildren().add(stackPane);
             }
@@ -93,7 +95,6 @@ public class Tile {
             // Create new top pane, meaning new guess on a new horizontal box
             topPane = new HBox();
             topPane.setId("topPane");
-
         }
     }
 }
