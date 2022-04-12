@@ -21,10 +21,8 @@ package main.tilemvc;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+import java.util.ArrayList;
 
 /**
  * Tile class that creates the 30 tiles where the guesses will be typed on
@@ -40,10 +38,17 @@ public class Tile {
     /** Individual tile to be added to our tiles */
     private Label rect;
 
-    // I added
-    private StackPane stackPane;
+    private ArrayList<Label> letterList;
 
-    private Text text;
+    private ArrayList<ArrayList<Label>> guessList;
+
+    public ArrayList<Label> getLetterList() {
+        return letterList;
+    }
+
+    public ArrayList<ArrayList<Label>> getGuessList() {
+        return guessList;
+    }
 
     /**
      * @return the 30 tiles representing all the guesses
@@ -62,6 +67,9 @@ public class Tile {
         // Set up the topPane node for our scene graph
         topPane = new HBox();
         topPane.setId("topPane");
+
+        guessList = new ArrayList<ArrayList<Label>>();
+        letterList = new ArrayList<>();
     }
 
     /**
@@ -80,19 +88,11 @@ public class Tile {
                 rect.setId("tile");
                 rect.setPrefSize(57, 57);
                 topPane.getChildren().add(rect);
-
-
-                // Create the text letter
-                text = new Text("");
-                text.setId("tileLetter");
-                stackPane = new StackPane();
-
-                // Add text to rectangle to the Scene
-                stackPane.getChildren().addAll(rect, text);
-                topPane.getChildren().add(stackPane);
-
+                letterList.add(rect);
             }
             tiles.getChildren().add(topPane);
+            guessList.add(letterList);
+            letterList = new ArrayList<>();
 
             // Create new top pane, meaning new guess on a new horizontal box
             topPane = new HBox();

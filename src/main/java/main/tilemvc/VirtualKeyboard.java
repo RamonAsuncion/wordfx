@@ -34,9 +34,9 @@ public class VirtualKeyboard {
     /** The {@HBox} to be added as every row of the virtual keyboard */
     private HBox topPane;
 
-    private ArrayList<Button> letters;
+    private ArrayList<Button> keyboardKeys;
 
-    public ArrayList<Button> getLetters() { return letters; }
+    public ArrayList<Button> getKeyboardKeys() { return keyboardKeys; }
 
     /**
      * @return the keyboard node
@@ -54,7 +54,7 @@ public class VirtualKeyboard {
         topPane = new HBox();
         topPane.setId("topPane");
 
-        letters = new ArrayList<>();
+        keyboardKeys = new ArrayList<>();
     }
 
     /**
@@ -65,9 +65,8 @@ public class VirtualKeyboard {
      */
     public Button createKey(Character letter) {
         Button key = new Button(letter.toString());
-        letters.add(key);
+        keyboardKeys.add(key);
         key.getStyleClass().add("keyboard-letter");
-        key.getStyleClass().add("exact");
         return key;
     }
 
@@ -90,7 +89,8 @@ public class VirtualKeyboard {
      * @return The delete key as a button
      */
     public Button createDeleteKey() {
-        Button delKey = new Button();
+        Button delKey = new Button("");
+        keyboardKeys.add(delKey);
         delKey.getStyleClass().add("keyboard-letter");
         delKey.getStyleClass().add("delete");
         return delKey;

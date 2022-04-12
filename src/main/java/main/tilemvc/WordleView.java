@@ -19,7 +19,10 @@
 package main.tilemvc;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
+
 import java.util.ArrayList;
 
 public class WordleView {
@@ -39,6 +42,14 @@ public class WordleView {
     /** List of all letters in the keyboard */
     private ArrayList<Button> letterList;
 
+    private ArrayList<ArrayList<Label>> listOfGuesses;
+
+    private int row;
+
+    private int col;
+
+    public ArrayList<ArrayList<Label>> getListOfGuesses() { return listOfGuesses; }
+
     /**
      * @return the {@link ArrayList} with all the letters contained in the virtual keyboard
      */
@@ -53,6 +64,8 @@ public class WordleView {
      * Simple constructor to initialize the scene graph
      */
     public WordleView() {
+        row = 0;
+        col = 0;
         initSceneGraph();
     }
 
@@ -66,6 +79,7 @@ public class WordleView {
         this.vk = new VirtualKeyboard();
         this.root = new BorderPane();
         this.root.setId("background");
+        this.listOfGuesses = new ArrayList<>();
 
         // Creating scene components
         this.header.createHeader();
@@ -73,11 +87,26 @@ public class WordleView {
         this.vk.createVirtualKeyboard();
 
         // Fill our array after creating the virtual keyboard
-        letterList = this.vk.getLetters();
+        letterList = this.vk.getKeyboardKeys();
+        this.listOfGuesses = this.tiles.getGuessList();
 
         // Set the scene accordingly
         this.root.setCenter(this.tiles.getTiles());
         this.root.setBottom(this.vk.getKeyboard());
         this.root.setTop(this.header.getHeaderSection());
+    }
+
+    public void typeLetter(Text letter) {
+        getListOfGuesses().get(row).get(col).textProperty().bind(letter.textProperty());
+        col++;
+        if (col == 5) {
+            row++;
+            col = 0;
+        }
+    }
+
+    public void deleteLetter() {
+        col--;
+        getListOfGuesses().get(row).get(col).textProperty().bind(new Text(" ").textProperty());
     }
 }

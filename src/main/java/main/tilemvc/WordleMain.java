@@ -3,11 +3,14 @@ package main.tilemvc;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.model.WordleModel;
 
 public class WordleMain extends Application {
 
     /** The view of our Wordle game */
-    private WordleView theView;
+    private WordleView wordleView;
+
+    private WordleModel wordleModel;
 
     /** The virtual keyboard controller for handling events like typing */
     private VirtualKeyboardController keyboardController;
@@ -20,18 +23,19 @@ public class WordleMain extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        this.theView = new WordleView();
+        this.wordleView = new WordleView();
+        this.wordleModel = new WordleModel();
     }
 
     @Override
     public void start(Stage primaryStage) {
         // Create new scene and use css resources from style.css
-        scene = new Scene(this.theView.getRoot());
+        scene = new Scene(this.wordleView.getRoot());
         scene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        keyboardController = new VirtualKeyboardController(this.theView, scene);
+        keyboardController = new VirtualKeyboardController(this.wordleView, this.wordleModel, scene);
 
         // Add the scene graph to the stage
         primaryStage.setScene(scene);
