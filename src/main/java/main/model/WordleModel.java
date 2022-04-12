@@ -18,7 +18,7 @@
  */
 package main.model;
 
-import main.tilemvc.WordleView;
+import main.view.WordleView;
 
 public class WordleModel {
     /** Current row that we are on */

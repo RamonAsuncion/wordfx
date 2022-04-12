@@ -16,12 +16,17 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.view;
 
+import javafx.animation.RotateTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
+import main.tilemvc.Header;
+import main.tilemvc.Tile;
 
 import java.util.ArrayList;
 
@@ -31,7 +36,7 @@ public class WordleView {
     private Tile tiles;
 
     /** The virtual keyboard which user cna use to type */
-    private VirtualKeyboard vk;
+    private VirtualKeyboardView vk;
 
     /** The "Wordle" header section */
     private Header header;
@@ -43,10 +48,6 @@ public class WordleView {
     private ArrayList<Button> letterList;
 
     private ArrayList<ArrayList<Label>> listOfGuesses;
-
-    private int row;
-
-    private int col;
 
     public ArrayList<ArrayList<Label>> getListOfGuesses() { return listOfGuesses; }
 
@@ -64,8 +65,6 @@ public class WordleView {
      * Simple constructor to initialize the scene graph
      */
     public WordleView() {
-        row = 0;
-        col = 0;
         initSceneGraph();
     }
 
@@ -76,7 +75,7 @@ public class WordleView {
         // Initialize the three nodes + the main root
         this.header = new Header();
         this.tiles = new Tile();
-        this.vk = new VirtualKeyboard();
+        this.vk = new VirtualKeyboardView();
         this.root = new BorderPane();
         this.root.setId("background");
         this.listOfGuesses = new ArrayList<>();
@@ -96,17 +95,22 @@ public class WordleView {
         this.root.setTop(this.header.getHeaderSection());
     }
 
-    public void typeLetter(Text letter) {
-        getListOfGuesses().get(row).get(col).textProperty().bind(letter.textProperty());
-        col++;
-        if (col == 5) {
-            row++;
-            col = 0;
+    public void flipTiles(ArrayList<Label> guess) {
+        for (Label tile : guess) {
+            RotateTransition rt = new RotateTransition(Duration.seconds(1.5), tile);
+            rt.setAxis(Rotate.X_AXIS);
+            rt.setFromAngle(0);
+            rt.setToAngle(360);
+            rt.setCycleCount(1);
+            rt.play();
         }
     }
 
-    public void deleteLetter() {
-        col--;
-        getListOfGuesses().get(row).get(col).textProperty().bind(new Text(" ").textProperty());
+    public void updateType(Text letter, int guess, int letterTile) {
+        getListOfGuesses().get(guess).get(letterTile).textProperty().bind(letter.textProperty());
+    }
+
+    public void updateDelete(int guess, int letterTile) {
+        getListOfGuesses().get(guess).get(letterTile).textProperty().bind(new Text(" ").textProperty());
     }
 }

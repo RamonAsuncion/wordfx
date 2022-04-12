@@ -44,7 +44,7 @@
     -fx-text-fill: black;
 }
 
-#tile {
+.tile {
     -fx-fill: white;
     -fx-stroke: #d0d0d0;
     -fx-stroke-width: 2px;
@@ -59,15 +59,15 @@
     -fx-text-fill: black;
 }
 
-#tileWrong {
+.tile.wrong {
     -fx-fill: -wrong;
 }
 
-#tileMisplaced {
+.tile.misplaced {
     -fx-fill: -misplaced;
 }
 
-#tileExact {
+.tile.exact {
     -fx-fill: -exact;
 }
 

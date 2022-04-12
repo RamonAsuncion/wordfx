@@ -16,17 +16,15 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.view;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class VirtualKeyboard {
+public class VirtualKeyboardView {
 
     /** Virtual keyboard node to later be added to scene */
     private VBox keyboard;
@@ -34,8 +32,12 @@ public class VirtualKeyboard {
     /** The {@HBox} to be added as every row of the virtual keyboard */
     private HBox topPane;
 
+    /** List with all the buttons representing virtual keyboard keys */
     private ArrayList<Button> keyboardKeys;
 
+    /**
+     * @return the {@link ArrayList} with all the virtual keyboard keys
+     */
     public ArrayList<Button> getKeyboardKeys() { return keyboardKeys; }
 
     /**
@@ -47,7 +49,7 @@ public class VirtualKeyboard {
      * Simple constructor to initialize the virtual keyboard, and the
      * topPane that will be used to create each row of the keyboard
      */
-    public VirtualKeyboard() {
+    public VirtualKeyboardView () {
         keyboard = new VBox();
         keyboard.setId("keyboard");
 
@@ -78,6 +80,7 @@ public class VirtualKeyboard {
      */
     public Button createEnterKey(String enter) {
         Button enterKey = new Button(enter);
+        keyboardKeys.add(enterKey);
         enterKey.getStyleClass().add("keyboard-letter");
         enterKey.getStyleClass().add("enter");
         return enterKey;
