@@ -19,7 +19,6 @@
 package main.tilemvc;
 
 
-import javafx.animation.RotateTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,16 +38,14 @@ public class Tile {
     /** Individual tile to be added to our tiles */
     private Label rect;
 
-    /** List of labels where letters will be placed */
     private ArrayList<Label> letterList;
 
-    /** List of all guesses, where each guess is a list of labels (letters) */
     private ArrayList<ArrayList<Label>> guessList;
 
-    /**
-     * @return the {@ArrayList} of a the guesses, containing each list of letters
-     * contained in guesses
-     */
+    public ArrayList<Label> getLetterList() {
+        return letterList;
+    }
+
     public ArrayList<ArrayList<Label>> getGuessList() {
         return guessList;
     }
@@ -65,14 +62,12 @@ public class Tile {
     public Tile() {
         // Set up the tiles for our scene graph
         tiles = new VBox();
-        tiles.getStyleClass().add("tile");
+        tiles.setId("tile");
 
         // Set up the topPane node for our scene graph
         topPane = new HBox();
         topPane.setId("topPane");
 
-        // Initialize the two arraylists to store all the guesses and
-        // letters respectively
         guessList = new ArrayList<ArrayList<Label>>();
         letterList = new ArrayList<>();
     }
@@ -90,18 +85,13 @@ public class Tile {
 
                 // Create new tile and add to top pane
                 rect = new Label();
-                rect.getStyleClass().add("tile");
+                rect.setId("tile");
                 rect.setPrefSize(57, 57);
                 topPane.getChildren().add(rect);
-
-                // Add label to list of letters
                 letterList.add(rect);
             }
             tiles.getChildren().add(topPane);
-
-            // Add all 5 letters to guess list as a guess
             guessList.add(letterList);
-            // Make sure to create new letterList (new guess)
             letterList = new ArrayList<>();
 
             // Create new top pane, meaning new guess on a new horizontal box
