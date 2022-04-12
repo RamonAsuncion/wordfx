@@ -159,6 +159,9 @@ public class Header {
         });
     }
 
+    /**
+     * Create a three dash menu to show the user other modes
+     */
     private void createThreeDashMenu() {
         // Initialize a new button
         menuThreeDashes = new Button();
