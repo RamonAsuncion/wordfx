@@ -60,7 +60,7 @@ public class WordleController {
      */
     private void initEventHandlers() {
         // If virtual keyboard is clicked
-        for (Button b : wordleView.getLetterList()) {
+        for (Button b : wordleView.getKeysList()) {
             b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
         }
 
@@ -137,12 +137,12 @@ public class WordleController {
     private void typeToTile(Text t) {
         if ((this.guessState == GuessState.UNCHECKED) && (this.wordleModel.getColumn() < 4)) {
             this.wordleModel.incrementColumn();
-            this.wordleView.updateType(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
+            this.wordleView.updateTyping(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
         else if (this.guessState == GuessState.CHECKED) {
             this.wordleModel.setColumn(0);
             this.guessState = GuessState.UNCHECKED;
-            this.wordleView.updateType(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
+            this.wordleView.updateTyping(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
     }
 }
