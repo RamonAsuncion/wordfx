@@ -1,4 +1,4 @@
-package main.view;
+package main.controller;
 
 public enum GuessState {
     UNCHECKED,

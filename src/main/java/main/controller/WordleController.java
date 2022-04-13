@@ -23,8 +23,6 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import main.model.WordleModel;
-import main.tilemvc.Tile;
-import main.view.GuessState;
 import main.view.WordleView;
 
 public class WordleController {
@@ -110,7 +108,9 @@ public class WordleController {
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
             case BACK_SPACE:
-                deleteFromTile();
+                if (letterTile != 0) {
+                    deleteFromTile();
+                }
                 break;
             case ENTER:
                 if (letterTile == 4) {
