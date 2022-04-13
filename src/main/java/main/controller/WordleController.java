@@ -37,12 +37,12 @@ public class WordleController {
     private Scene scene;
 
     /** Current row we are in, representing a given guess */
-    private int guess;
+    private int row;
 
     /** Current column we are in, representing a letter of a guess */
-    private int letterTile;
+    private int col;
 
-    /** The state of our guess, initially unchecked */
+    /** The state of our row, initially unchecked */
     private GuessState guessState;
 
     /**
@@ -56,8 +56,8 @@ public class WordleController {
         this.wordleView = wordleView;
         this.wordleModel = wordleModel;
         this.scene = scene;
-        this.guess = 0;
-        this.letterTile = -1;
+        this.row = 0;
+        this.col = -1;
         this.guessState = GuessState.UNCHECKED;
         initEventHandlers();
     }
@@ -88,7 +88,7 @@ public class WordleController {
                 deleteFromTile();
                 break;
             case "ENTER":
-                if (letterTile == 4) {
+                if (col == 4) {
                     this.guessState = GuessState.CHECKED;
                 }
                 break;
@@ -108,14 +108,15 @@ public class WordleController {
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
             case BACK_SPACE:
-                if (letterTile >= 0) {
+                if (col >= 0) {
                     deleteFromTile();
                 }
                 break;
             case ENTER:
-                if (letterTile == 4) {
-                    this.wordleView.flipTiles(this.wordleView.getListOfGuesses().get(guess));
+                if (col == 4) {
+                    this.wordleView.flipTiles(this.wordleView.getListOfGuesses().get(row));
                     this.guessState = GuessState.CHECKED;
+                    row++;
                 }
                 break;
             default:
@@ -130,8 +131,8 @@ public class WordleController {
      * Deletes the letter from the latest tile that contains the letter
      */
     private void deleteFromTile() {
-        this.wordleView.updateDelete(guess, letterTile);
-        letterTile--;
+        this.wordleView.updateDelete(row, col);
+        col--;
     }
 
     /**
@@ -141,15 +142,14 @@ public class WordleController {
      * @param t - letter to be added
      */
     private void typeToTile(Text t) {
-        if ((this.guessState == GuessState.UNCHECKED) && (letterTile < 4)) {
-            letterTile++;
-            this.wordleView.updateType(t, guess, letterTile);
+        if ((this.guessState == GuessState.UNCHECKED) && (col < 4)) {
+            col++;
+            this.wordleView.updateType(t, row, col);
         }
         else if (this.guessState == GuessState.CHECKED) {
-            guess++;
-            letterTile = 0;
+            col = 0;
             this.guessState = GuessState.UNCHECKED;
-            this.wordleView.updateType(t, guess, letterTile);
+            this.wordleView.updateType(t, row, col);
         }
     }
 }
