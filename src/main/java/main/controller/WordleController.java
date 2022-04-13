@@ -114,6 +114,7 @@ public class WordleController {
                 break;
             case ENTER:
                 if (col == 4) {
+                    // Flip the tiles, check guess, switch the guess state to checked, and jump to next guess
                     this.wordleView.flipTiles(this.wordleView.getListOfGuesses().get(row));
                     this.guessState = GuessState.CHECKED;
                     row++;

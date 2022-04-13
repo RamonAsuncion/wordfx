@@ -45,7 +45,7 @@
 }
 
 .tile {
-    -fx-fill: white;
+    -fx-background-color: white;
     -fx-stroke: #d0d0d0;
     -fx-stroke-width: 2px;
     -fx-spacing: 10;
@@ -58,15 +58,18 @@
 }
 
 .tile.wrong {
-    -fx-fill: -wrong;
+    -fx-background-color: -wrong;
+    -fx-text-fill: white;
 }
 
 .tile.misplaced {
-    -fx-fill: -misplaced;
+    -fx-background-color: -misplaced;
+    -fx-text-fill: white;
 }
 
 .tile.exact {
-    -fx-fill: -exact;
+    -fx-background-color: -exact;
+    -fx-text-fill: white;
 }
 
 #keyboard {
