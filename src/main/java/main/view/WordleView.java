@@ -110,6 +110,7 @@ public class WordleView {
         changeTileColor(evaluation);
     }
 
+
     public void flipTiles(Label tile) {
         RotateTransition rotation;
 //        double delay = 1.5;
