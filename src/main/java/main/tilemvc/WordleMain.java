@@ -25,8 +25,8 @@ public class WordleMain extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        this.wordleView = new WordleView();
         this.wordleModel = new WordleModel();
+        this.wordleView = new WordleView(this.wordleModel);
     }
 
     @Override

@@ -61,13 +61,10 @@ public class GuessEvaluator {
     /**
      * Simple GuessEvaluator constructor to define the secret word, current guess,
      * and a guess analysis
-     *
-     * @param secretWord - the word to be guessed
-     * @param currentGuess - guess given by the user
      */
-    public GuessEvaluator(String secretWord, String currentGuess) {
-        this.secretWord = secretWord.toLowerCase();
-        this.currentGuess = currentGuess.toLowerCase();
+    public GuessEvaluator() {
+        this.secretWord = "HELLO";
+//        this.currentGuess = currentGuess.toLowerCase();
         this.guessAnalysis = new StringBuffer("-----");
         this.mapOfLetters = new HashMap<>();
     }
@@ -95,7 +92,7 @@ public class GuessEvaluator {
                 this.guessAnalysis.setCharAt(guess.indexOf(entry.getValue()),'+');
             }
         }
-
+        System.out.println(this.guessAnalysis.toString());
         return this.guessAnalysis.toString();
     }
 

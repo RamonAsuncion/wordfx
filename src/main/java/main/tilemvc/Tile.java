@@ -75,13 +75,15 @@ public class Tile {
         // letters respectively
         guessList = new ArrayList<ArrayList<Label>>();
         letterList = new ArrayList<>();
+
+        createTilePane();
     }
 
     /**
      * Creates the pane made up of the 30 tiles, meaning 6 guesses of 5-letter
      * words. Tiles (rectangles) are styled using css.
      */
-    public void createTilePane() {
+    private void createTilePane() {
         // Loop through 6 rows (guesses) and 5 columns (length of word)
         //TODO change 5 to whatever length customer wants
         for (int i = 0; i < 6; ++i) {

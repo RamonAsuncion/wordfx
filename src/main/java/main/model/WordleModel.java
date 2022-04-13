@@ -18,6 +18,7 @@
  */
 package main.model;
 
+import main.tilemvc.Tile;
 import main.view.WordleView;
 
 public class WordleModel {
@@ -27,13 +28,36 @@ public class WordleModel {
     /** Current column that we are on */
     private int column;
 
-    private WordleView wv;
+    private Tile tiles;
 
     public WordleModel() {
-        wv = new WordleView();
-        row = 0;
-        column = 0;
+        this.tiles = new Tile();
+        this.row = 0;
+        this.column = -1;
     }
 
+    public int incrementRow() {
+        return this.row++;
+    }
+
+    public int incrementColumn() {
+        return this.column++;
+    }
+
+    public int decrementColumn() {
+        return this.column--;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getColumn() {
+        return this.column;
+    }
+
+    public void setColumn(int col) {
+        this.column = col;
+    }
 
 }

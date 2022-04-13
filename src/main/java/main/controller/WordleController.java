@@ -36,12 +36,6 @@ public class WordleController {
     /** The scene, to take care of keyboard typing */
     private Scene scene;
 
-    /** Current row we are in, representing a given guess */
-    private int row;
-
-    /** Current column we are in, representing a letter of a guess */
-    private int col;
-
     /** The state of our row, initially unchecked */
     private GuessState guessState;
 
@@ -56,8 +50,6 @@ public class WordleController {
         this.wordleView = wordleView;
         this.wordleModel = wordleModel;
         this.scene = scene;
-        this.row = 0;
-        this.col = -1;
         this.guessState = GuessState.UNCHECKED;
         initEventHandlers();
     }
@@ -88,7 +80,7 @@ public class WordleController {
                 deleteFromTile();
                 break;
             case "ENTER":
-                if (col == 4) {
+                if (this.wordleModel.getColumn() == 4) {
                     this.guessState = GuessState.CHECKED;
                 }
                 break;
@@ -108,16 +100,16 @@ public class WordleController {
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
             case BACK_SPACE:
-                if (col >= 0) {
+                if (this.wordleModel.getColumn() >= 0) {
                     deleteFromTile();
                 }
                 break;
             case ENTER:
-                if (col == 4) {
+                if (this.wordleModel.getColumn() == 4) {
                     // Flip the tiles, check guess, switch the guess state to checked, and jump to next guess
-                    this.wordleView.flipTiles(this.wordleView.getListOfGuesses().get(row));
+                    this.wordleView.createEvaluator(this.wordleView.getListOfGuesses().get(this.wordleModel.getRow()));
                     this.guessState = GuessState.CHECKED;
-                    row++;
+                    this.wordleModel.incrementRow();
                 }
                 break;
             default:
@@ -132,8 +124,8 @@ public class WordleController {
      * Deletes the letter from the latest tile that contains the letter
      */
     private void deleteFromTile() {
-        this.wordleView.updateDelete(row, col);
-        col--;
+        this.wordleView.updateDelete(this.wordleModel.getRow(), this.wordleModel.getColumn());
+        this.wordleModel.decrementColumn();
     }
 
     /**
@@ -143,14 +135,14 @@ public class WordleController {
      * @param t - letter to be added
      */
     private void typeToTile(Text t) {
-        if ((this.guessState == GuessState.UNCHECKED) && (col < 4)) {
-            col++;
-            this.wordleView.updateType(t, row, col);
+        if ((this.guessState == GuessState.UNCHECKED) && (this.wordleModel.getColumn() < 4)) {
+            this.wordleModel.incrementColumn();
+            this.wordleView.updateType(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
         else if (this.guessState == GuessState.CHECKED) {
-            col = 0;
+            this.wordleModel.setColumn(0);
             this.guessState = GuessState.UNCHECKED;
-            this.wordleView.updateType(t, row, col);
+            this.wordleView.updateType(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
     }
 }

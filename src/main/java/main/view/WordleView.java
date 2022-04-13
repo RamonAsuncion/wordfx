@@ -25,10 +25,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+import main.model.WordleModel;
+import main.tilemvc.GuessEvaluator;
 import main.tilemvc.Header;
 import main.tilemvc.Tile;
-
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class WordleView {
 
@@ -49,6 +51,10 @@ public class WordleView {
 
     private ArrayList<ArrayList<Label>> listOfGuesses;
 
+    private GuessEvaluator guessEval;
+
+    private WordleModel wordleModel;
+
     public ArrayList<ArrayList<Label>> getListOfGuesses() { return listOfGuesses; }
 
     /**
@@ -64,11 +70,13 @@ public class WordleView {
     /**
      * Simple constructor to initialize the scene graph
      */
-    public WordleView() {
+    public WordleView(WordleModel wordleModel) {
         // Initialize the three nodes + the main root
         this.header = new Header();
         this.tiles = new Tile();
         this.vk = new VirtualKeyboardView();
+        this.wordleModel = wordleModel;
+        this.guessEval = new GuessEvaluator();
         this.root = new BorderPane();
         this.root.setId("background");
         this.listOfGuesses = new ArrayList<>();
@@ -81,7 +89,6 @@ public class WordleView {
     private void initSceneGraph() {
         // Creating scene components
         this.header.createHeader();
-        this.tiles.createTilePane();
         this.vk.createVirtualKeyboard();
 
         // Fill our array after creating the virtual keyboard
@@ -94,15 +101,26 @@ public class WordleView {
         this.root.setTop(this.header.getHeaderSection());
     }
 
-    public void flipTiles(ArrayList<Label> guess) {
+    public void createEvaluator(ArrayList<Label> guess) {
+        StringBuffer s = new StringBuffer("");
         for (Label tile : guess) {
-            RotateTransition rt = new RotateTransition(Duration.seconds(1.5), tile);
-            rt.setAxis(Rotate.X_AXIS);
-            rt.setFromAngle(0);
-            tile.getStyleClass().add("exact");
-            rt.setToAngle(360);
-            rt.play();
+            s.append(tile.getText());
         }
+        String evaluation = guessEval.analyzeGuess(s.toString());
+        changeTileColor(evaluation);
+    }
+
+    public void flipTiles(Label tile) {
+        RotateTransition rotation;
+//        double delay = 1.5;
+        rotation = new RotateTransition(Duration.seconds(1));
+        rotation.setNode(tile);
+        rotation.setAxis(Rotate.X_AXIS);
+//        rotation.setDelay(Duration.seconds(delay));
+        rotation.setFromAngle(0);
+        rotation.setToAngle(360);
+        rotation.setCycleCount(1);
+        rotation.play();
     }
 
     public void updateType(Text letter, int guess, int letterTile) {
@@ -111,5 +129,22 @@ public class WordleView {
 
     public void updateDelete(int guess, int letterTile) {
         getListOfGuesses().get(guess).get(letterTile).textProperty().bind(new Text(" ").textProperty());
+    }
+
+    public void changeTileColor(String evaluation) {
+        for (int i = 0; i < 5; i++) {
+            if (evaluation.charAt(i) == ('*')) {
+                flipTiles(this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i));
+                this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i).getStyleClass().add("exact");
+            }
+            if (evaluation.charAt(i) == ('+')) {
+                flipTiles(this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i));
+                this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i).getStyleClass().add("misplaced");
+            }
+            if (evaluation.charAt(i) == ('-')) {
+                flipTiles(this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i));
+                this.tiles.getGuessList().get(this.wordleModel.getRow()).get(i).getStyleClass().add("wrong");
+            }
+        }
     }
 }
