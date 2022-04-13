@@ -110,7 +110,9 @@ public class WordleController {
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
             case BACK_SPACE:
-                deleteFromTile();
+                if (letterTile >= 0) {
+                    deleteFromTile();
+                }
                 break;
             case ENTER:
                 if (letterTile == 4) {
