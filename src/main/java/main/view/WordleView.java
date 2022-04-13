@@ -126,6 +126,7 @@ public class WordleView {
         }
         this.guessEval = new GuessEvaluator("HELLO", s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
+        System.out.println("GUESS " + s);
         changeTileColor(evaluation, s.toString());
     }
 
@@ -210,7 +211,20 @@ public class WordleView {
     private void changeKeyboardLetterColor(String style, char letter) {
         // Obtain the index of current letter in guess and change its style
         int index = this.letterList.indexOf(letter);
-        if ((!this.keysList.get(index).getStyleClass().toString().contains("exact")) | (!this.keysList.get(index).getStyleClass().toString().contains("misplaced"))) {
+
+        // Only possibility to change colors is from yellow to green, nothing else
+        if (this.keysList.get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
+            this.keysList.get(index).getStyleClass().remove("misplaced");
+            this.keysList.get(index).getStyleClass().add("exact");
+        }
+
+        // If key already has a color
+        else if (this.keysList.get(index).getStyle().contains("misplaced") ||
+                this.keysList.get(index).getStyle().contains("exact") ||
+                this.keysList.get(index).getStyle().contains("wrong")) {
+            // Don't do anything if letter already has a color
+        }
+        else {
             this.keysList.get(index).getStyleClass().add(style);
         }
     }

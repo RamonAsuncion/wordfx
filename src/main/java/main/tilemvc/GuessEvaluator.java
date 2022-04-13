@@ -66,7 +66,7 @@ public class GuessEvaluator {
         this.secretWord = secretWord;
         this.currentGuess = currentGuess.toLowerCase();
         this.guessAnalysis = new StringBuffer("-----");
-        this.mapOfLetters = new HashMap<>();
+        this.mapOfLetters = new TreeMap<>();
     }
 
     /**

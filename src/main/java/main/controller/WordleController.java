@@ -132,17 +132,17 @@ public class WordleController {
      * Adds the letter to the next open tile. If on last tile of a guess,
      * must check guess before jumping to typing in the next row.
      *
-     * @param t - letter to be added
+     * @param letter - letter to be added
      */
-    private void typeToTile(Text t) {
+    private void typeToTile(Text letter) {
         if ((this.guessState == GuessState.UNCHECKED) && (this.wordleModel.getColumn() < 4)) {
             this.wordleModel.incrementColumn();
-            this.wordleView.updateTyping(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
+            this.wordleView.updateTyping(letter, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
         else if (this.guessState == GuessState.CHECKED) {
             this.wordleModel.setColumn(0);
             this.guessState = GuessState.UNCHECKED;
-            this.wordleView.updateTyping(t, this.wordleModel.getRow(), this.wordleModel.getColumn());
+            this.wordleView.updateTyping(letter, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
     }
 }
