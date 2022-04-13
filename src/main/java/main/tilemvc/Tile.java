@@ -91,6 +91,7 @@ public class Tile {
                 // Create new tile and add to top pane
                 rect = new Label();
                 rect.getStyleClass().add("tile");
+                rect.setStyle("-fx-border-color: darkgray;");
                 rect.setPrefSize(57, 57);
                 topPane.getChildren().add(rect);
 
