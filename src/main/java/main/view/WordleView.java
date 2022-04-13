@@ -65,13 +65,6 @@ public class WordleView {
      * Simple constructor to initialize the scene graph
      */
     public WordleView() {
-        initSceneGraph();
-    }
-
-    /**
-     * Initializes the scene graph containing header, tiles, and virtual keyboard
-     */
-    private void initSceneGraph() {
         // Initialize the three nodes + the main root
         this.header = new Header();
         this.tiles = new Tile();
@@ -79,7 +72,13 @@ public class WordleView {
         this.root = new BorderPane();
         this.root.setId("background");
         this.listOfGuesses = new ArrayList<>();
+        initSceneGraph();
+    }
 
+    /**
+     * Initializes the scene graph containing header, tiles, and virtual keyboard
+     */
+    private void initSceneGraph() {
         // Creating scene components
         this.header.createHeader();
         this.tiles.createTilePane();
@@ -100,8 +99,8 @@ public class WordleView {
             RotateTransition rt = new RotateTransition(Duration.seconds(1.5), tile);
             rt.setAxis(Rotate.X_AXIS);
             rt.setFromAngle(0);
+            tile.getStyleClass().add("exact");
             rt.setToAngle(360);
-            rt.setCycleCount(1);
             rt.play();
         }
     }
