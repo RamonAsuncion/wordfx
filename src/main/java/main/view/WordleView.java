@@ -108,7 +108,8 @@ public class WordleView {
      * @param letterTile - Next available tile
      */
     public void updateTyping(Text letter, int guess, int letterTile) {
-        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty().bind(letter.textProperty());
+        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty()
+                .bind(letter.textProperty());
     }
 
     /**
@@ -118,7 +119,8 @@ public class WordleView {
      * @param letterTile - Next available tile
      */
     public void updateDelete(int guess, int letterTile) {
-        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty().bind(new Text(" ").textProperty());
+        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty()
+                .bind(new Text(" ").textProperty());
     }
 
     /**
