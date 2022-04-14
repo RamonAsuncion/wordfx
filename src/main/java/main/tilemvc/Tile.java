@@ -22,6 +22,7 @@ package main.tilemvc;
 import javafx.animation.RotateTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class Tile {
     private ArrayList<ArrayList<Label>> guessList;
 
     /**
-     * @return the {@ArrayList} of a the guesses, containing each list of letters
+     * @return the {@ArrayList} of the guesses, containing each list of letters
      * contained in guesses
      */
     public ArrayList<ArrayList<Label>> getGuessList() {
@@ -58,6 +59,10 @@ public class Tile {
      */
     public VBox getTiles() { return tiles; }
 
+    public StackPane tileStackPane;
+
+    public StackPane getTileStackPane() { return tileStackPane; }
+
     /**
      * Simple constructor for the Tile class. Initializes the tiles and
      * topPane, where the topPane represents each row of tiles.
@@ -66,6 +71,8 @@ public class Tile {
         // Set up the tiles for our scene graph
         tiles = new VBox();
         tiles.getStyleClass().add("tile");
+
+        tileStackPane = new StackPane();
 
         // Set up the topPane node for our scene graph
         topPane = new HBox();
@@ -111,5 +118,6 @@ public class Tile {
             topPane = new HBox();
             topPane.setId("topPane");
         }
+        tileStackPane.getChildren().add(tiles);
     }
 }

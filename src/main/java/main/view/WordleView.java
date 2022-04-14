@@ -18,12 +18,19 @@
  */
 package main.view;
 
-import javafx.animation.RotateTransition;
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
+import javafx.animation.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -32,7 +39,6 @@ import main.tilemvc.GuessEvaluator;
 import main.tilemvc.Header;
 import main.tilemvc.Tile;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class WordleView {
 
@@ -63,6 +69,26 @@ public class WordleView {
     /** The model of the game */
     private WordleModel wordleModel;
 
+    /** The rectangle that shows up when you win */
+    private Rectangle winRect;
+
+    /** The label on the win screen */
+    private Label winLabel;
+
+    /** Stackpane for the win screen */
+    private StackPane winStackPane;
+
+    /** Border pane for the win screen */
+    private BorderPane winBorderPane;
+
+    /** Button for the win screen */
+    private Button winButton;
+
+    /** Label for the win screen */
+    private Label nameLabel;
+
+
+
     /**
      * @return List with all buttons on the virtual keyboard
      */
@@ -90,6 +116,13 @@ public class WordleView {
         this.root = new BorderPane();
         this.root.setId("background");
         this.listOfGuesses = new ArrayList<>();
+        this.winRect = new Rectangle(300, 200);
+        this.winStackPane = new StackPane();
+        this.winLabel = new Label();
+        this.winBorderPane = new BorderPane();
+        this.winButton = new Button();
+        this.nameLabel = new Label();
+
         initSceneGraph();
     }
 
@@ -107,7 +140,7 @@ public class WordleView {
         this.listOfGuesses = this.tiles.getGuessList();
 
         // Set the scene accordingly
-        this.root.setCenter(this.tiles.getTiles());
+        this.root.setCenter(this.tiles.getTileStackPane());
         this.root.setBottom(this.vk.getKeyboard());
         this.root.setTop(this.header.getHeaderSection());
     }
@@ -130,7 +163,6 @@ public class WordleView {
         changeTileColor(evaluation, s.toString());
     }
 
-
     /**
      * Will perform the action of flipping a tile on the screen for a
      * given duration
@@ -146,6 +178,58 @@ public class WordleView {
         rotation.setToAngle(360);
         rotation.setCycleCount(1);
         rotation.play();
+    }
+
+    /**
+     * Adds two labels and a button to a rectangle, then adds to tiles stackpane
+     * to stack on top of tiles
+     */
+    public void showWinScreen() {
+         //Create rectangle
+        this.winRect.setFill(Color.WHITE);
+        this.winRect.setArcHeight(10.0d);
+        this.winRect.setArcWidth(10.0d);
+        this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
+
+        // Create "You won" label
+        this.winLabel.setText("You won!");
+        this.winButton.setText("Play again?");
+        this.winButton.setPrefSize(100, 50);
+        this.winButton.setId("winButton");
+        this.winLabel.setId("winLabel");
+
+        // Create border pane
+        this.winBorderPane.setMaxSize(300, 200);
+        this.winBorderPane.setPadding(new Insets(10));
+        this.winBorderPane.setAlignment(this.winLabel, Pos.CENTER);
+        this.winBorderPane.setAlignment(this.nameLabel, Pos.CENTER);
+
+        // Create label with names
+        this.nameLabel.setId("nameLabel");
+        this.nameLabel.setText("A game by: Liv, Ramon, Pedro, and Alvin");
+
+        // Add to border pane and stackpane
+        this.winBorderPane.setTop(this.winLabel);
+        this.winBorderPane.setCenter(this.winButton);
+        this.winBorderPane.setBottom(this.nameLabel);
+        this.winStackPane.getChildren().add(this.winRect);
+        this.winStackPane.getChildren().add(this.winBorderPane);
+        this.tiles.getTileStackPane().getChildren().add(this.winStackPane);
+
+        animateWinScreen();
+    }
+
+    /**
+     * Makes the win screen fade in
+     */
+    public void animateWinScreen() {
+        ObjectBinding<Node> frontNode = Bindings.valueAt(this.winStackPane.getChildren(),
+                Bindings.size(this.winStackPane.getChildren()).subtract(1));
+
+        FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
+        ft.setFromValue(0.1);
+        ft.setToValue(1.0);
+        ft.play();
     }
 
     /**
@@ -198,6 +282,10 @@ public class WordleView {
                 this.listOfGuesses.get(this.wordleModel.getRow()).get(i).getStyleClass().add("wrong");
                 changeKeyboardLetterColor("wrong", guess.charAt(i));
             }
+        }
+
+        if (evaluation.equals("*****")) {
+            showWinScreen();
         }
     }
 
