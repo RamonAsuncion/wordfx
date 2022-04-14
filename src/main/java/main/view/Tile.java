@@ -22,6 +22,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 
 /**
@@ -29,20 +31,35 @@ import java.util.ArrayList;
  */
 public class Tile {
 
-    /** Root node for the scene graph */
+    /**
+     * Root node for the scene graph
+     */
     private VBox tiles;
 
-    /** Row of tiles representing each guess */
+    /**
+     * Row of tiles representing each guess
+     */
     private HBox topPane;
 
-    /** Individual tile to be added to our tiles */
+    /**
+     * Individual tile to be added to our tiles
+     */
     private Label rect;
 
-    /** List of labels where letters will be placed */
+    /**
+     * List of labels where letters will be placed
+     */
     private ArrayList<Label> letterList;
 
-    /** List of all guesses, where each guess is a list of labels (letters) */
+    /**
+     * List of all guesses, where each guess is a list of labels (letters)
+     */
     private ArrayList<ArrayList<Label>> guessList;
+
+    /**
+     * Stack Pane with the tiles and win screen
+     */
+    public StackPane tileStackPane;
 
     /**
      * @return the {@ArrayList} of the guesses, containing each list of letters
@@ -55,11 +72,16 @@ public class Tile {
     /**
      * @return the 30 tiles representing all the guesses
      */
-    public VBox getTiles() { return tiles; }
+    public VBox getTiles() {
+        return tiles;
+    }
 
-    public StackPane tileStackPane;
-
-    public StackPane getTileStackPane() { return tileStackPane; }
+    /**
+     * @return the stack pane with tiles and win screen
+     */
+    public StackPane getTileStackPane() {
+        return tileStackPane;
+    }
 
     /**
      * Simple constructor for the Tile class. Initializes the tiles and
@@ -70,8 +92,6 @@ public class Tile {
         tiles = new VBox();
         tiles.getStyleClass().add("tile");
 
-        tileStackPane = new StackPane();
-
         // Set up the topPane node for our scene graph
         topPane = new HBox();
         topPane.setId("topPane");
@@ -80,6 +100,9 @@ public class Tile {
         // letters respectively
         guessList = new ArrayList<ArrayList<Label>>();
         letterList = new ArrayList<>();
+
+        // Create the stack pane for the win screen */
+        tileStackPane = new StackPane();
 
         createTilePane();
     }

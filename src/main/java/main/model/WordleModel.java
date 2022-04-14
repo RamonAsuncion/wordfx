@@ -20,6 +20,7 @@ package main.model;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import main.view.Header;
 import main.view.Tile;
 import main.view.VirtualKeyboardView;
@@ -70,6 +71,11 @@ public class WordleModel {
      * @return all 30 tiles
      */
     public Tile getTiles() { return tiles; }
+
+    /**
+     * @return the stackpane in the tile class
+     */
+    public StackPane getTileStackPane() { return this.tiles.getTileStackPane(); }
 
     /**
      * @return The VirtualKeyboard object that stores all keys on virtual keyboard

@@ -18,9 +18,17 @@
  */
 package main.view;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -40,8 +48,29 @@ public class WordleView {
     /** The model of the game */
     private WordleModel wordleModel;
 
+    /** The 30 tiles representing all possible guesses */
+    private Tile tiles;
+
     /** Current state of the game */
     private GameState gameState;
+
+    /** The rectangle that shows up when you win */
+    private Rectangle winRect;
+
+    /** The label on the win screen */
+    private Label winLabel;
+
+    /** Stackpane for the win screen */
+    private StackPane winStackPane;
+
+    /** Border pane for the win screen */
+    private BorderPane winBorderPane;
+
+    /** Button for the win screen */
+    private Button winButton;
+
+    /** Label for the win screen */
+    private Label nameLabel;
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -57,6 +86,13 @@ public class WordleView {
         // Initialize the root for our display
         this.root = new BorderPane();
         this.root.setId("background");
+        this.winRect = new Rectangle(300, 200);
+        this.winStackPane = new StackPane();
+        this.winLabel = new Label();
+        this.winBorderPane = new BorderPane();
+        this.winButton = new Button();
+        this.nameLabel = new Label();
+
         initSceneGraph();
     }
 
@@ -160,6 +196,11 @@ public class WordleView {
                 changeKeyboardLetterColor("wrong", guess.charAt(i));
             }
         }
+
+        if (evaluation.equals("*****")) {
+            System.out.println("equals");
+            showWinScreen();
+        }
     }
 
     /**
@@ -197,5 +238,57 @@ public class WordleView {
                 !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
             this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
         }
+    }
+
+    /**
+     * Adds two labels and a button to a rectangle, then adds to tiles stackpane
+     * to stack on top of tiles
+     */
+    public void showWinScreen() {
+        // Create rectangle
+        this.winRect.setFill(Color.WHITE);
+        this.winRect.setArcHeight(10.0d);
+        this.winRect.setArcWidth(10.0d);
+        this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
+
+        // Create "You won" label
+        this.winLabel.setText("You won!");
+        this.winLabel.setId("winLabel");
+
+        // Create play again button
+        this.winButton.setText("Play again?");
+        this.winButton.setPrefSize(100, 50);
+        this.winButton.setId("winButton");
+
+        // Create border pane
+        this.winBorderPane.setMaxSize(300, 200);
+        this.winBorderPane.setPadding(new Insets(18));
+        this.winBorderPane.setAlignment(this.winLabel, Pos.CENTER);
+        this.winBorderPane.setAlignment(this.nameLabel, Pos.CENTER);
+
+        // Create label with names
+        this.nameLabel.setId("nameLabel");
+        this.nameLabel.setText("A game by Liv & Gang");
+
+        // Add to border pane and stackpane
+        this.winBorderPane.setTop(this.winLabel);
+        this.winBorderPane.setCenter(this.winButton);
+        this.winBorderPane.setBottom(this.nameLabel);
+        this.winStackPane.getChildren().add(this.winRect);
+        this.winStackPane.getChildren().add(this.winBorderPane);
+        this.wordleModel.getTileStackPane().getChildren().add(this.winStackPane);
+        this.root.setCenter(this.winStackPane);
+
+        animateWinScreen();
+    }
+
+    /**
+     * Makes the win screen fade in
+     */
+    public void animateWinScreen() {
+        FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
+        ft.setFromValue(0.1);
+        ft.setToValue(1.0);
+        ft.play();
     }
 }
