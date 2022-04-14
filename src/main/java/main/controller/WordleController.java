@@ -60,7 +60,7 @@ public class WordleController {
      */
     private void initEventHandlers() {
         // If virtual keyboard is clicked
-        for (Button b : wordleView.getKeysList()) {
+        for (Button b : this.wordleModel.getVk().getKeyboardKeys()) {
             b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
         }
 
@@ -107,7 +107,7 @@ public class WordleController {
             case ENTER:
                 if (this.wordleModel.getColumn() == 4) {
                     // Flip the tiles, check guess, switch the guess state to checked, and jump to next guess
-                    this.wordleView.createEvaluator(this.wordleView.getListOfGuesses().get(this.wordleModel.getRow()));
+                    this.wordleView.createEvaluator(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()));
                     this.guessState = GuessState.CHECKED;
                     this.wordleModel.incrementRow();
                 }
