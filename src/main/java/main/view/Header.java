@@ -16,7 +16,7 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.view;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -18,50 +18,21 @@
  */
 package main.view;
 
-import javafx.animation.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.animation.RotateTransition;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.GuessEvaluator;
-import main.tilemvc.Header;
-import main.tilemvc.Tile;
 import java.util.ArrayList;
 
 public class WordleView {
 
-    /** The 30 tiles representing all possible guesses */
-    private Tile tiles;
-
-    /** The virtual keyboard which user cna use to type */
-    private VirtualKeyboardView vk;
-
-    /** The "Wordle" header section */
-    private Header header;
-
     /** The root node containing all three nodes above */
     private BorderPane root;
-
-    /** List of all letters in the keyboard */
-    private ArrayList<Character> letterList;
-
-    /** List of all 6 guesses in the game */
-    private ArrayList<ArrayList<Label>> listOfGuesses;
-
-    /** The list with the buttons on the virtual keyboard */
-    private ArrayList<Button> keysList;
 
     /** The evaluator of our guess */
     private GuessEvaluator guessEval;
@@ -69,35 +40,8 @@ public class WordleView {
     /** The model of the game */
     private WordleModel wordleModel;
 
-    /** The rectangle that shows up when you win */
-    private Rectangle winRect;
-
-    /** The label on the win screen */
-    private Label winLabel;
-
-    /** Stackpane for the win screen */
-    private StackPane winStackPane;
-
-    /** Border pane for the win screen */
-    private BorderPane winBorderPane;
-
-    /** Button for the win screen */
-    private Button winButton;
-
-    /** Label for the win screen */
-    private Label nameLabel;
-
-
-
-    /**
-     * @return List with all buttons on the virtual keyboard
-     */
-    public ArrayList<Button> getKeysList() { return keysList; }
-
-    /**
-     * @return List with all possible guesses (will be blank labels)
-     */
-    public ArrayList<ArrayList<Label>> getListOfGuesses() { return listOfGuesses; }
+    /** Current state of the game */
+    private GameState gameState;
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -108,21 +52,11 @@ public class WordleView {
      * Simple constructor to initialize the scene graph
      */
     public WordleView(WordleModel wordleModel) {
-        // Initialize the three nodes + the main root
-        this.header = new Header();
-        this.tiles = new Tile();
-        this.vk = new VirtualKeyboardView();
         this.wordleModel = wordleModel;
+
+        // Initialize the root for our display
         this.root = new BorderPane();
         this.root.setId("background");
-        this.listOfGuesses = new ArrayList<>();
-        this.winRect = new Rectangle(300, 200);
-        this.winStackPane = new StackPane();
-        this.winLabel = new Label();
-        this.winBorderPane = new BorderPane();
-        this.winButton = new Button();
-        this.nameLabel = new Label();
-
         initSceneGraph();
     }
 
@@ -130,19 +64,10 @@ public class WordleView {
      * Initializes the scene graph containing header, tiles, and virtual keyboard
      */
     private void initSceneGraph() {
-        // Creating scene components
-        this.header.createHeader();
-        this.vk.createVirtualKeyboard();
-
-        // Fill our array after creating the virtual keyboard
-        this.letterList = this.vk.getKeyboardLetters();
-        this.keysList = this.vk.getKeyboardKeys();
-        this.listOfGuesses = this.tiles.getGuessList();
-
         // Set the scene accordingly
-        this.root.setCenter(this.tiles.getTileStackPane());
-        this.root.setBottom(this.vk.getKeyboard());
-        this.root.setTop(this.header.getHeaderSection());
+        this.root.setCenter(this.wordleModel.getTiles().getTiles());
+        this.root.setBottom(this.wordleModel.getVk().getKeyboard());
+        this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
     }
 
     /**
@@ -159,8 +84,10 @@ public class WordleView {
         }
         this.guessEval = new GuessEvaluator("HELLO", s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
-        System.out.println("GUESS " + s);
-        changeTileColor(evaluation, s.toString());
+        performScreenAnimation(evaluation, s.toString());
+        if (evaluation.equals("*****")) {
+            this.gameState = GameState.GAME_WINNER;
+        }
     }
 
     /**
@@ -181,58 +108,6 @@ public class WordleView {
     }
 
     /**
-     * Adds two labels and a button to a rectangle, then adds to tiles stackpane
-     * to stack on top of tiles
-     */
-    public void showWinScreen() {
-         //Create rectangle
-        this.winRect.setFill(Color.WHITE);
-        this.winRect.setArcHeight(10.0d);
-        this.winRect.setArcWidth(10.0d);
-        this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
-
-        // Create "You won" label
-        this.winLabel.setText("You won!");
-        this.winButton.setText("Play again?");
-        this.winButton.setPrefSize(100, 50);
-        this.winButton.setId("winButton");
-        this.winLabel.setId("winLabel");
-
-        // Create border pane
-        this.winBorderPane.setMaxSize(300, 200);
-        this.winBorderPane.setPadding(new Insets(10));
-        this.winBorderPane.setAlignment(this.winLabel, Pos.CENTER);
-        this.winBorderPane.setAlignment(this.nameLabel, Pos.CENTER);
-
-        // Create label with names
-        this.nameLabel.setId("nameLabel");
-        this.nameLabel.setText("A game by: Liv, Ramon, Pedro, and Alvin");
-
-        // Add to border pane and stackpane
-        this.winBorderPane.setTop(this.winLabel);
-        this.winBorderPane.setCenter(this.winButton);
-        this.winBorderPane.setBottom(this.nameLabel);
-        this.winStackPane.getChildren().add(this.winRect);
-        this.winStackPane.getChildren().add(this.winBorderPane);
-        this.tiles.getTileStackPane().getChildren().add(this.winStackPane);
-
-        animateWinScreen();
-    }
-
-    /**
-     * Makes the win screen fade in
-     */
-    public void animateWinScreen() {
-        ObjectBinding<Node> frontNode = Bindings.valueAt(this.winStackPane.getChildren(),
-                Bindings.size(this.winStackPane.getChildren()).subtract(1));
-
-        FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
-        ft.setFromValue(0.1);
-        ft.setToValue(1.0);
-        ft.play();
-    }
-
-    /**
      * Takes care of binding what is being typed to the labels on the screen
      *
      * @param letter - Letter being typed
@@ -240,7 +115,8 @@ public class WordleView {
      * @param letterTile - Next available tile
      */
     public void updateTyping(Text letter, int guess, int letterTile) {
-        getListOfGuesses().get(guess).get(letterTile).textProperty().bind(letter.textProperty());
+        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty()
+                .bind(letter.textProperty());
     }
 
     /**
@@ -250,43 +126,50 @@ public class WordleView {
      * @param letterTile - Next available tile
      */
     public void updateDelete(int guess, int letterTile) {
-        getListOfGuesses().get(guess).get(letterTile).textProperty().bind(new Text(" ").textProperty());
+        this.wordleModel.getListOfGuesses().get(guess).get(letterTile).textProperty()
+                .bind(new Text(" ").textProperty());
     }
 
     /**
-     * Changes the color on the tile on the screen with css styling. Green means letter on the guess is
-     * positioned the same way as on the secret word. Yellow means secret word has such letter but misplaced.
-     * Grey simply means not in secret word.
+     * Performs changes of color on the tile and on the virtual keyboard with css styling as well as filps tiles.
+     * Green means letter on the guess is positioned the same way as on the secret word. Yellow means secret word
+     * has such letter but misplaced. Grey simply means not in secret word. The flip is to reveal the colors.
      *
      * @param evaluation - String containing Dash - (becomes grey), Plus + (becomes yellow), and Asterisk * (becomes green)
      * @param guess - guess given by user (to be compared with secret word)
      */
-    public void changeTileColor(String evaluation, String guess) {
+    public void performScreenAnimation(String evaluation, String guess) {
         // Loop through our evaluation
         for (int i = 0; i < 5; i++) {
             // Correctly positioned letter
             if (evaluation.charAt(i) == ('*')) {
-                flipTiles(this.listOfGuesses.get(this.wordleModel.getRow()).get(i));
-                this.listOfGuesses.get(this.wordleModel.getRow()).get(i).getStyleClass().add("exact");
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                changeTileColor("exact", i);
                 changeKeyboardLetterColor("exact", guess.charAt(i));
             }
             // Misplaced letter
             if (evaluation.charAt(i) == ('+')) {
-                flipTiles(this.listOfGuesses.get(this.wordleModel.getRow()).get(i));
-                this.listOfGuesses.get(this.wordleModel.getRow()).get(i).getStyleClass().add("misplaced");
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                changeTileColor("misplaced", i);
                 changeKeyboardLetterColor("misplaced", guess.charAt(i));
             }
             // Wrong letter
             if (evaluation.charAt(i) == ('-')) {
-                flipTiles(this.listOfGuesses.get(this.wordleModel.getRow()).get(i));
-                this.listOfGuesses.get(this.wordleModel.getRow()).get(i).getStyleClass().add("wrong");
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                changeTileColor("wrong", i);
                 changeKeyboardLetterColor("wrong", guess.charAt(i));
             }
         }
+    }
 
-        if (evaluation.equals("*****")) {
-            showWinScreen();
-        }
+    /**
+     * Changes the color of the tiles containing the guessed letters (forming a guess word) on the screen
+     *
+     * @param style - css style: exact for green, misplaced for yellow, wrong for dark grey
+     * @param index - index in which the letter is located on the guess
+     */
+    private void changeTileColor(String style, int index) {
+        this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(index).getStyleClass().add(style);
     }
 
     /**
@@ -298,22 +181,21 @@ public class WordleView {
      */
     private void changeKeyboardLetterColor(String style, char letter) {
         // Obtain the index of current letter in guess and change its style
-        int index = this.letterList.indexOf(letter);
+        int index = this.wordleModel.getLetterList().indexOf(letter);
 
         // Only possibility to change colors is from yellow to green, nothing else
-        if (this.keysList.get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
-            this.keysList.get(index).getStyleClass().remove("misplaced");
-            this.keysList.get(index).getStyleClass().add("exact");
+        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
+            // Remove the yellow styling
+            this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
+            // Add the green
+            this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
         }
 
-        // If key already has a color
-        else if (this.keysList.get(index).getStyle().contains("misplaced") ||
-                this.keysList.get(index).getStyle().contains("exact") ||
-                this.keysList.get(index).getStyle().contains("wrong")) {
-            // Don't do anything if letter already has a color
-        }
-        else {
-            this.keysList.get(index).getStyleClass().add(style);
+        // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
+        else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
+                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
+                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
+            this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
         }
     }
 }
