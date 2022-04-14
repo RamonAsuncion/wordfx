@@ -45,7 +45,6 @@
 }
 
 .tile {
-    -fx-background-color: white;
     -fx-stroke: #d0d0d0;
     -fx-stroke-width: 2px;
     -fx-spacing: 10;
