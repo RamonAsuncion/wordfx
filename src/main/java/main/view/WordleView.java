@@ -24,6 +24,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
+import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.GuessEvaluator;
 import java.util.ArrayList;
@@ -38,6 +39,9 @@ public class WordleView {
 
     /** The model of the game */
     private WordleModel wordleModel;
+
+    /** Current state of the game */
+    private GameState gameState;
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -81,6 +85,9 @@ public class WordleView {
         this.guessEval = new GuessEvaluator("HELLO", s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
         performScreenAnimation(evaluation, s.toString());
+        if (evaluation.equals("*****")) {
+            this.gameState = GameState.GAME_WINNER;
+        }
     }
 
     /**

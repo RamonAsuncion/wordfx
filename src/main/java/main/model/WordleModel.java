@@ -20,8 +20,8 @@ package main.model;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import main.tilemvc.Header;
-import main.tilemvc.Tile;
+import main.view.Header;
+import main.view.Tile;
 import main.view.VirtualKeyboardView;
 
 import java.util.ArrayList;

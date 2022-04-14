@@ -16,10 +16,8 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.view;
 
-
-import javafx.animation.RotateTransition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
