@@ -18,6 +18,8 @@
  */
 package main.controller;
 
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -77,21 +79,53 @@ public class WordleController {
         // If typed on physical keyboard
         this.scene.setOnKeyPressed(this::takeActionFromKeyPressed);
 
-        this.wordleView.getWinButton().setOnMouseClicked(event -> startNewGame());
+        // Press the button at the end of the game to restart.
+        this.wordleView.getWinButton().setOnMouseClicked(this::restartGame);
     }
 
     /**
      * Starts a new game if user would like to continue
+     *
+     * @param event button handler
      */
-    private void startNewGame() {
-        Stage stage = new Stage();
+    public void restartGame(Event event) {
+        // Stops from implicitly exiting out the application before a
+        // new stage is shown.
+        Platform.setImplicitExit(false);
+
         wm = new WordleMain();
+
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+
+        // Save the windows current position.
+        double positionX = stage.getX();
+        double positionY = stage.getY();
+
+        // Save the windows size.
+        double height = stage.getHeight();
+        double width = stage.getWidth();
+
+        // Close the scene a start a new one.
+        stage.close();
         try {
             wm.init();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Set the streak of the game.
         wm.setStreak(this.wordleModel.getCurrentWinStreak());
+
+        // Reapply last window position.
+        stage.setX(positionX);
+        stage.setY(positionY);
+
+        // Reapply last window size.
+        stage.setHeight(height);
+        stage.setWidth(width);
+
+        // Start the stage again.
         wm.start(stage);
     }
 

@@ -262,6 +262,8 @@ public class WordleView {
     /**
      * Adds two labels and a button to a rectangle, then adds to tiles stackpane
      * to stack on top of tiles
+     *
+     * @param winningResult the string of the game ending result.
      */
     public void showWinScreen(String winningResult) {
         // Create rectangle
