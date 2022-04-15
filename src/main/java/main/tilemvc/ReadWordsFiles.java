@@ -20,6 +20,7 @@ package main.tilemvc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -28,6 +29,9 @@ public class ReadWordsFiles {
 
     /** The secret word for user to guess */
     private String secretWord;
+
+    /** To determine if word is in list */
+    private UsedWords usedWords = new UsedWords();
 
     /** The set of all words in the file */
     private ArrayList<String> wordSet = new ArrayList<>();
@@ -41,19 +45,29 @@ public class ReadWordsFiles {
      */
     public String createRandomWord(String wordFile) {
         File file = new File(wordFile);
+        // Scan through file and create a set of all words
+        Scanner scnr = null;
         try {
-            // Scan through file and create a set of all words
-            Scanner scnr = new Scanner(file);
-            while(scnr.hasNext()) {
-                wordSet.add(scnr.next());
-            }
-            // Find a random word in the list at index randInt
-            // and assign to secret word
-            Random rand = new Random();
-            int randInt = rand.nextInt((wordSet.size()));
-            secretWord = wordSet.get(randInt);
-
+            scnr = new Scanner(file);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (scnr.hasNext()) {
+            wordSet.add(scnr.next());
+        }
+        // Find a random word in the list at index randInt
+        // and assign to secret word
+        Random rand = new Random();
+        int randInt = rand.nextInt((wordSet.size()));
+        try {
+            if (!this.usedWords.isWordUsed(wordSet.get(randInt))) {
+                secretWord = wordSet.get(randInt);
+            } else {
+                System.out.println("already used");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return secretWord;
