@@ -28,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -99,6 +100,10 @@ public class WordleView {
         this.winButton = new Button();
         this.nameLabel = new Label();
 
+        // TODO: Remove, temporary for testing.
+        var header = this.wordleModel.getHeader().getHeaderSection();
+
+
         initSceneGraph();
     }
 
@@ -136,18 +141,21 @@ public class WordleView {
         if (evaluation.equals("*****")) {
             this.wordleModel.setGameState(GameState.GAME_WINNER);
             this.wordleModel.incrementCurrentWinStreak();
-            showWinScreen("You won!");
+            String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
+            showEndScreen("You won!", message);
         }
         // If user runs out of guesses.
         else if (this.wordleModel.getRow() >= 5) {
             this.wordleModel.setGameState(GameState.GAME_LOSER);
             this.wordleModel.setStreak(0);
-            showWinScreen("You lose!");
+            String message = "Secret word: " + this.wordleModel.getSecretWord();
+            showEndScreen("You Lost :(!", message);
         }
         // Continue running the game.
         else {
             this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
         }
+        this.wordleModel.incrementCurrentGuessNumber();
     }
 
     /**
@@ -165,6 +173,11 @@ public class WordleView {
         rotation.setToAngle(360);
         rotation.setCycleCount(1);
         rotation.play();
+    }
+
+    // TODO: If the answer is not in the word list shake.
+    public void horizontalShakeTiles(Label tile) {
+         // here
     }
 
     /**
@@ -263,18 +276,22 @@ public class WordleView {
      * Adds two labels and a button to a rectangle, then adds to tiles stackpane
      * to stack on top of tiles
      *
-     * @param winningResult the string of the game ending result.
+     * @param winOrLose the string of the game ending result.
      */
-    public void showWinScreen(String winningResult) {
+    public void showEndScreen(String winOrLose, String streakOrSecretWord) {
         // Create rectangle
         this.winRect.setFill(Color.WHITE);
         this.winRect.setArcHeight(10.0d);
         this.winRect.setArcWidth(10.0d);
         this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
 
-        // Create "You won" label
-        this.winLabel.setText(winningResult);
+        // Create label with the winning result displayed.
+        VBox endScreenHeader = new VBox();
+        Label importantInfo = new Label(streakOrSecretWord);
+        this.winLabel.setText(winOrLose);
         this.winLabel.setId("winLabel");
+        endScreenHeader.getChildren().addAll(this.winLabel, importantInfo);
+        endScreenHeader.setAlignment(Pos.CENTER);
 
         // Create play again button
         this.winButton.setText("Play again?");
@@ -293,7 +310,7 @@ public class WordleView {
         this.nameLabel.setText("A game by Liv & Gang");
 
         // Add to border pane and stackpane
-        this.winBorderPane.setTop(this.winLabel);
+        this.winBorderPane.setTop(endScreenHeader);
         this.winBorderPane.setCenter(this.winButton);
         this.winBorderPane.setBottom(this.nameLabel);
         this.winStackPane.getChildren().add(this.winRect);
