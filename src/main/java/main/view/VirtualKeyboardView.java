@@ -90,7 +90,7 @@ public class VirtualKeyboardView {
      */
     public Button createEnterKey(String enter) {
         Button enterKey = new Button(enter);
-        keyboardKeys.add(enterKey);
+        //keyboardKeys.add(enterKey);
         enterKey.getStyleClass().add("keyboard-letter");
         enterKey.getStyleClass().add("enter");
         return enterKey;
@@ -103,7 +103,7 @@ public class VirtualKeyboardView {
      */
     public Button createDeleteKey() {
         Button delKey = new Button("");
-        keyboardKeys.add(delKey);
+        //keyboardKeys.add(delKey); //TODO fix misplacing colors
         delKey.getStyleClass().add("keyboard-letter");
         delKey.getStyleClass().add("delete");
         return delKey;

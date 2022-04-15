@@ -100,7 +100,6 @@ public class WordleView {
         this.nameLabel = new Label();
 
         initSceneGraph();
-        initSecretWord();
     }
 
     /**
@@ -114,9 +113,9 @@ public class WordleView {
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
     }
 
-    private void initSecretWord() {
-        this.secretWord = this.guessEval.createRandomWord();
-    }
+//    private void initSecretWord() {
+//        this.secretWord = this.guessEval.createRandomWord("5words.");
+//    }
 
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
@@ -130,7 +129,7 @@ public class WordleView {
         for (Label tile : guess) {
             s.append(tile.getText());
         }
-        this.guessEval = new GuessEvaluator(secretWord, s.toString());
+        this.guessEval = new GuessEvaluator(this.wordleModel.getSecretWord(), s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
         performScreenAnimation(evaluation, s.toString());
         if (evaluation.equals("*****")) {

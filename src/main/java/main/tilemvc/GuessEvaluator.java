@@ -87,6 +87,7 @@ public class GuessEvaluator {
      * what letters are promising
      */
     public String analyzeGuess(String guess) {
+        guess = guess.toLowerCase();
         //first check for green letters (correct letter, correct position)
         for (int i = 0; i < guess.length(); ++i) {
             if (this.secretWord.charAt(i) == guess.charAt(i)) { this.guessAnalysis.setCharAt(i, '*'); }
@@ -100,31 +101,6 @@ public class GuessEvaluator {
                 this.guessAnalysis.setCharAt(guess.indexOf(entry.getValue()),'+');
             }
         }
-        System.out.println(this.guessAnalysis.toString());
         return this.guessAnalysis.toString();
-    }
-
-    public String createRandomWord() {
-        System.out.println("hi");
-        secretWord = "HELLO";
-//        System.out.println("hi");
-//        File file = new File(wordFile);
-//        try {
-//            // Scan through file and create a set of all words
-//            Scanner scnr = new Scanner(file);
-//            while(scnr.hasNext()) {
-//                wordSet.add(scnr.next());
-//            }
-//            // Find a random word in the list at index randInt
-//            // and assign to secret word
-//            Random rand = new Random();
-//            int randInt = rand.nextInt((wordSet.size()));
-//            secretWord = wordSet.get(randInt);
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println(secretWord);
-        return secretWord;
     }
 }

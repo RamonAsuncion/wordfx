@@ -21,6 +21,7 @@ package main.model;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import main.tilemvc.ReadWordsFiles;
 import main.view.Header;
 import main.view.Tile;
 import main.view.VirtualKeyboardView;
@@ -54,6 +55,12 @@ public class WordleModel {
 
     /** Keeps track of how many games user has won */
     private int currentWinStreak;
+
+    private ReadWordsFiles reader;
+
+    private String secretWord;
+
+    public String getSecretWord() { return secretWord; }
 
     /**
      * @return the current win streak of the player
@@ -117,6 +124,8 @@ public class WordleModel {
         // state of game starts our with NEW_GAME
         this.gameState = GameState.NEW_GAME;
         this.currentWinStreak = 0;
+        this.reader = new ReadWordsFiles();
+        this.secretWord = this.reader.createRandomWord("5words.txt");
         initInterface();
     }
 
