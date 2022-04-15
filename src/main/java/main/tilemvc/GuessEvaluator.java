@@ -18,6 +18,8 @@
  */
 package main.tilemvc;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -36,6 +38,11 @@ public class GuessEvaluator {
 
     /** This keeps track of the letters in both the secret word and guessed word */
     private Map<Character, Character> mapOfLetters;
+
+    /** Stores the file of either 3, 4, or 5 letter words depending on mode */
+    private String wordFile;
+
+    private List<String> wordSet;
 
     /**
      * Returns the secret word
@@ -67,6 +74,8 @@ public class GuessEvaluator {
         this.currentGuess = currentGuess.toLowerCase();
         this.guessAnalysis = new StringBuffer("-----");
         this.mapOfLetters = new TreeMap<>();
+        this.wordSet = new ArrayList<String>();
+        this.wordFile = "5words.txt";
     }
 
     /**
@@ -95,4 +104,27 @@ public class GuessEvaluator {
         return this.guessAnalysis.toString();
     }
 
+    public String createRandomWord() {
+        System.out.println("hi");
+        secretWord = "HELLO";
+//        System.out.println("hi");
+//        File file = new File(wordFile);
+//        try {
+//            // Scan through file and create a set of all words
+//            Scanner scnr = new Scanner(file);
+//            while(scnr.hasNext()) {
+//                wordSet.add(scnr.next());
+//            }
+//            // Find a random word in the list at index randInt
+//            // and assign to secret word
+//            Random rand = new Random();
+//            int randInt = rand.nextInt((wordSet.size()));
+//            secretWord = wordSet.get(randInt);
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(secretWord);
+        return secretWord;
+    }
 }

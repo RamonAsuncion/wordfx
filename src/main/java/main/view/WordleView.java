@@ -36,6 +36,8 @@ import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.GuessEvaluator;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class WordleView {
@@ -67,7 +69,11 @@ public class WordleView {
     /** Label for the win screen */
     private Label nameLabel;
 
+    /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
+
+    /** The secret word */
+    private String secretWord;
 
     public Button getWinButton() { return winButton; }
 
@@ -81,6 +87,7 @@ public class WordleView {
      */
     public WordleView(WordleModel wordleModel) {
         this.wordleModel = wordleModel;
+        // Get the secret word
 
         // Initialize the root for our display
         this.root = new BorderPane();
@@ -93,6 +100,7 @@ public class WordleView {
         this.nameLabel = new Label();
 
         initSceneGraph();
+        initSecretWord();
     }
 
     /**
@@ -106,6 +114,10 @@ public class WordleView {
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
     }
 
+    private void initSecretWord() {
+        this.secretWord = this.guessEval.createRandomWord();
+    }
+
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
      * finding if a letter is in the correct position, misplaced, or not even
@@ -113,12 +125,12 @@ public class WordleView {
      *
      * @param guess - Given guess by user
      */
-    public void createEvaluator(ArrayList<Label> guess) {
+    public void createEvaluator(ArrayList<Label> guess) throws FileNotFoundException {
         StringBuffer s = new StringBuffer("");
         for (Label tile : guess) {
             s.append(tile.getText());
         }
-        this.guessEval = new GuessEvaluator("HELLO", s.toString());
+        this.guessEval = new GuessEvaluator(secretWord, s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
         performScreenAnimation(evaluation, s.toString());
         if (evaluation.equals("*****")) {

@@ -29,6 +29,8 @@ import main.model.WordleModel;
 import main.tilemvc.WordleMain;
 import main.view.WordleView;
 
+import java.io.FileNotFoundException;
+
 public class WordleController {
 
     /** The model of our Wordle implementation */
@@ -130,7 +132,11 @@ public class WordleController {
             case ENTER:
                 if (this.wordleModel.getColumn() == 4) {
                     // Flip the tiles, check guess, switch the guess state to checked, and jump to next guess
-                    this.wordleView.createEvaluator(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()));
+                    try {
+                        this.wordleView.createEvaluator(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     this.guessState = GuessState.CHECKED;
                     this.wordleModel.incrementRow();
                 }
