@@ -22,6 +22,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -48,12 +49,6 @@ public class WordleView {
     /** The model of the game */
     private WordleModel wordleModel;
 
-    /** The 30 tiles representing all possible guesses */
-    private Tile tiles;
-
-    /** Current state of the game */
-    private GameState gameState;
-
     /** The rectangle that shows up when you win */
     private Rectangle winRect;
 
@@ -71,6 +66,8 @@ public class WordleView {
 
     /** Label for the win screen */
     private Label nameLabel;
+
+    public Button getWinButton() { return winButton; }
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -122,7 +119,9 @@ public class WordleView {
         String evaluation = this.guessEval.analyzeGuess(s.toString());
         performScreenAnimation(evaluation, s.toString());
         if (evaluation.equals("*****")) {
-            this.gameState = GameState.GAME_WINNER;
+            this.wordleModel.setGameState(GameState.GAME_WINNER);
+            this.wordleModel.incrementCurrentWinStreak();
+            showWinScreen();
         }
     }
 
@@ -196,11 +195,6 @@ public class WordleView {
                 changeKeyboardLetterColor("wrong", guess.charAt(i));
             }
         }
-
-        if (evaluation.equals("*****")) {
-            System.out.println("equals");
-            showWinScreen();
-        }
     }
 
     /**
@@ -257,6 +251,7 @@ public class WordleView {
 
         // Create play again button
         this.winButton.setText("Play again?");
+        System.out.println("STREAK: " + this.wordleModel.getCurrentWinStreak());
         this.winButton.setPrefSize(100, 50);
         this.winButton.setId("winButton");
 

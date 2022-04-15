@@ -20,9 +20,13 @@ package main.controller;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import main.model.GameState;
 import main.model.WordleModel;
+import main.tilemvc.WordleMain;
 import main.view.WordleView;
 
 public class WordleController {
@@ -38,6 +42,8 @@ public class WordleController {
 
     /** The state of our row, initially unchecked */
     private GuessState guessState;
+
+    private WordleMain wm;
 
     /**
      * Simple constructor for our Worldle game
@@ -59,14 +65,31 @@ public class WordleController {
      * clicking on virtual keyboard
      */
     private void initEventHandlers() {
+
         // If virtual keyboard is clicked
         for (Button b : this.wordleModel.getVk().getKeyboardKeys()) {
             b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
         }
 
         // If typed on physical keyboard
-        scene.setOnKeyPressed(this::takeActionFromKeyPressed);
+        this.scene.setOnKeyPressed(this::takeActionFromKeyPressed);
 
+        this.wordleView.getWinButton().setOnMouseClicked(event -> startNewGame());
+    }
+
+    /**
+     * Starts a new game if user would like to continue
+     */
+    private void startNewGame() {
+        Stage stage = new Stage();
+        wm = new WordleMain();
+        try {
+            wm.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        wm.setStreak(this.wordleModel.getCurrentWinStreak());
+        wm.start(stage);
     }
 
     /**

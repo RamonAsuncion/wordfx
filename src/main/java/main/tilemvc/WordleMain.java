@@ -20,6 +20,10 @@ public class WordleMain extends Application {
     /** Our Wordle scene where everything is displayed */
     private Scene scene;
 
+    private Stage stage;
+
+    public Stage getStage() { return stage; }
+
     public static void main(String[] args) { launch(args); }
 
     @Override
@@ -29,8 +33,13 @@ public class WordleMain extends Application {
         this.wordleView = new WordleView(this.wordleModel);
     }
 
+    public void setStreak(int streak) {
+        this.wordleModel.setStreak(streak);
+    }
+
     @Override
     public void start(Stage primaryStage) {
+        stage = primaryStage;
         // Create new scene and use css resources from style.css
         scene = new Scene(this.wordleView.getRoot());
         scene.getStylesheets().add(
@@ -40,12 +49,12 @@ public class WordleMain extends Application {
         keyboardController = new WordleController(this.wordleView, this.wordleModel, scene);
 
         // Add the scene graph to the stage
-        primaryStage.setScene(scene);
+        stage.setScene(scene);
 
         // Set the title for the main window
-        primaryStage.setTitle("Wordle");
+        stage.setTitle("Wordle");
 
         // Display the scene
-        primaryStage.show();
+        stage.show();
     }
 }

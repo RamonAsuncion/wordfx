@@ -52,6 +52,16 @@ public class WordleModel {
     /** The list with the buttons on the virtual keyboard */
     private ArrayList<Button> keysList;
 
+    /** Keeps track of how many games user has won */
+    private int currentWinStreak;
+
+    /**
+     * @return the current win streak of the player
+     */
+    public int getCurrentWinStreak() { return currentWinStreak; }
+
+    public void setStreak(int currentWinStreak) { this.currentWinStreak = currentWinStreak; }
+
     /**
      * @return List with all letters contained in last given guess
      */
@@ -90,6 +100,10 @@ public class WordleModel {
     /** The current state of the game */
     private GameState gameState;
 
+    public void setGameState(GameState gameState) { this.gameState = gameState; }
+
+    public GameState getGameState() { return gameState;}
+
     public WordleModel() {
         // Three main components of interface
         this.header = new Header();
@@ -102,9 +116,13 @@ public class WordleModel {
 
         // state of game starts our with NEW_GAME
         this.gameState = GameState.NEW_GAME;
+        this.currentWinStreak = 0;
         initInterface();
     }
 
+    /**
+     * Initializes the interface with the header, tiles, and virtual keyboard
+     */
     private void initInterface() {
         // Creating scene components
         this.header.createHeader();
@@ -158,6 +176,11 @@ public class WordleModel {
     public void setColumn(int col) {
         this.column = col;
     }
+
+    /**
+     * Increments the win streak by one
+     */
+    public void incrementCurrentWinStreak() { this.currentWinStreak++; }
 
 
 }
