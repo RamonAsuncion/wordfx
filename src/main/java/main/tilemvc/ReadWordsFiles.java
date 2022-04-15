@@ -26,10 +26,19 @@ import java.util.Scanner;
 
 public class ReadWordsFiles {
 
+    /** The secret word for user to guess */
     private String secretWord;
 
+    /** The set of all words in the file */
     private ArrayList<String> wordSet = new ArrayList<>();
 
+    /**
+     * Reads in the file and creates a set of words, then gets a random
+     * word from that set to be the secret word
+     *
+     * @param wordFile - the 3, 4, or 5 letter word file
+     * @return - the secret word
+     */
     public String createRandomWord(String wordFile) {
         File file = new File(wordFile);
         try {
@@ -48,5 +57,14 @@ public class ReadWordsFiles {
             e.printStackTrace();
         }
         return secretWord;
+    }
+
+    /**
+     * Checks that the user guess is a valid word from the set
+     * @param guess - the user guess
+     * @return - boolean, whether or not guess is in word set
+     */
+    public boolean isWordInSet(String guess) {
+        return wordSet.contains(guess);
     }
 }

@@ -65,6 +65,8 @@ public class WordleModel {
 
     public String getSecretWord() { return secretWord; }
 
+    public ReadWordsFiles getReader() { return reader; }
+
     /**
      * @return the current win streak of the player
      */

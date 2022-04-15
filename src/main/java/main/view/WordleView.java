@@ -109,6 +109,7 @@ public class WordleView {
         this.root.setCenter(tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
+        System.out.println(this.wordleModel.getSecretWord());
     }
 
     /**
@@ -124,27 +125,34 @@ public class WordleView {
             s.append(tile.getText());
         }
         this.guessEval = new GuessEvaluator(this.wordleModel.getSecretWord(), s.toString());
-        String evaluation = this.guessEval.analyzeGuess(s.toString());
-        performScreenAnimation(evaluation, s.toString());
-        // If the user gets the right word.
-        if (evaluation.equals("*****")) {
-            this.wordleModel.setGameState(GameState.GAME_WINNER);
-            this.wordleModel.incrementCurrentWinStreak();
-            String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
-            showEndScreen("You won!", message);
+
+        // Make sure the word is a valid word
+        if(this.wordleModel.getReader().isWordInSet(s.toString().toLowerCase()) == true) {
+            String evaluation = this.guessEval.analyzeGuess(s.toString());
+            performScreenAnimation(evaluation, s.toString());
+            // If the user gets the right word.
+            if (evaluation.equals("*****")) {
+                this.wordleModel.setGameState(GameState.GAME_WINNER);
+                this.wordleModel.incrementCurrentWinStreak();
+                String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
+                showEndScreen("You won!", message);
+            }
+            // If user runs out of guesses.
+            else if (this.wordleModel.getRow() >= 5) {
+                this.wordleModel.setGameState(GameState.GAME_LOSER);
+                this.wordleModel.setStreak(0);
+                String message = "Secret word: " + this.wordleModel.getSecretWord();
+                showEndScreen("You Lost :(!", message);
+            }
+            // Continue running the game.
+            else {
+                this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
+            }
+            this.wordleModel.incrementCurrentGuessNumber();
         }
-        // If user runs out of guesses.
-        else if (this.wordleModel.getRow() >= 5) {
-            this.wordleModel.setGameState(GameState.GAME_LOSER);
-            this.wordleModel.setStreak(0);
-            String message = "Secret word: " + this.wordleModel.getSecretWord();
-            showEndScreen("You Lost :(!", message);
-        }
-        // Continue running the game.
         else {
-            this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
+            System.out.println("BAD INPUT");
         }
-        this.wordleModel.incrementCurrentGuessNumber();
     }
 
     /**
