@@ -67,6 +67,8 @@ public class WordleView {
     /** Label for the win screen */
     private Label nameLabel;
 
+    private StackPane tileStack;
+
     public Button getWinButton() { return winButton; }
 
     /**
@@ -98,7 +100,8 @@ public class WordleView {
      */
     private void initSceneGraph() {
         // Set the scene accordingly
-        this.root.setCenter(this.wordleModel.getTiles().getTiles());
+        tileStack = new StackPane(this.wordleModel.getTiles().getTiles()); //this must be a stack for final message
+        this.root.setCenter(tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
     }
@@ -272,7 +275,8 @@ public class WordleView {
         this.winStackPane.getChildren().add(this.winRect);
         this.winStackPane.getChildren().add(this.winBorderPane);
         this.wordleModel.getTileStackPane().getChildren().add(this.winStackPane);
-        this.root.setCenter(this.winStackPane);
+        tileStack.getChildren().add(this.winStackPane);
+        this.root.setCenter(tileStack);
 
         animateWinScreen();
     }
