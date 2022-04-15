@@ -127,8 +127,8 @@ public class WordleView {
         this.guessEval = new GuessEvaluator(this.wordleModel.getSecretWord(), s.toString());
 
         // Make sure the word is a valid word
-        if(this.wordleModel.getReader().isWordInSet(s.toString().toLowerCase()) == true) {
-            String evaluation = this.guessEval.analyzeGuess(s.toString());
+        if(this.wordleModel.getReader().isWordInSet(s.toString().toLowerCase())) {
+            String evaluation = this.guessEval.analyzeGuess();
             performScreenAnimation(evaluation, s.toString());
             // If the user gets the right word.
             if (evaluation.equals("*****")) {
@@ -142,7 +142,7 @@ public class WordleView {
                 this.wordleModel.setGameState(GameState.GAME_LOSER);
                 this.wordleModel.setStreak(0);
                 String message = "Secret word: " + this.wordleModel.getSecretWord();
-                showEndScreen("You Lost :(!", message);
+                showEndScreen("You Lost :(", message);
             }
             // Continue running the game.
             else {

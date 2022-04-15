@@ -39,32 +39,6 @@ public class GuessEvaluator {
     /** This keeps track of the letters in both the secret word and guessed word */
     private Map<Character, Character> mapOfLetters;
 
-    /** Stores the file of either 3, 4, or 5 letter words depending on mode */
-    private String wordFile;
-
-    private List<String> wordSet;
-
-    /**
-     * Returns the secret word
-     *
-     * @return the secret word
-     */
-    public String getSecretWord() { return this.secretWord; }
-
-    /**
-     * Returns the current guess
-     *
-     * @return the current guess
-     */
-    public String getCurrentGuess() { return this.currentGuess; }
-
-    /**
-     * Returns the analysis of the guess
-     *
-     * @return the analysis of the guess
-     */
-    public StringBuffer getGuessAnalysis() { return guessAnalysis; }
-
     /**
      * Simple GuessEvaluator constructor to define the secret word, current guess,
      * and a guess analysis
@@ -74,8 +48,6 @@ public class GuessEvaluator {
         this.currentGuess = currentGuess.toLowerCase();
         this.guessAnalysis = new StringBuffer("-----");
         this.mapOfLetters = new TreeMap<>();
-        this.wordSet = new ArrayList<String>();
-        this.wordFile = "5words.txt";
     }
 
     /**
@@ -86,19 +58,18 @@ public class GuessEvaluator {
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-    public String analyzeGuess(String guess) {
-        guess = guess.toLowerCase();
+    public String analyzeGuess() {
         //first check for green letters (correct letter, correct position)
-        for (int i = 0; i < guess.length(); ++i) {
-            if (this.secretWord.charAt(i) == guess.charAt(i)) { this.guessAnalysis.setCharAt(i, '*'); }
-            else { mapOfLetters.put(this.secretWord.charAt(i), guess.charAt(i)); }
+        for (int i = 0; i < this.currentGuess.length(); ++i) {
+            if (this.secretWord.charAt(i) == this.currentGuess.charAt(i)) { this.guessAnalysis.setCharAt(i, '*'); }
+            else { mapOfLetters.put(this.secretWord.charAt(i), this.currentGuess.charAt(i)); }
         }
 
         //then, check for yellow letters (correct letter, incorrect position)
         Set<Character> remainingSecretLetters = mapOfLetters.keySet();
         for (Map.Entry<Character,Character> entry : mapOfLetters.entrySet()) {
             if (remainingSecretLetters.contains(entry.getValue())) {
-                this.guessAnalysis.setCharAt(guess.indexOf(entry.getValue()),'+');
+                this.guessAnalysis.setCharAt(this.currentGuess.indexOf(entry.getValue()),'+');
             }
         }
         return this.guessAnalysis.toString();
