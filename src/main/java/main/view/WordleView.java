@@ -73,9 +73,6 @@ public class WordleView {
     /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
 
-    /** The secret word */
-    private String secretWord;
-
     public Button getWinButton() { return winButton; }
 
     /**
@@ -100,10 +97,6 @@ public class WordleView {
         this.winButton = new Button();
         this.nameLabel = new Label();
 
-        // TODO: Remove, temporary for testing.
-        var header = this.wordleModel.getHeader().getHeaderSection();
-
-
         initSceneGraph();
     }
 
@@ -117,10 +110,6 @@ public class WordleView {
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
     }
-
-//    private void initSecretWord() {
-//        this.secretWord = this.guessEval.createRandomWord("5words.");
-//    }
 
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
