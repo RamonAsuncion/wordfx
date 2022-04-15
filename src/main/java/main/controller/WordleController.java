@@ -30,6 +30,7 @@ import main.tilemvc.WordleMain;
 import main.view.WordleView;
 
 import java.io.FileNotFoundException;
+import java.util.EnumSet;
 
 public class WordleController {
 
@@ -99,6 +100,11 @@ public class WordleController {
      * delete, or press enter.
      */
     private void takeActionFromVirtualKeyboard(Button b) {
+        // If the game is not playable return to the call stack.
+        if (!this.wordleModel.getGameState().isPlayable()) {
+            return;
+        }
+
         Text t = new Text(b.getText().toUpperCase());
         switch (b.getText()) {
             case "": //"" represents the delete key which is an icon
@@ -122,6 +128,11 @@ public class WordleController {
      * @param event - {@KeyEvent} representing key pressed on physical keyboard
      */
     private void takeActionFromKeyPressed(KeyEvent event) {
+        // If the game is not playable return to the call stack.
+        if (!this.wordleModel.getGameState().isPlayable()) {
+            return;
+        }
+
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
             case BACK_SPACE:
