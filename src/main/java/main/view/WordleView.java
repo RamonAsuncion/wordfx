@@ -132,10 +132,21 @@ public class WordleView {
         this.guessEval = new GuessEvaluator(this.wordleModel.getSecretWord(), s.toString());
         String evaluation = this.guessEval.analyzeGuess(s.toString());
         performScreenAnimation(evaluation, s.toString());
+        // If the user gets the right word.
         if (evaluation.equals("*****")) {
             this.wordleModel.setGameState(GameState.GAME_WINNER);
             this.wordleModel.incrementCurrentWinStreak();
-            showWinScreen();
+            showWinScreen("You won!");
+        }
+        // If user runs out of guesses.
+        else if (this.wordleModel.getRow() >= 5) {
+            this.wordleModel.setGameState(GameState.GAME_LOSER);
+            this.wordleModel.setStreak(0);
+            showWinScreen("You lose!");
+        }
+        // Continue running the game.
+        else {
+            this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
         }
     }
 
@@ -252,7 +263,7 @@ public class WordleView {
      * Adds two labels and a button to a rectangle, then adds to tiles stackpane
      * to stack on top of tiles
      */
-    public void showWinScreen() {
+    public void showWinScreen(String winningResult) {
         // Create rectangle
         this.winRect.setFill(Color.WHITE);
         this.winRect.setArcHeight(10.0d);
@@ -260,7 +271,7 @@ public class WordleView {
         this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
 
         // Create "You won" label
-        this.winLabel.setText("You won!");
+        this.winLabel.setText(winningResult);
         this.winLabel.setId("winLabel");
 
         // Create play again button

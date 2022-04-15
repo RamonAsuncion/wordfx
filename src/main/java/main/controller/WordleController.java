@@ -119,7 +119,7 @@ public class WordleController {
      * Takes action such as typing, deleting, or pressing enter
      * on physical keyboard
      *
-     * @param event - {@KeyEvent} represeting key pressed on physical keyboard
+     * @param event - {@KeyEvent} representing key pressed on physical keyboard
      */
     private void takeActionFromKeyPressed(KeyEvent event) {
         Text t = new Text(event.getText().toUpperCase());
