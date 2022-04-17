@@ -12,6 +12,17 @@
     -fx-background-color: white;
 }
 
+#theme1 {
+    -fx-background-color: grey;
+}
+#theme2{
+    -fx-background-color: yellow;
+}
+
+#theme3{
+    -fx-backgroud-color: red;
+}
+
 #topPane {
     -fx-orientation: horizontal;
     -fx-alignment: center;
@@ -79,7 +90,7 @@
 
 .keyboard-letter {
     -fx-font-family: 'Arial';
-    -fx-background-color: #d3d6da;
+    -fx-background-color: #d3d6da; // fds
     -fx-text-fill: black;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
@@ -139,6 +150,12 @@
 .menu-three-button {
     -fx-graphic: url("https://img.icons8.com/ios-glyphs/30/000000/menu-rounded.png");
     -fx-background-color: transparent;
+}
+
+.dark-mode-button{
+    -fx-background-color: transparent;
+    -fx-padding: 5 15 5 5;
+    -fx-pref-width: 100;
 }
 
 #winLabel {
