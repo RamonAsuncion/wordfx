@@ -78,6 +78,16 @@ public class WordleView {
 
     private UsedWords usedWords;
 
+    /** Create button for darkmode */
+    private Button darkMode;
+
+    /** Create the getter for the darkmode button */
+    public Button getDarkMode() {
+        return darkMode;
+    }
+
+
+
     public Button getWinButton() { return winButton; }
 
     /**
@@ -101,6 +111,8 @@ public class WordleView {
         this.winBorderPane = new BorderPane();
         this.winButton = new Button();
         this.nameLabel = new Label();
+        this.darkMode = new Button("DARK\n MODE");
+        this.darkMode.getStyleClass().add("dark-mode-button");
 
         // If used words.txt does not exist, create it
         File usedFile = new File("src/usedwords.txt");
