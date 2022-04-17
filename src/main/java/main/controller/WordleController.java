@@ -29,10 +29,13 @@ import javafx.stage.Stage;
 import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.WordleMain;
+import main.view.Header;
 import main.view.WordleView;
 
 import java.io.FileNotFoundException;
 import java.util.EnumSet;
+
+import java.util.ArrayList;
 
 public class WordleController {
 
@@ -62,6 +65,7 @@ public class WordleController {
         this.wordleModel = wordleModel;
         this.scene = scene;
         this.guessState = GuessState.UNCHECKED;
+
         initEventHandlers();
     }
 
@@ -81,6 +85,12 @@ public class WordleController {
 
         // Press the button at the end of the game to restart.
         this.wordleView.getWinButton().setOnMouseClicked(this::restartGame);
+
+        // If this button is pressed, change to dark mode.
+        this.wordleView.getDarkMode().setOnMouseClicked(
+                event -> {this.wordleView.getRoot().setId("theme1");
+                            System.out.println("lights lights");
+    });
     }
 
     /**
