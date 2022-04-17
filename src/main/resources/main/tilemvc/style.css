@@ -158,7 +158,11 @@
     -fx-pref-width: 100;
 }
 
-#winLabel {
+#finalMessageRect {
+
+}
+
+#finalMessageLabel {
     -fx-font-family: Arial;
     -fx-font-size: 25px;
     -fx-font-weight: 400;
@@ -174,7 +178,7 @@
     -fx-alignment: center;
 }
 
-#winButton {
+#playAgainBtn {
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;

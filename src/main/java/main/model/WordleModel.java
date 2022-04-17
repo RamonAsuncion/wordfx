@@ -48,7 +48,7 @@ public class WordleModel {
     private Header header;
 
     /** List of all letters in the keyboard */
-    private ArrayList<Character> letterList;
+    private ArrayList<String> letterList;
 
     /** List of all 6 guesses in the game */
     private ArrayList<ArrayList<Label>> listOfGuesses;
@@ -77,7 +77,7 @@ public class WordleModel {
     /**
      * @return List with all letters contained in last given guess
      */
-    public ArrayList<Character> getLetterList() { return letterList; }
+    public ArrayList<String> getLetterList() { return letterList; }
 
     /**
      * @return List with all possible guesses (will be blank labels)
@@ -184,9 +184,7 @@ public class WordleModel {
      * Sets new column
      * @param col - new value for column
      */
-    public void setColumn(int col) {
-        this.column = col;
-    }
+    public void setColumn(int col) { this.column = col; }
 
 
     /**

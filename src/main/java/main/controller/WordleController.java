@@ -22,17 +22,21 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.model.GameState;
 import main.model.WordleModel;
+import main.tilemvc.GuessEvaluator;
 import main.tilemvc.WordleMain;
+import main.view.EndMessageFinal;
 import main.view.Header;
 import main.view.WordleView;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.EnumSet;
 
 import java.util.ArrayList;
@@ -54,6 +58,12 @@ public class WordleController {
     /** The state of our row, initially unchecked */
     private GuessState guessState;
 
+    /** Evaluates the guess based on the secret word */
+    private GuessEvaluator evaluator;
+
+    /** Takes care of our end message */
+    private EndMessageFinal endMessage;
+
     /**
      * Simple constructor for our Worldle game
      *
@@ -62,10 +72,17 @@ public class WordleController {
      * @param scene - the scene to capture key events
      */
     public WordleController(WordleView wordleView, WordleModel wordleModel, Scene scene) {
+        // Initialize view, model, and scene
         this.wordleView = wordleView;
         this.wordleModel = wordleModel;
         this.scene = scene;
+
+        // Guess state starts out unchecked
         this.guessState = GuessState.UNCHECKED;
+
+        // Initialize the guess evaluator and end message
+        this.evaluator = new GuessEvaluator(this.wordleModel, this.wordleView, this.wordleModel.getSecretWord());
+        this.endMessage = new EndMessageFinal(this.wordleModel, this.wordleView);
 
         initEventHandlers();
     }
@@ -82,16 +99,18 @@ public class WordleController {
         }
 
         // If typed on physical keyboard
-        this.scene.setOnKeyPressed(this::takeActionFromKeyPressed);
+        this.scene.setOnKeyPressed(event -> {
+            try {
+                takeActionFromKeyPressed(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-        // Press the button at the end of the game to restart.
-        this.wordleView.getWinButton().setOnMouseClicked(this::restartGame);
+        this.wordleView.getPlayAgainBtn().setOnMouseClicked(this::restartGame);
 
         // If this button is pressed, change to dark mode.
-        this.wordleView.getDarkMode().setOnMouseClicked(
-                event -> {this.wordleView.getRoot().setId("theme1");
-                            System.out.println("lights lights");
-    });
+        this.wordleView.getDarkMode().setOnMouseClicked(event -> this.wordleView.getRoot().setId("theme1"));
     }
 
     /**
@@ -109,14 +128,6 @@ public class WordleController {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
 
-        // Save the windows current position.
-        double positionX = stage.getX();
-        double positionY = stage.getY();
-
-        // Save the windows size.
-        double height = stage.getHeight();
-        double width = stage.getWidth();
-
         // Close the scene a start a new one.
         stage.close();
         try {
@@ -129,12 +140,12 @@ public class WordleController {
         wm.setStreak(this.wordleModel.getCurrentWinStreak());
 
         // Reapply last window position.
-        stage.setX(positionX);
-        stage.setY(positionY);
+        stage.setX(stage.getX());
+        stage.setY(stage.getY());
 
         // Reapply last window size.
-        stage.setHeight(height);
-        stage.setWidth(width);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
 
         // Start the stage again.
         wm.start(stage);
@@ -152,14 +163,24 @@ public class WordleController {
 
         Text t = new Text(b.getText().toUpperCase());
         switch (b.getText()) {
+            // If user wants to delete last letter checked
             case "": //"" represents the delete key which is an icon
-                deleteFromTile();
-                break;
-            case "ENTER":
-                if (this.wordleModel.getColumn() == 4) {
-                    this.guessState = GuessState.CHECKED;
+                if (this.wordleModel.getColumn() >= 0) {
+                    deleteFromTile();
                 }
                 break;
+            // If user wants to check guess
+            case "ENTER":
+                StringBuffer guess = getGuessFromTiles();
+                if ((this.wordleModel.getColumn() == 4) &&
+                (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
+                    this.evaluator.createEvaluator(guess.toString().toLowerCase());
+                    this.guessState = GuessState.CHECKED;
+                    this.wordleModel.incrementRow();
+                }
+                break;
+
+            // If user wants to simply type from virtual keyboard
             default:
                 typeToTile(t);
                 break;
@@ -172,7 +193,7 @@ public class WordleController {
      *
      * @param event - {@KeyEvent} representing key pressed on physical keyboard
      */
-    private void takeActionFromKeyPressed(KeyEvent event) {
+    private void takeActionFromKeyPressed(KeyEvent event) throws IOException {
         // If the game is not playable return to the call stack.
         if (!this.wordleModel.getGameState().isPlayable()) {
             return;
@@ -180,29 +201,43 @@ public class WordleController {
 
         Text t = new Text(event.getText().toUpperCase());
         switch (event.getCode()) {
+            // If user wants to delete a letter
             case BACK_SPACE:
                 if (this.wordleModel.getColumn() >= 0) {
                     deleteFromTile();
                 }
                 break;
+
+            // If user wants to check a guess
             case ENTER:
-                if (this.wordleModel.getColumn() == 4) {
-                    // Flip the tiles, check guess, switch the guess state to checked, and jump to next guess
-                    try {
-                        this.wordleView.createEvaluator(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                StringBuffer guess = getGuessFromTiles();
+                // Ensure guess is valid by length and being in word list
+                if (this.wordleModel.getColumn() == 4 &&
+                        (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
+
+                    // Evaluate guess, switch the guess state to checked, and jump to next guess
+                    this.evaluator.createEvaluator(guess.toString().toLowerCase());
                     this.guessState = GuessState.CHECKED;
                     this.wordleModel.incrementRow();
                 }
                 break;
+
+            // If user types on keyboard
             default:
                 if (event.getCode().isLetterKey()) {
                     typeToTile(t);
                 }
                 break;
         }
+    }
+
+    /**
+     * @return the guess from reading the labels aka tiles
+     */
+    private StringBuffer getGuessFromTiles() {
+        StringBuffer s = new StringBuffer("");
+        this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).forEach(t -> s.append(t.getText()));
+        return s;
     }
 
     /**

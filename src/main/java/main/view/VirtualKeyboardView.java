@@ -36,12 +36,12 @@ public class VirtualKeyboardView {
     private ArrayList<Button> keyboardKeys;
 
     /** List with all letters on the virtual keyboard */
-    private ArrayList<Character> keyboardLetters;
+    private ArrayList<String> keyboardLetters;
 
     /**
      * @return The list with all letters on the virtual keyboard
      */
-    public ArrayList<Character> getKeyboardLetters() { return keyboardLetters; }
+    public ArrayList<String> getKeyboardLetters() { return keyboardLetters; }
 
     /**
      * @return the {@link ArrayList} with all the virtual keyboard keys
@@ -77,7 +77,7 @@ public class VirtualKeyboardView {
     public Button createKey(Character letter) {
         Button key = new Button(letter.toString());
         keyboardKeys.add(key);
-        keyboardLetters.add(letter);
+        keyboardLetters.add(letter.toString().toLowerCase());
         key.getStyleClass().add("keyboard-letter");
         return key;
     }

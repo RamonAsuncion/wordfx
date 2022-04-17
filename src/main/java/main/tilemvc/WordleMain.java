@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.controller.WordleController;
 import main.model.WordleModel;
+import main.view.EndMessageFinal;
 import main.view.WordleView;
 
 public class WordleMain extends Application {
@@ -20,10 +21,6 @@ public class WordleMain extends Application {
     /** Our Wordle scene where everything is displayed */
     private Scene scene;
 
-    private Stage stage;
-
-    public Stage getStage() { return stage; }
-
     public static void main(String[] args) { launch(args); }
 
     @Override
@@ -31,6 +28,7 @@ public class WordleMain extends Application {
         super.init();
         this.wordleModel = new WordleModel();
         this.wordleView = new WordleView(this.wordleModel);
+
     }
 
     public void setStreak(int streak) {
@@ -39,7 +37,7 @@ public class WordleMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        stage = primaryStage;
+        Stage stage = primaryStage;
         // Create new scene and use css resources from style.css
         scene = new Scene(this.wordleView.getRoot());
         scene.getStylesheets().add(
