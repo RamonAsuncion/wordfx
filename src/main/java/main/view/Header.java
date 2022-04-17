@@ -18,11 +18,15 @@
  */
 package main.view;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Header class to create the header section, which includes the "Wordle" header
@@ -175,5 +179,15 @@ public class Header {
         menuThreeDashes.setOnAction(event -> {
             System.out.println("Three dash menu - Button clicked!");
         });
+    }
+
+    private void testStackPanStackPane() {
+        StackPane stackPane = new StackPane();
+        Rectangle rectangle = new Rectangle(); // Get the size of the whole game.
+
+        // Create a rectangle.
+        rectangle.setFill(Color.WHITE);
+
+        stackPane.getChildren().add(rectangle);
     }
 }

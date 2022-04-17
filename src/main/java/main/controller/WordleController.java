@@ -45,13 +45,14 @@ public class WordleController {
     /** The view of our Wordle implementation */
     private WordleView wordleView;
 
+    /** The main class or our implementation */
+    private WordleMain wm;
+
     /** The scene, to take care of keyboard typing */
     private Scene scene;
 
     /** The state of our row, initially unchecked */
     private GuessState guessState;
-
-    private WordleMain wm;
 
     /**
      * Simple constructor for our Worldle game

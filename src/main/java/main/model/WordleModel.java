@@ -35,6 +35,9 @@ public class WordleModel {
     /** Current column that we are on */
     private int column;
 
+    /** Current guess number */
+    private int currentGuessNumber;
+
     /** The 30 tiles representing all possible guesses */
     private Tile tiles;
 
@@ -61,6 +64,8 @@ public class WordleModel {
     private String secretWord;
 
     public String getSecretWord() { return secretWord; }
+
+    public ReadWordsFiles getReader() { return reader; }
 
     /**
      * @return the current win streak of the player
@@ -144,24 +149,21 @@ public class WordleModel {
     }
 
     /**
-     * @return row value incremented by 1
      */
-    public int incrementRow() {
-        return this.row++;
+    public void incrementRow() {
+        this.row++;
     }
 
     /**
-     * @return column value incremented by 1
      */
-    public int incrementColumn() {
-        return this.column++;
+    public void incrementColumn() {
+        this.column++;
     }
 
     /**
-     * @return column value decremented by 1
      */
-    public int decrementColumn() {
-        return this.column--;
+    public void decrementColumn() {
+        this.column--;
     }
 
     /**
@@ -186,10 +188,21 @@ public class WordleModel {
         this.column = col;
     }
 
+
+    /**
+     * @return the current guess number.
+     */
+    public int getCurrentGuessNumber() { return currentGuessNumber; }
+
     /**
      * Increments the win streak by one
      */
     public void incrementCurrentWinStreak() { this.currentWinStreak++; }
+
+    /**
+     * Increments the current guess
+     */
+    public void incrementCurrentGuessNumber() { this.currentGuessNumber++; }
 
 
 }

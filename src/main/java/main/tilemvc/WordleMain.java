@@ -24,10 +24,6 @@ public class WordleMain extends Application {
 
     public Stage getStage() { return stage; }
 
-    public Scene getScene() {
-        return scene;
-    }
-
     public static void main(String[] args) { launch(args); }
 
     @Override
@@ -60,9 +56,5 @@ public class WordleMain extends Application {
 
         // Display the scene
         stage.show();
-
-        // stage.getScene().getWindow().hide();
-        //stage.hide();
-
     }
 }

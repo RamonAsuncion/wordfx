@@ -18,16 +18,15 @@
  */
 package main.view;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.RotateTransition;
+import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -36,8 +35,11 @@ import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.GuessEvaluator;
+import main.tilemvc.UsedWords;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class WordleView {
@@ -72,21 +74,11 @@ public class WordleView {
     /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
 
-    /** The secret word */
-    private String secretWord;
+    private ArrayList<Label> badTiles;
 
-    /** The button to switch to darkmode */
-    private Button darkMode;
-
-    public Button getDarkMode() {
-        return darkMode;
-    }
-
-
+    private UsedWords usedWords;
 
     public Button getWinButton() { return winButton; }
-
-
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -102,15 +94,24 @@ public class WordleView {
 
         // Initialize the root for our display
         this.root = new BorderPane();
-        this.root.getStyleClass().add("background");
+        this.root.setId("background");
         this.winRect = new Rectangle(300, 200);
         this.winStackPane = new StackPane();
         this.winLabel = new Label();
         this.winBorderPane = new BorderPane();
         this.winButton = new Button();
         this.nameLabel = new Label();
-        this.darkMode = new Button("DARK\n MODE");
-        this.darkMode.getStyleClass().add("dark-mode-button");
+
+        // If used words.txt does not exist, create it
+        File usedFile = new File("src/usedwords.txt");
+        if (!usedFile.exists()) {
+            try {
+                this.usedWords.createFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         initSceneGraph();
     }
 
@@ -123,12 +124,8 @@ public class WordleView {
         this.root.setCenter(tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
-        this.root.setTop(darkMode);
+        System.out.println(this.wordleModel.getSecretWord());
     }
-
-//    private void initSecretWord() {
-//        this.secretWord = this.guessEval.createRandomWord("5words.");
-//    }
 
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
@@ -143,23 +140,51 @@ public class WordleView {
             s.append(tile.getText());
         }
         this.guessEval = new GuessEvaluator(this.wordleModel.getSecretWord(), s.toString());
-        String evaluation = this.guessEval.analyzeGuess(s.toString());
-        performScreenAnimation(evaluation, s.toString());
-        // If the user gets the right word.
-        if (evaluation.equals("*****")) {
-            this.wordleModel.setGameState(GameState.GAME_WINNER);
-            this.wordleModel.incrementCurrentWinStreak();
-            showWinScreen("You won!");
+
+        // Make sure the word is a valid word
+        if(this.wordleModel.getReader().isWordInSet(s.toString().toLowerCase())) {
+            String evaluation = this.guessEval.analyzeGuess();
+            performScreenAnimation(evaluation, s.toString());
+            // If the user gets the right word.
+            if (evaluation.equals("*****")) {
+                this.wordleModel.setGameState(GameState.GAME_WINNER);
+                this.wordleModel.incrementCurrentWinStreak();
+                // Add the word to used words list
+                try {
+                    this.usedWords.addToList(s.toString().toLowerCase());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
+                animateEndScreen("You won!", message);
+            }
+            // If user runs out of guesses.
+            else if (this.wordleModel.getRow() >= 5) {
+                this.wordleModel.setGameState(GameState.GAME_LOSER);
+                this.wordleModel.setStreak(0);
+                // Add the word to used words list
+                try {
+                    this.usedWords.addToList(s.toString().toLowerCase());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String message = "Secret word: " + this.wordleModel.getSecretWord();
+                animateEndScreen("You Lost :(!", message);
+            }
+            // Continue running the game
+            else {
+                this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
+            }
+            this.wordleModel.incrementCurrentGuessNumber();
         }
-        // If user runs out of guesses.
-        else if (this.wordleModel.getRow() >= 5) {
-            this.wordleModel.setGameState(GameState.GAME_LOSER);
-            this.wordleModel.setStreak(0);
-            showWinScreen("You lose!");
-        }
-        // Continue running the game.
         else {
-            this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
+            // Create a list of the bad tiles that were typed
+            badTiles = new ArrayList<Label>();
+            for (Label tile : guess) {
+                badTiles.add(tile);
+            }
+            // Make the tiles shake
+            horizontalShakeTiles(badTiles);
         }
     }
 
@@ -169,15 +194,45 @@ public class WordleView {
      *
      * @param tile - specific tile to be flipped
      */
-    public void flipTiles(Label tile) {
-        RotateTransition rotation;
-        rotation = new RotateTransition(Duration.seconds(1));
-        rotation.setNode(tile);
-        rotation.setAxis(Rotate.X_AXIS);
-        rotation.setFromAngle(0);
-        rotation.setToAngle(360);
-        rotation.setCycleCount(1);
-        rotation.play();
+    public void flipTiles(Label tile, int index) {
+        if (index == 0) {
+            RotateTransition rotation;
+            rotation = new RotateTransition(Duration.seconds(1));
+            rotation.setNode(tile);
+            rotation.setAxis(Rotate.X_AXIS);
+            rotation.setFromAngle(0);
+            rotation.setToAngle(360);
+            rotation.setCycleCount(1);
+            rotation.play();
+        }
+        else {
+            int delay= 0;
+            if (index == 1) {
+                delay = 500;
+            }
+            if (index == 2) {
+                delay = 1000;
+            }
+            if (index == 3) {
+                delay = 1500;
+            }
+            if (index == 4) {
+                delay = 2000;
+            }
+            RotateTransition rotation;
+            rotation = new RotateTransition(Duration.seconds(1));
+            rotation.setNode(tile);
+            rotation.setDelay(Duration.millis(delay));
+            rotation.setAxis(Rotate.X_AXIS);
+            rotation.setFromAngle(0);
+            rotation.setToAngle(360);
+            rotation.setCycleCount(1);
+            rotation.play();
+        }
+    }
+
+    // TODO: If the answer is not in the word list shake.
+    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
     }
 
     /**
@@ -216,19 +271,19 @@ public class WordleView {
         for (int i = 0; i < 5; i++) {
             // Correctly positioned letter
             if (evaluation.charAt(i) == ('*')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
                 changeTileColor("exact", i);
                 changeKeyboardLetterColor("exact", guess.charAt(i));
             }
             // Misplaced letter
             if (evaluation.charAt(i) == ('+')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
                 changeTileColor("misplaced", i);
                 changeKeyboardLetterColor("misplaced", guess.charAt(i));
             }
             // Wrong letter
             if (evaluation.charAt(i) == ('-')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i));
+                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
                 changeTileColor("wrong", i);
                 changeKeyboardLetterColor("wrong", guess.charAt(i));
             }
@@ -276,18 +331,22 @@ public class WordleView {
      * Adds two labels and a button to a rectangle, then adds to tiles stackpane
      * to stack on top of tiles
      *
-     * @param winningResult the string of the game ending result.
+     * @param winOrLose the string of the game ending result.
      */
-    public void showWinScreen(String winningResult) {
+    public void showEndScreen(String winOrLose, String streakOrSecretWord) {
         // Create rectangle
         this.winRect.setFill(Color.WHITE);
         this.winRect.setArcHeight(10.0d);
         this.winRect.setArcWidth(10.0d);
         this.winRect.setEffect(new DropShadow(10.0, Color.GREY));
 
-        // Create "You won" label
-        this.winLabel.setText(winningResult);
+        // Create label with the winning result displayed.
+        VBox endScreenHeader = new VBox();
+        Label importantInfo = new Label(streakOrSecretWord);
+        this.winLabel.setText(winOrLose);
         this.winLabel.setId("winLabel");
+        endScreenHeader.getChildren().addAll(this.winLabel, importantInfo);
+        endScreenHeader.setAlignment(Pos.CENTER);
 
         // Create play again button
         this.winButton.setText("Play again?");
@@ -306,7 +365,7 @@ public class WordleView {
         this.nameLabel.setText("A game by Liv & Gang");
 
         // Add to border pane and stackpane
-        this.winBorderPane.setTop(this.winLabel);
+        this.winBorderPane.setTop(endScreenHeader);
         this.winBorderPane.setCenter(this.winButton);
         this.winBorderPane.setBottom(this.nameLabel);
         this.winStackPane.getChildren().add(this.winRect);
@@ -314,29 +373,19 @@ public class WordleView {
         this.wordleModel.getTileStackPane().getChildren().add(this.winStackPane);
         tileStack.getChildren().add(this.winStackPane);
         this.root.setCenter(tileStack);
-
-        animateWinScreen();
     }
 
     /**
      * Makes the win screen fade in
      */
-    public void animateWinScreen() {
-        FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
+    public void animateEndScreen(String winOrLose, String streakOrSecretWord) {
+        FadeTransition ft = new FadeTransition();
+        ft.setDelay(Duration.millis(3000));
+        ft.setDuration(Duration.millis(700));
+        ft.setNode(this.winStackPane);
         ft.setFromValue(0.1);
         ft.setToValue(1.0);
         ft.play();
-    }
-
-    private void createDarkModeButton(){
-        // Add styling the button
-
-        // change the color
-//        darkMode.setOnMouseClicked(
-//                event -> {
-//                    this.root.setId("theme1");
-//                    System.out.println("change the lights buddy!");
-//                });
-
+        showEndScreen(winOrLose, streakOrSecretWord);
     }
 }
