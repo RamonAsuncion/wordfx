@@ -75,7 +75,18 @@ public class WordleView {
     /** The secret word */
     private String secretWord;
 
+    /** The button to switch to darkmode */
+    private Button darkMode;
+
+    public Button getDarkMode() {
+        return darkMode;
+    }
+
+
+
     public Button getWinButton() { return winButton; }
+
+
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -91,14 +102,15 @@ public class WordleView {
 
         // Initialize the root for our display
         this.root = new BorderPane();
-        this.root.setId("background");
+        this.root.getStyleClass().add("background");
         this.winRect = new Rectangle(300, 200);
         this.winStackPane = new StackPane();
         this.winLabel = new Label();
         this.winBorderPane = new BorderPane();
         this.winButton = new Button();
         this.nameLabel = new Label();
-
+        this.darkMode = new Button("DARK\n MODE");
+        this.darkMode.getStyleClass().add("dark-mode-button");
         initSceneGraph();
     }
 
@@ -111,6 +123,7 @@ public class WordleView {
         this.root.setCenter(tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
+        this.root.setTop(darkMode);
     }
 
 //    private void initSecretWord() {
@@ -313,5 +326,17 @@ public class WordleView {
         ft.setFromValue(0.1);
         ft.setToValue(1.0);
         ft.play();
+    }
+
+    private void createDarkModeButton(){
+        // Add styling the button
+
+        // change the color
+//        darkMode.setOnMouseClicked(
+//                event -> {
+//                    this.root.setId("theme1");
+//                    System.out.println("change the lights buddy!");
+//                });
+
     }
 }
