@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.controller.WordleController;
 import main.model.WordleModel;
-import main.view.EndMessageFinal;
 import main.view.WordleView;
 
 public class WordleMain extends Application {

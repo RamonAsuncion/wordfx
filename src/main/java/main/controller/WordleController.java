@@ -22,24 +22,15 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.model.GameState;
 import main.model.WordleModel;
 import main.tilemvc.GuessEvaluator;
 import main.tilemvc.WordleMain;
-import main.view.EndMessageFinal;
-import main.view.Header;
+import main.view.EndMessageView;
 import main.view.WordleView;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.EnumSet;
-
-import java.util.ArrayList;
 
 public class WordleController {
 
@@ -62,7 +53,7 @@ public class WordleController {
     private GuessEvaluator evaluator;
 
     /** Takes care of our end message */
-    private EndMessageFinal endMessage;
+    private EndMessageView endMessage;
 
     /**
      * Simple constructor for our Worldle game
@@ -82,7 +73,7 @@ public class WordleController {
 
         // Initialize the guess evaluator and end message
         this.evaluator = new GuessEvaluator(this.wordleModel, this.wordleView, this.wordleModel.getSecretWord());
-        this.endMessage = new EndMessageFinal(this.wordleModel, this.wordleView);
+        this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
 
         initEventHandlers();
     }

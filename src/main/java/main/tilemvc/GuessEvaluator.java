@@ -20,7 +20,7 @@ package main.tilemvc;
 
 import main.model.GameState;
 import main.model.WordleModel;
-import main.view.EndMessageFinal;
+import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.File;
 import java.io.FileWriter;
@@ -41,13 +41,17 @@ public class GuessEvaluator {
     /** This keeps track of the letters in both the secret word and guessed word */
     private Map<Character, Character> mapOfLetters;
 
+    /** Secret word is added to usedwords.txt through this variable */
     private UsedWords usedWords;
 
+    /** The model of the game */
     private WordleModel wordleModel;
 
+    /** The view of the game */
     private WordleView wordleView;
 
-    private EndMessageFinal endMessage;
+    /** End message of the game */
+    private EndMessageView endMessage;
 
     /**
      * Simple GuessEvaluator constructor to define the secret word, current guess,
@@ -57,8 +61,7 @@ public class GuessEvaluator {
         this.wordleModel = wordleModel;
         this.wordleView = wordleView;
         this.secretWord = secretWord;
-        this.guessAnalysis = new StringBuffer("-----");
-        this.endMessage = new EndMessageFinal(this.wordleModel, this.wordleView);
+        this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
 
         // If used words.txt does not exist, create it
         try {
@@ -96,11 +99,18 @@ public class GuessEvaluator {
     public String analyzeGuess(String currentGuess) {
         // Initially empty
         this.mapOfLetters = new TreeMap<>();
+        this.guessAnalysis = new StringBuffer("-----");
 
         //first check for green letters (correct letter, correct position)
         for (int i = 0; i < currentGuess.length(); ++i) {
-            if (this.secretWord.charAt(i) == currentGuess.charAt(i)) { this.guessAnalysis.setCharAt(i, '*'); }
-            else { mapOfLetters.put(this.secretWord.charAt(i), currentGuess.charAt(i)); }
+            if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
+                this.guessAnalysis.setCharAt(i, '*');
+//                this.wordleView.changeTileColor("exact", i);
+//                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
+            }
+            else {
+                mapOfLetters.put(this.secretWord.charAt(i), currentGuess.charAt(i));
+            }
         }
 
         //then, check for yellow letters (correct letter, incorrect position)

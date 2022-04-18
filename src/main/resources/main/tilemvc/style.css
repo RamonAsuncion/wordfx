@@ -158,11 +158,14 @@
     -fx-pref-width: 100;
 }
 
-#finalMessageRect {
-
+#final-message-rect {
+    -fx-fill: white;
+    -fx-arc-height: 10.0;
+    -fx-arc-width: 10.0;
+    -fx-effect: dropshadow(gaussian, grey, 10.0, 0, 0, 0);
 }
 
-#finalMessageLabel {
+#final-message-label {
     -fx-font-family: Arial;
     -fx-font-size: 25px;
     -fx-font-weight: 400;
@@ -170,7 +173,7 @@
     -fx-alignment: center;
 }
 
-#nameLabel {
+#group-name-label {
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;
@@ -178,11 +181,23 @@
     -fx-alignment: center;
 }
 
-#playAgainBtn {
+#play-again-btn {
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;
     -fx-text-fill: black;
     -fx-alignment: center;
     -fx-background-color: #6aaa64;
+}
+
+#end-screen-header {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+
+#final-message-pane {
+    -fx-max-width: 300;
+    -fx-max-height: 200;
+    -fx-padding: 18;
+    -fx-alignment: center;
 }

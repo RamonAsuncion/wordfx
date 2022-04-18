@@ -33,8 +33,9 @@ import javafx.util.Duration;
 import main.controller.WordleController;
 import main.model.WordleModel;
 
-public class EndMessageFinal {
+public class EndMessageView {
 
+    private final VBox endScreenHeader;
     /** The rectangle that shows up when you win */
     private Rectangle finalMessageRect;
 
@@ -56,7 +57,10 @@ public class EndMessageFinal {
     /** The view of the game */
     private WordleView wordleView;
 
-    public EndMessageFinal(WordleModel wordleModel, WordleView wordleView) {
+    /** Contains streak count if winner, secret word if loser */
+    private Label winOrLoseInfo;
+
+    public EndMessageView(WordleModel wordleModel, WordleView wordleView) {
         // Initialize model and view
         this.wordleModel = wordleModel;
         this.wordleView = wordleView;
@@ -65,7 +69,8 @@ public class EndMessageFinal {
         this.winStackPane = new StackPane();
         this.finalMessageLabel = new Label();
         this.finalMessagePane = new BorderPane();
-        this.groupNameLabel = new Label();
+        this.groupNameLabel = new Label("A game by Liv & Gang");
+        this.endScreenHeader = new VBox();
     }
 
     /**
@@ -75,39 +80,33 @@ public class EndMessageFinal {
      * @param winOrLose the string of the game ending result.
      */
     public void showEndScreen(String winOrLose, String streakOrSecretWord) {
-        // Create rectangle
-        this.finalMessageRect.setFill(Color.WHITE);
-        this.finalMessageRect.setArcHeight(10.0d);
-        this.finalMessageRect.setArcWidth(10.0d);
-        this.finalMessageRect.setEffect(new DropShadow(10.0, Color.GREY));
+        // Setting the styles
+        this.finalMessageRect.setId("final-message-rect");
+        this.groupNameLabel.setId("group-name-label");
+        this.endScreenHeader.setId("end-screen-header");
+        this.finalMessageLabel.setId("final-message-label");
+        this.finalMessagePane.setId("final-message-pane");
 
-        // Create label with the winning result displayed.
-        VBox endScreenHeader = new VBox();
-        Label importantInfo = new Label(streakOrSecretWord);
+        // Create message with the winner/loser result displayed.
+        this.winOrLoseInfo = new Label(streakOrSecretWord);
         this.finalMessageLabel.setText(winOrLose);
-        this.finalMessageLabel.setId("finalMessageLabel");
-        endScreenHeader.getChildren().addAll(this.finalMessageLabel, importantInfo);
-        endScreenHeader.setAlignment(Pos.CENTER);
+        this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, this.winOrLoseInfo);
 
-        // Create border pane
-        this.finalMessagePane.setMaxSize(300, 200);
-        this.finalMessagePane.setPadding(new Insets(18));
-        this.finalMessagePane.setAlignment(this.finalMessageLabel, Pos.CENTER);
         this.finalMessagePane.setAlignment(this.groupNameLabel, Pos.CENTER);
 
-        // Create label with names
-        this.groupNameLabel.setId("nameLabel");
-        this.groupNameLabel.setText("A game by Liv & Gang");
-
-        // Add to border pane and stackpane
-        this.finalMessagePane.setTop(endScreenHeader);
+        // Placing sections of end message (header, play again button, group name)
+        this.finalMessagePane.setTop(this.endScreenHeader);
         this.finalMessagePane.setCenter(this.wordleView.getPlayAgainBtn());
         this.finalMessagePane.setBottom(this.groupNameLabel);
+
+        // Adding rectangle over tiles and text over rectangle
         this.winStackPane.getChildren().add(this.finalMessageRect);
         this.winStackPane.getChildren().add(this.finalMessagePane);
         this.wordleModel.getTileStackPane().getChildren().add(this.winStackPane);
         this.wordleView.getTileStack().getChildren().add(this.winStackPane);
         this.wordleView.getRoot().setCenter(this.wordleView.getTileStack());
+
+        // Animate the screen with fading
         animateEndScreen();
     }
 

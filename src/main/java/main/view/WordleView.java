@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class WordleView {
 
@@ -61,12 +62,22 @@ public class WordleView {
     /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
 
+    /** Play again button to keep playing */
     private Button playAgainBtn;
 
+    /**
+     * @return The play again button
+     */
     public Button getPlayAgainBtn() { return playAgainBtn; }
 
+    /**
+     * @return The tile stack where all guesses are placed
+     */
     public StackPane getTileStack() { return tileStack; }
 
+    /**
+     * @return True if tiles are done flipping, false otherwise;
+     */
     public boolean isFlippingDone() { return flippingDone; }
 
     /** Create the getter for the darkmode button */
@@ -95,7 +106,7 @@ public class WordleView {
         this.playAgainBtn = new Button();
         this.playAgainBtn.setText("Play again?");
         this.playAgainBtn.setPrefSize(100, 50);
-        this.playAgainBtn.setId("playAgainBtn");
+        this.playAgainBtn.setId("play-again-btn");
         initSceneGraph();
     }
 
@@ -153,6 +164,7 @@ public class WordleView {
             rotation.setToAngle(360);
             rotation.setCycleCount(1);
             rotation.play();
+
         }
         return flippingDone;
     }
@@ -196,22 +208,20 @@ public class WordleView {
         // Loop through our evaluation
         for (int i = 0; i < 5; i++) {
             // Correctly positioned letter
-            if (evaluation.charAt(i) == ('*')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
-                changeTileColor("exact", i);
-                changeKeyboardLetterColor("exact", Character.toString(guess.charAt(i)));
-            }
-            // Misplaced letter
-            if (evaluation.charAt(i) == ('+')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
-                changeTileColor("misplaced", i);
-                changeKeyboardLetterColor("misplaced", Character.toString(guess.charAt(i)));
-            }
-            // Wrong letter
-            if (evaluation.charAt(i) == ('-')) {
-                flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
-                changeTileColor("wrong", i);
-                changeKeyboardLetterColor("wrong", Character.toString(guess.charAt(i)));
+            flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
+            switch (evaluation.charAt(i)) {
+                case '*':
+                    changeTileColor("exact", i);
+                    changeKeyboardLetterColor("exact", Character.toString(guess.charAt(i)));
+                    break;
+                case '+':
+                    changeTileColor("misplaced", i);
+                    changeKeyboardLetterColor("misplaced", Character.toString(guess.charAt(i)));
+                    break;
+                case '-':
+                    changeTileColor("wrong", i);
+                    changeKeyboardLetterColor("wrong", Character.toString(guess.charAt(i)));
+                    break;
             }
         }
     }
@@ -222,7 +232,7 @@ public class WordleView {
      * @param style - css style: exact for green, misplaced for yellow, wrong for dark grey
      * @param index - index in which the letter is located on the guess
      */
-    private void changeTileColor(String style, int index) {
+    public void changeTileColor(String style, int index) {
         this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(index).getStyleClass().add(style);
     }
 
@@ -233,7 +243,7 @@ public class WordleView {
      * @param style - css style to style the color of the virtual key (exact, misplaced, or wrong)
      * @param letter - Current letter in guess
      */
-    private void changeKeyboardLetterColor(String style, String letter) {
+    public void changeKeyboardLetterColor(String style, String letter) {
         // Obtain the index of current letter in guess and change its style
         int index = this.wordleModel.getLetterList().indexOf(letter);
 
