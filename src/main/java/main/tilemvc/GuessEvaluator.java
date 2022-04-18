@@ -85,7 +85,7 @@ public class GuessEvaluator {
                 e.printStackTrace();
             }
         }
-        fw.write(this.secretWord);
+        //fw.write(this.secretWord);
 
     }
 
@@ -96,10 +96,10 @@ public class GuessEvaluator {
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-    public String analyzeGuess(String currentGuess) {
+    public String analyzeGuess(String currentGuess, int wordLength) {
         // Initially empty
         this.mapOfLetters = new TreeMap<>();
-        this.guessAnalysis = new StringBuffer("-----");
+        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
 
         //first check for green letters (correct letter, correct position)
         for (int i = 0; i < currentGuess.length(); ++i) {
@@ -119,7 +119,6 @@ public class GuessEvaluator {
                 this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
             }
         }
-        System.out.println(this.guessAnalysis);
         return this.guessAnalysis.toString();
     }
 
@@ -132,14 +131,14 @@ public class GuessEvaluator {
      */
     public void createEvaluator(String guess) {
         // Obtain result from analyzing guess
-        String evaluation = analyzeGuess(guess);
+        String evaluation = analyzeGuess(guess, this.wordleModel.getWordLength());
 
         // If the user gets the right word.
-        if (evaluation.equals("*****")) {
+        if (evaluation.equals("*".repeat(this.wordleModel.getWordLength()))) {
             winnerUser();
         }
         // If user runs out of guesses.
-        else if (this.wordleModel.getRow() >= 5) {
+        else if (this.wordleModel.getRow() >= this.wordleModel.getWordLength()) {
             loserUser();
         }
         this.wordleModel.incrementCurrentGuessNumber();

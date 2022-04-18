@@ -159,7 +159,7 @@ public class WordleController {
             // If user wants to check guess
             case "ENTER":
                 StringBuffer guess = getGuessFromTiles();
-                if ((this.wordleModel.getColumn() == 4) &&
+                if ((this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) &&
                 (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
                     this.evaluator.createEvaluator(guess.toString().toLowerCase());
                     this.guessState = GuessState.CHECKED;
@@ -199,7 +199,7 @@ public class WordleController {
             case ENTER:
                 StringBuffer guess = getGuessFromTiles();
                 // Ensure guess is valid by length and being in word list
-                if (this.wordleModel.getColumn() == 4 &&
+                if ((this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) &&
                         (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
 
                     // Evaluate guess, switch the guess state to checked, and jump to next guess

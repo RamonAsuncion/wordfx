@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.controller.WordleController;
 import main.model.WordleModel;
+import main.view.InitialScreenView;
 import main.view.WordleView;
 
 public class WordleMain extends Application {
@@ -18,15 +19,23 @@ public class WordleMain extends Application {
     private WordleController keyboardController;
 
     /** Our Wordle scene where everything is displayed */
-    private Scene scene;
+    private Scene firstScene, secondScene;
+
+    public Scene getFirstScene() { return firstScene; }
+
+    private InitialScreenView initialView;
+
+    private Stage window;
+
+    private int wordLength;
 
     public static void main(String[] args) { launch(args); }
 
     @Override
     public void init() throws Exception {
         super.init();
-        this.wordleModel = new WordleModel();
-        this.wordleView = new WordleView(this.wordleModel);
+        this.initialView = new InitialScreenView();
+        wordLength = 0;
 
     }
 
@@ -41,22 +50,45 @@ public class WordleMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Stage stage = primaryStage;
+        window = primaryStage;
+        firstScene = new Scene(this.initialView.getRoot(), 600, 800);
+
+        this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
+            wordLength = 3;
+            createSecondScene();
+            window.setScene(secondScene);
+        });
+        this.initialView.getFourLetterBtn().setOnMouseClicked(event -> {
+            wordLength = 4;
+            createSecondScene();
+            window.setScene(secondScene);
+        });
+        this.initialView.getFiveLetterBtn().setOnMouseClicked(event -> {
+            wordLength = 5;
+            createSecondScene();
+            window.setScene(secondScene);
+        });
+
+        // Add the scene graph to the stage
+        window.setScene(firstScene);
+
+        // Set the title for the main window
+        window.setTitle("Wordle");
+
+        // Display the scene
+        window.show();
+    }
+
+    private void createSecondScene() {
+        this.wordleModel = new WordleModel(wordLength);
+        this.wordleView = new WordleView(this.wordleModel);
+
         // Create new scene and use css resources from style.css
-        scene = new Scene(this.wordleView.getRoot());
-        scene.getStylesheets().add(
+        secondScene = new Scene(this.wordleView.getRoot());
+        secondScene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        keyboardController = new WordleController(this.wordleView, this.wordleModel, scene);
-
-        // Add the scene graph to the stage
-        stage.setScene(scene);
-
-        // Set the title for the main window
-        stage.setTitle("Wordle");
-
-        // Display the scene
-        stage.show();
+        keyboardController = new WordleController(this.wordleView, this.wordleModel, secondScene);
     }
 }

@@ -63,6 +63,10 @@ public class WordleModel {
 
     private String secretWord;
 
+    private int wordLength;
+
+    public int getWordLength() { return wordLength; }
+
     public String getSecretWord() { return secretWord; }
 
     public ReadWordsFiles getReader() { return reader; }
@@ -116,10 +120,12 @@ public class WordleModel {
 
     public GameState getGameState() { return gameState;}
 
-    public WordleModel() {
+    public WordleModel(int wordLength) {
+        this.wordLength = wordLength;
+
         // Three main components of interface
         this.header = new Header();
-        this.tiles = new Tile();
+        this.tiles = new Tile(wordLength);
         this.vk = new VirtualKeyboardView();
 
         // Keep track of where the next letter is typed or deleted
@@ -130,8 +136,29 @@ public class WordleModel {
         this.gameState = GameState.NEW_GAME;
         this.currentWinStreak = 0;
         this.reader = new ReadWordsFiles();
-        this.secretWord = this.reader.createRandomWord("5words.txt");
+
+        readFileOfWords(wordLength);
         initInterface();
+    }
+
+    /**
+     * Reads file of words according to word length user has chosen
+     *
+     * @param wordLength - word length user has chosen (3, 4, or 5)
+     */
+    private void readFileOfWords(int wordLength) {
+        switch (wordLength) {
+            case 3:
+                this.secretWord = this.reader.createRandomWord("3words.txt");
+                break;
+            case 4:
+                this.secretWord = this.reader.createRandomWord("4words.txt");
+                break;
+            default:
+                this.secretWord = this.reader.createRandomWord("5words.txt");
+                break;
+
+        }
     }
 
     /**
@@ -185,12 +212,6 @@ public class WordleModel {
      * @param col - new value for column
      */
     public void setColumn(int col) { this.column = col; }
-
-
-    /**
-     * @return the current guess number.
-     */
-    public int getCurrentGuessNumber() { return currentGuessNumber; }
 
     /**
      * Increments the win streak by one

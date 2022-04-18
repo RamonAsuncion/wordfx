@@ -56,6 +56,8 @@ public class Tile {
      */
     private ArrayList<ArrayList<Label>> guessList;
 
+    private int wordLength;
+
     /**
      * Stack Pane with the tiles and win screen
      */
@@ -87,7 +89,8 @@ public class Tile {
      * Simple constructor for the Tile class. Initializes the tiles and
      * topPane, where the topPane represents each row of tiles.
      */
-    public Tile() {
+    public Tile(int wordLength) {
+        this.wordLength = wordLength;
         // Set up the tiles for our scene graph
         tiles = new VBox();
         tiles.getStyleClass().add("tile");
@@ -116,7 +119,7 @@ public class Tile {
         //TODO change 5 to whatever length customer wants
         for (int i = 0; i < 6; ++i) {
 
-            for (int j = 0; j < 5; ++j) {
+            for (int j = 0; j < this.wordLength; ++j) {
 
                 // Create new tile and add to top pane
                 rect = new Label();
