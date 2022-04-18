@@ -52,9 +52,6 @@ public class WordleController {
     /** Evaluates the guess based on the secret word */
     private GuessEvaluator evaluator;
 
-    /** Takes care of our end message */
-    private EndMessageView endMessage;
-
     /**
      * Simple constructor for our Worldle game
      *
@@ -73,7 +70,6 @@ public class WordleController {
 
         // Initialize the guess evaluator and end message
         this.evaluator = new GuessEvaluator(this.wordleModel, this.wordleView, this.wordleModel.getSecretWord());
-        this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
 
         initEventHandlers();
     }

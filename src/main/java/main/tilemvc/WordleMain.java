@@ -30,6 +30,11 @@ public class WordleMain extends Application {
 
     }
 
+    /**
+     * Sets the streak from previous wins by user
+     *
+     * @param streak - Amount of games won in a row by user
+     */
     public void setStreak(int streak) {
         this.wordleModel.setStreak(streak);
     }

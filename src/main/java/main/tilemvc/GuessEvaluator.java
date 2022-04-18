@@ -103,23 +103,23 @@ public class GuessEvaluator {
 
         //first check for green letters (correct letter, correct position)
         for (int i = 0; i < currentGuess.length(); ++i) {
+            this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i*500);
             if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
                 this.guessAnalysis.setCharAt(i, '*');
-//                this.wordleView.changeTileColor("exact", i);
-//                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
+                this.wordleView.changeTileColor("exact", i);
+                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
+            }
+            else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
+                this.wordleView.changeTileColor("wrong", i);
+                this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
             }
             else {
-                mapOfLetters.put(this.secretWord.charAt(i), currentGuess.charAt(i));
+                this.guessAnalysis.setCharAt(i, '+');
+                this.wordleView.changeTileColor("misplaced", i);
+                this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
             }
         }
-
-        //then, check for yellow letters (correct letter, incorrect position)
-        Set<Character> remainingSecretLetters = mapOfLetters.keySet();
-        for (Map.Entry<Character,Character> entry : mapOfLetters.entrySet()) {
-            if (remainingSecretLetters.contains(entry.getValue())) {
-                this.guessAnalysis.setCharAt(currentGuess.indexOf(entry.getValue()),'+');
-            }
-        }
+        System.out.println(this.guessAnalysis);
         return this.guessAnalysis.toString();
     }
 
@@ -133,9 +133,6 @@ public class GuessEvaluator {
     public void createEvaluator(String guess) {
         // Obtain result from analyzing guess
         String evaluation = analyzeGuess(guess);
-
-        // Perform screen animation such as flipping tiles
-        this.wordleView.performScreenAnimation(evaluation, guess);
 
         // If the user gets the right word.
         if (evaluation.equals("*****")) {
@@ -156,9 +153,7 @@ public class GuessEvaluator {
         this.wordleModel.setGameState(GameState.GAME_LOSER);
         this.wordleModel.setStreak(0);
         String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
-        if (this.wordleView.isFlippingDone()) {
-            this.endMessage.showEndScreen("You Lost!", message);
-        }
+        this.endMessage.showEndScreen("You Lost!", message);
     }
 
     /**
@@ -168,8 +163,6 @@ public class GuessEvaluator {
         this.wordleModel.setGameState(GameState.GAME_WINNER);
         this.wordleModel.incrementCurrentWinStreak();
         String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
-        if (this.wordleView.isFlippingDone()) {
-            this.endMessage.showEndScreen("You won!", message);
-        }
+        this.endMessage.showEndScreen("You won!", message);
     }
 }

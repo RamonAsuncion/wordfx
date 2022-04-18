@@ -48,22 +48,19 @@ public class WordleView {
     /** The root node containing all three nodes above */
     private BorderPane root;
 
-    /** The evaluator of our guess */
-    private GuessEvaluator guessEval;
-
     /** The model of the game */
     private WordleModel wordleModel;
 
     /** Create button for darkmode */
     private Button darkMode;
 
-    private boolean flippingDone;
-
     /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
 
     /** Play again button to keep playing */
     private Button playAgainBtn;
+
+    private RotateTransition rotation;
 
     /**
      * @return The play again button
@@ -76,14 +73,9 @@ public class WordleView {
     public StackPane getTileStack() { return tileStack; }
 
     /**
-     * @return True if tiles are done flipping, false otherwise;
+     * @return The button to create the dark mode
      */
-    public boolean isFlippingDone() { return flippingDone; }
-
-    /** Create the getter for the darkmode button */
-    public Button getDarkMode() {
-        return darkMode;
-    }
+    public Button getDarkMode() { return darkMode; }
 
     /**
      * @return the root containing header, tiles, and keyboard, to create our scene
@@ -95,7 +87,6 @@ public class WordleView {
      */
     public WordleView(WordleModel wordleModel) {
         this.wordleModel = wordleModel;
-        // Get the secret word
 
         // Initialize the root for our display
         this.root = new BorderPane();
@@ -103,9 +94,7 @@ public class WordleView {
         this.darkMode = new Button("DARK\n MODE");
         this.darkMode.getStyleClass().add("dark-mode-button");
 
-        this.playAgainBtn = new Button();
-        this.playAgainBtn.setText("Play again?");
-        this.playAgainBtn.setPrefSize(100, 50);
+        this.playAgainBtn = new Button("Play again?");
         this.playAgainBtn.setId("play-again-btn");
         initSceneGraph();
     }
@@ -115,8 +104,8 @@ public class WordleView {
      */
     private void initSceneGraph() {
         // Set the scene accordingly
-        tileStack = new StackPane(this.wordleModel.getTiles().getTiles()); //this must be a stack for final message
-        this.root.setCenter(tileStack);
+        this.tileStack = new StackPane(this.wordleModel.getTiles().getTiles()); //this must be a stack for final message
+        this.root.setCenter(this.tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
         System.out.println("Secret word " + this.wordleModel.getSecretWord());
@@ -127,46 +116,14 @@ public class WordleView {
      * given duration
      *
      * @param tile - specific tile to be flipped
+     * @param delay - delay between each flip
      */
-    public boolean flipTiles(Label tile, int index) {
-        flippingDone = false;
-        if (index == 0) {
-            RotateTransition rotation;
-            rotation = new RotateTransition(Duration.seconds(1));
-            rotation.setNode(tile);
-            rotation.setAxis(Rotate.X_AXIS);
-            rotation.setFromAngle(0);
-            rotation.setToAngle(360);
-            rotation.setCycleCount(1);
-            rotation.play();
-        }
-        else {
-            int delay = 0;
-            if (index == 1) {
-                delay = 500;
-            }
-            if (index == 2) {
-                delay = 1000;
-            }
-            if (index == 3) {
-                delay = 1500;
-            }
-            if (index == 4) {
-                delay = 2000;
-                flippingDone = true;
-            }
-            RotateTransition rotation;
-            rotation = new RotateTransition(Duration.seconds(1));
-            rotation.setNode(tile);
-            rotation.setDelay(Duration.millis(delay));
-            rotation.setAxis(Rotate.X_AXIS);
-            rotation.setFromAngle(0);
-            rotation.setToAngle(360);
-            rotation.setCycleCount(1);
-            rotation.play();
-
-        }
-        return flippingDone;
+    public void performFlip(Label tile, int delay) {
+        rotation = new RotateTransition(Duration.seconds(1), tile);
+        rotation.setDelay(Duration.millis(delay));
+        rotation.setAxis(Rotate.X_AXIS);
+        rotation.setToAngle(360);
+        rotation.play();
     }
 
     // TODO: If the answer is not in the word list shake.
@@ -197,36 +154,6 @@ public class WordleView {
     }
 
     /**
-     * Performs changes of color on the tile and on the virtual keyboard with css styling as well as flips tiles.
-     * Green means letter on the guess is positioned the same way as on the secret word. Yellow means secret word
-     * has such letter but misplaced. Grey simply means not in secret word. The flip is to reveal the colors.
-     *
-     * @param evaluation - String containing Dash - (becomes grey), Plus + (becomes yellow), and Asterisk * (becomes green)
-     * @param guess - guess given by user (to be compared with secret word)
-     */
-    public void performScreenAnimation(String evaluation, String guess) {
-        // Loop through our evaluation
-        for (int i = 0; i < 5; i++) {
-            // Correctly positioned letter
-            flipTiles(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i);
-            switch (evaluation.charAt(i)) {
-                case '*':
-                    changeTileColor("exact", i);
-                    changeKeyboardLetterColor("exact", Character.toString(guess.charAt(i)));
-                    break;
-                case '+':
-                    changeTileColor("misplaced", i);
-                    changeKeyboardLetterColor("misplaced", Character.toString(guess.charAt(i)));
-                    break;
-                case '-':
-                    changeTileColor("wrong", i);
-                    changeKeyboardLetterColor("wrong", Character.toString(guess.charAt(i)));
-                    break;
-            }
-        }
-    }
-
-    /**
      * Changes the color of the tiles containing the guessed letters (forming a guess word) on the screen
      *
      * @param style - css style: exact for green, misplaced for yellow, wrong for dark grey
@@ -249,9 +176,7 @@ public class WordleView {
 
         // Only possibility to change colors is from yellow to green, nothing else
         if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
-            // Remove the yellow styling
             this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
-            // Add the green
             this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
         }
 

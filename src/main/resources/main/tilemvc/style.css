@@ -182,12 +182,14 @@
 }
 
 #play-again-btn {
+    -fx-pref-width: 100;
+    -fx-pref-height: 50;
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;
     -fx-text-fill: black;
     -fx-alignment: center;
-    -fx-background-color: #6aaa64;
+    -fx-background-color: -exact;
 }
 
 #end-screen-header {
