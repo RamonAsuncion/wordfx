@@ -124,7 +124,7 @@ public class WordleController {
         }
 
         // Set the streak of the game.
-        wm.setStreak(this.wordleModel.getCurrentWinStreak());
+        //wm.setStreak(this.wordleModel.getCurrentWinStreak());
 
         // Reapply last window position.
         stage.setX(stage.getX());

@@ -20,12 +20,13 @@ package main.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.tilemvc.WordleMain;
 
 public class InitialScreenView {
 
-    private VBox root;
+    private HBox root;
 
     private Button threeLetterBtn, fourLetterBtn, fiveLetterBtn;
 
@@ -35,10 +36,10 @@ public class InitialScreenView {
 
     public Button getFiveLetterBtn() { return fiveLetterBtn; }
 
-    public VBox getRoot() { return root; }
+    public HBox getRoot() { return root; }
 
     public InitialScreenView() {
-        root = new VBox();
+        root = new HBox();
         initSceneGraph();
     }
 
@@ -47,12 +48,11 @@ public class InitialScreenView {
         fourLetterBtn = new Button("4 Letter Mode");
         fiveLetterBtn = new Button("5 Letter Mode");
 
-        threeLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 100; -fx-text-alignment: center; -fx-background-color: grey");
-        fourLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 100; -fx-text-alignment: center; -fx-background-color: grey");
-        fiveLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 100; -fx-text-alignment: center; -fx-background-color: grey");
+        threeLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
+        fourLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
+        fiveLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
 
         root.getChildren().addAll(threeLetterBtn, fourLetterBtn, fiveLetterBtn);
-        root.setAlignment(Pos.CENTER);
-        root.setSpacing(20);
+        root.setSpacing(3);
     }
 }
