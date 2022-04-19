@@ -65,6 +65,8 @@ public class WordleModel {
 
     private int wordLength;
 
+    public void setWordLength(int wordLength) { this.wordLength = wordLength; }
+
     public int getWordLength() { return wordLength; }
 
     public String getSecretWord() { return secretWord; }

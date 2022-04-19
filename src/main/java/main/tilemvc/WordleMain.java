@@ -27,6 +27,8 @@ public class WordleMain extends Application {
 
     private int wordLength;
 
+    private int currentUserStreak;
+
     public static void main(String[] args) { launch(args); }
 
     @Override
@@ -43,7 +45,7 @@ public class WordleMain extends Application {
      * @param streak - Amount of games won in a row by user
      */
     public void setStreak(int streak) {
-        this.wordleModel.setStreak(streak);
+        this.currentUserStreak = streak;
     }
 
     @Override
@@ -83,6 +85,7 @@ public class WordleMain extends Application {
 
     private void createSecondScene() {
         this.wordleModel = new WordleModel(wordLength);
+        this.wordleModel.setStreak(currentUserStreak);
         this.wordleView = new WordleView(this.wordleModel);
 
         // Create new scene and use css resources from style.css
