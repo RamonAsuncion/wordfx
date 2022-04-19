@@ -116,17 +116,16 @@ public class WordleView {
      * given duration
      *
      * @param tile - specific tile to be flipped
-     * @param delay - delay between each flip
+     * @param index - index of the tile
+     * @param style - style to add to tile (exact, misplaced, wrong)
      */
-    public void performFlip(Label tile, int delay) {
+    public void performFlip(Label tile, int index, String style) {
         rotation = new RotateTransition(Duration.seconds(1), tile);
-        rotation.setDelay(Duration.millis(delay));
+        rotation.setDelay(Duration.millis(index*500));
         rotation.setAxis(Rotate.X_AXIS);
         rotation.setToAngle(360);
         rotation.play();
-        rotation.setOnFinished(e -> {
-
-        });
+        rotation.setOnFinished(event -> changeTileColor(style, index));
     }
 
     // TODO: If the answer is not in the word list shake.
@@ -164,7 +163,7 @@ public class WordleView {
      * @param index - index in which the letter is located on the guess
      */
     public void changeTileColor(String style, int index) {
-        this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(index).getStyleClass().add(style);
+        this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow() - 1).get(index).getStyleClass().add(style);
     }
 
     /**

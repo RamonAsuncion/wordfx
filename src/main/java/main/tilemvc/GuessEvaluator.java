@@ -103,19 +103,21 @@ public class GuessEvaluator {
 
         //first check for green letters (correct letter, correct position)
         for (int i = 0; i < currentGuess.length(); ++i) {
-            this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i*500);
             if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
                 this.guessAnalysis.setCharAt(i, '*');
-                this.wordleView.changeTileColor("exact", i);
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact");
+                //this.wordleView.changeTileColor("exact", i);
                 this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
             }
             else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
-                this.wordleView.changeTileColor("wrong", i);
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong");
+                //this.wordleView.changeTileColor("wrong", i);
                 this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
             }
             else {
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced");
                 this.guessAnalysis.setCharAt(i, '+');
-                this.wordleView.changeTileColor("misplaced", i);
+                //this.wordleView.changeTileColor("misplaced", i);
                 this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
             }
         }
