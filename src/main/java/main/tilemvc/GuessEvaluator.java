@@ -105,17 +105,17 @@ public class GuessEvaluator {
         for (int i = 0; i < currentGuess.length(); ++i) {
             if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
                 this.guessAnalysis.setCharAt(i, '*');
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact");
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact", endMessage);
                 //this.wordleView.changeTileColor("exact", i);
                 this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
             }
             else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong");
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong", endMessage);
                 //this.wordleView.changeTileColor("wrong", i);
                 this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
             }
             else {
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced");
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced", endMessage);
                 this.guessAnalysis.setCharAt(i, '+');
                 //this.wordleView.changeTileColor("misplaced", i);
                 this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
@@ -150,20 +150,16 @@ public class GuessEvaluator {
      * In case user is a loser, we tell them the secret word
      * and print final message
      */
-    private void loserUser() {
+    public void loserUser() {
         this.wordleModel.setGameState(GameState.GAME_LOSER);
         this.wordleModel.setStreak(0);
-        String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
-        this.endMessage.showEndScreen("You Lost!", message);
     }
 
     /**
      * In case user is a winner, we keep track of wins and print final message
      */
-    private void winnerUser() {
+    public void winnerUser() {
         this.wordleModel.setGameState(GameState.GAME_WINNER);
         this.wordleModel.incrementCurrentWinStreak();
-        String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
-        this.endMessage.showEndScreen("You won!", message);
     }
 }

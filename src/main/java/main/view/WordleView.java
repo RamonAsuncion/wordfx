@@ -62,6 +62,10 @@ public class WordleView {
 
     private RotateTransition rotation;
 
+    private boolean isFlippingDone = true;
+
+    public boolean isFlippingDone() { return isFlippingDone; }
+
     /**
      * @return The play again button
      */
@@ -119,13 +123,40 @@ public class WordleView {
      * @param index - index of the tile
      * @param style - style to add to tile (exact, misplaced, wrong)
      */
-    public void performFlip(Label tile, int index, String style) {
+    public void performFlip(Label tile, int index, String style, EndMessageView endMessage) {
+        isFlippingDone = false;
         rotation = new RotateTransition(Duration.seconds(1), tile);
         rotation.setDelay(Duration.millis(index*500));
         rotation.setAxis(Rotate.X_AXIS);
         rotation.setToAngle(360);
         rotation.play();
-        rotation.setOnFinished(event -> changeTileColor(style, index));
+        rotation.setOnFinished(event -> {
+            changeTileColor(style, index);
+            showEndMessage(index, endMessage);
+        });
+    }
+
+    /**
+     * Shows end message if user is winner or loser. Also keeps
+     * track to see if flipping is done or not.
+     *
+     * @param index - index of the letter being flipped (checking for last letter to flip)
+     * @param endMessage - End message either You Won, or You Lost
+     */
+    private void showEndMessage(int index, EndMessageView endMessage) {
+        if (index == this.wordleModel.getWordLength() - 1) {
+            if (this.wordleModel.getGameState() == GameState.GAME_WINNER) {
+                String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
+                endMessage.showEndScreen("You won!", message);
+            }
+            else if (this.wordleModel.getGameState() == GameState.GAME_LOSER) {
+                String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
+                endMessage.showEndScreen("You Lost!", message);
+            }
+            else {
+                isFlippingDone = true;
+            }
+        }
     }
 
     // TODO: If the answer is not in the word list shake.

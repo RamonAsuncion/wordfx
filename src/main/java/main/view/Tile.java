@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -124,7 +123,7 @@ public class Tile {
                 rect = new Label();
                 rect.getStyleClass().add("tile");
                 rect.setStyle("-fx-border-color: darkgray;");
-                rect.setPrefSize(57, 57);
+                rect.setPrefSize(62, 62);
                 topPane.getChildren().add(rect);
 
                 // Add label to list of letters

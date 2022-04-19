@@ -50,7 +50,7 @@
 
 #tileLetter {
     -fx-font-family: Arial;
-    -fx-font-size: 25px;
+    -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
@@ -58,27 +58,30 @@
 .tile {
     -fx-border: #d0d0d0;
     -fx-border-width: 2px;
-    -fx-spacing: 10;
+    -fx-spacing: 5;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: Arial;
-    -fx-font-size: 27px;
+    -fx-font-size: 29px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
 
 .tile.wrong {
     -fx-background-color: -wrong;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
 .tile.misplaced {
     -fx-background-color: -misplaced;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
 .tile.exact {
     -fx-background-color: -exact;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
@@ -204,10 +207,12 @@
     -fx-alignment: center;
 }
 
-#word-not-in-list-message {
+#bad-input-message {
     -fx-background-color: black;
     -fx-alignment: center;
     -fx-text-fill: white;
-    -fx-font-size: 20;
+    -fx-font-size: 25;
     -fx-font-weight: bold;
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
 }

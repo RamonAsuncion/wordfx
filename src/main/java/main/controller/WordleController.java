@@ -161,18 +161,14 @@ public class WordleController {
                 break;
             // If user wants to check guess
             case "ENTER":
-                StringBuffer guess = getGuessFromTiles();
-                if ((this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) &&
-                (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
-                    this.evaluator.createEvaluator(guess.toString().toLowerCase());
-                    this.guessState = GuessState.CHECKED;
-                    this.wordleModel.incrementRow();
-                }
+                checkInput();
                 break;
 
             // If user wants to simply type from virtual keyboard
             default:
-                typeToTile(t);
+                if (this.wordleView.isFlippingDone()) {
+                    typeToTile(t);
+                }
                 break;
         }
     }
@@ -200,27 +196,38 @@ public class WordleController {
 
             // If user wants to check a guess
             case ENTER:
-                StringBuffer guess = getGuessFromTiles();
-                // Ensure guess is valid by length and being in word list
-                if (this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) {
-                    if (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase())) {
-                        // Evaluate guess, switch the guess state to checked, and jump to next guess
-                        this.evaluator.createEvaluator(guess.toString().toLowerCase());
-                        this.guessState = GuessState.CHECKED;
-                        this.wordleModel.incrementRow();
-                    }
-                    else {
-                        this.endMessage.wordNotInListScreen();
-                    }
-                }
+                checkInput();
                 break;
 
             // If user types on keyboard
             default:
-                if (event.getCode().isLetterKey()) {
+                if (event.getCode().isLetterKey() && this.wordleView.isFlippingDone()) {
                     typeToTile(t);
                 }
                 break;
+        }
+    }
+
+    /**
+     * Checks for validity of input. Checks if input has enough letters
+     * and if it is in the word list.
+     */
+    private void checkInput() {
+        StringBuffer guess = getGuessFromTiles();
+        // Ensure guess is valid by length and being in word list
+        if (this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) {
+            if (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase())) {
+                // Evaluate guess, switch the guess state to checked, and jump to next guess
+                this.evaluator.createEvaluator(guess.toString().toLowerCase());
+                this.guessState = GuessState.CHECKED;
+                this.wordleModel.incrementRow();
+            }
+            else {
+                this.endMessage.invalidInputScreen("Invalid word");
+            }
+        }
+        else {
+            this.endMessage.invalidInputScreen("Not enough letters");
         }
     }
 

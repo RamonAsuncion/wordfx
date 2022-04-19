@@ -31,6 +31,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import main.controller.WordleController;
+import main.model.GameState;
 import main.model.WordleModel;
 
 public class EndMessageView {
@@ -60,7 +61,7 @@ public class EndMessageView {
     /** Contains streak count if winner, secret word if loser */
     private Label winOrLoseInfo;
 
-    private StackPane badWordStackPane;
+    private StackPane invalidWordStackPane;
 
     public EndMessageView(WordleModel wordleModel, WordleView wordleView) {
         // Initialize model and view
@@ -69,7 +70,7 @@ public class EndMessageView {
 
         this.finalMessageRect = new Rectangle(300, 200);
         this.winStackPane = new StackPane();
-        this.badWordStackPane = new StackPane();
+        this.invalidWordStackPane = new StackPane();
         this.finalMessageLabel = new Label();
         this.finalMessagePane = new BorderPane();
         this.groupNameLabel = new Label("A game by Liv & Gang");
@@ -123,17 +124,18 @@ public class EndMessageView {
         ft.play();
     }
 
-    public void wordNotInListScreen() {
-        Label wordNotInListMessage = new Label("Invalid word");
-        wordNotInListMessage.setId("word-not-in-list-message");
-        this.badWordStackPane.getChildren().add(wordNotInListMessage);
-        this.wordleModel.getTileStackPane().getChildren().add(this.badWordStackPane);
-        this.wordleView.getTileStack().getChildren().add(this.badWordStackPane);
+    public void invalidInputScreen(String message) {
+        Label badInputMessage = new Label(message);
+        badInputMessage.setId("bad-input-message");
+        this.invalidWordStackPane.getChildren().add(badInputMessage);
+        this.wordleModel.getTileStackPane().getChildren().add(this.invalidWordStackPane);
+        this.wordleView.getTileStack().getChildren().add(this.invalidWordStackPane);
         this.wordleView.getRoot().setCenter(this.wordleView.getTileStack());
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), this.badWordStackPane);
-        ft.setFromValue(3.0);
+        FadeTransition ft = new FadeTransition(Duration.millis(1700), this.invalidWordStackPane);
+        ft.setFromValue(1.0);
         ft.setToValue(0);
         ft.play();
+        ft.setOnFinished(e -> this.invalidWordStackPane.getChildren().remove(badInputMessage));
     }
 
 }
