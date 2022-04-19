@@ -60,6 +60,8 @@ public class EndMessageView {
     /** Contains streak count if winner, secret word if loser */
     private Label winOrLoseInfo;
 
+    private StackPane badWordStackPane;
+
     public EndMessageView(WordleModel wordleModel, WordleView wordleView) {
         // Initialize model and view
         this.wordleModel = wordleModel;
@@ -67,6 +69,7 @@ public class EndMessageView {
 
         this.finalMessageRect = new Rectangle(300, 200);
         this.winStackPane = new StackPane();
+        this.badWordStackPane = new StackPane();
         this.finalMessageLabel = new Label();
         this.finalMessagePane = new BorderPane();
         this.groupNameLabel = new Label("A game by Liv & Gang");
@@ -117,6 +120,19 @@ public class EndMessageView {
         FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
         ft.setFromValue(0.1);
         ft.setToValue(1.0);
+        ft.play();
+    }
+
+    public void wordNotInListScreen() {
+        Label wordNotInListMessage = new Label("Invalid word");
+        wordNotInListMessage.setId("word-not-in-list-message");
+        this.badWordStackPane.getChildren().add(wordNotInListMessage);
+        this.wordleModel.getTileStackPane().getChildren().add(this.badWordStackPane);
+        this.wordleView.getTileStack().getChildren().add(this.badWordStackPane);
+        this.wordleView.getRoot().setCenter(this.wordleView.getTileStack());
+        FadeTransition ft = new FadeTransition(Duration.millis(1000), this.badWordStackPane);
+        ft.setFromValue(3.0);
+        ft.setToValue(0);
         ft.play();
     }
 

@@ -203,3 +203,11 @@
     -fx-padding: 18;
     -fx-alignment: center;
 }
+
+#word-not-in-list-message {
+    -fx-background-color: black;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}

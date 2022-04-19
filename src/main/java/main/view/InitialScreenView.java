@@ -47,15 +47,15 @@ public class InitialScreenView {
     }
 
     public void initSceneGraph() {
-        threeLetterBtn = new Button("3 LETTER MODE");
-        fourLetterBtn = new Button("4 LETTER MODE");
-        fiveLetterBtn = new Button("5 LETTER MODE");
+        threeLetterBtn = new Button("3 LETTER MODE\n(HARD)");
+        fourLetterBtn = new Button("4 LETTER MODE\n(MEDIUM)");
+        fiveLetterBtn = new Button("5 LETTER MODE\n(EASY)");
 
         threeLetterBtn.setId("three-letter-btn");
         fourLetterBtn.setId("four-letter-btn");
         fiveLetterBtn.setId("five-letter-btn");
 
-        Label question = new Label("What mode would\nyou like to play?");
+        Label question = new Label("WELCOME TO WORDFX\nCHOOSE A MODE:");
         HBox topPane = new HBox(question);
         topPane.setAlignment(Pos.CENTER);
         question.setId("question");

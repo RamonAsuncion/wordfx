@@ -52,6 +52,8 @@ public class WordleController {
     /** Evaluates the guess based on the secret word */
     private GuessEvaluator evaluator;
 
+    private EndMessageView endMessage;
+
     /**
      * Simple constructor for our Worldle game
      *
@@ -63,6 +65,7 @@ public class WordleController {
         // Initialize view, model, and scene
         this.wordleView = wordleView;
         this.wordleModel = wordleModel;
+        this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
         this.scene = scene;
 
         // Guess state starts out unchecked
@@ -199,13 +202,16 @@ public class WordleController {
             case ENTER:
                 StringBuffer guess = getGuessFromTiles();
                 // Ensure guess is valid by length and being in word list
-                if ((this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) &&
-                        (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase()))) {
-
-                    // Evaluate guess, switch the guess state to checked, and jump to next guess
-                    this.evaluator.createEvaluator(guess.toString().toLowerCase());
-                    this.guessState = GuessState.CHECKED;
-                    this.wordleModel.incrementRow();
+                if (this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) {
+                    if (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase())) {
+                        // Evaluate guess, switch the guess state to checked, and jump to next guess
+                        this.evaluator.createEvaluator(guess.toString().toLowerCase());
+                        this.guessState = GuessState.CHECKED;
+                        this.wordleModel.incrementRow();
+                    }
+                    else {
+                        this.endMessage.wordNotInListScreen();
+                    }
                 }
                 break;
 

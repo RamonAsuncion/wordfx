@@ -3,8 +3,7 @@
     -fx-pref-height: 100;
     -fx-font-size: 30;
     -fx-font-weight: bold;
-    -fx-border-color: black;
-    -fx-border-width: 3;
+    -fx-text-alignment: center;
 }
 
 #four-letter-btn {
@@ -12,8 +11,7 @@
     -fx-pref-height: 100;
     -fx-font-size: 30;
     -fx-font-weight: bold;
-    -fx-border-color: black;
-    -fx-border-width: 3;
+    -fx-text-alignment: center;
 }
 
 #five-letter-btn {
@@ -21,8 +19,7 @@
     -fx-pref-height: 100;
     -fx-font-size: 30;
     -fx-font-weight: bold;
-    -fx-border-color: black;
-    -fx-border-width: 3;
+    -fx-text-alignment: center;
 }
 
 #question {

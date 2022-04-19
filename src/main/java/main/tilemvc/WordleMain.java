@@ -49,7 +49,7 @@ public class WordleMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        firstScene = new Scene(this.initialView.getBp(), 510, 800);
+        firstScene = new Scene(this.initialView.getBp(), 550, 800);
 
         firstScene.getStylesheets().add(
                 getClass().getResource("initial-screen.css")
