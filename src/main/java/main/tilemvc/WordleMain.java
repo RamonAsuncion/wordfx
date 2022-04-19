@@ -51,7 +51,7 @@ public class WordleMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        firstScene = new Scene(this.initialView.getBp(), 550, 800);
+        firstScene = new Scene(this.initialView.getBp(), 600, 850);
 
         firstScene.getStylesheets().add(
                 getClass().getResource("initial-screen.css")

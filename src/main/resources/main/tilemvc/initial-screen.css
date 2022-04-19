@@ -25,6 +25,12 @@
 #question {
     -fx-font-weight: bold;
     -fx-font-family: Verdana;
-    -fx-font-size: 40;
+    -fx-font-size: 30;
     -fx-text-alignment: center;
+}
+
+#group-name {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
 }
