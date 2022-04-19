@@ -242,7 +242,7 @@ public class WordleController {
      * @param letter - letter to be added
      */
     private void typeToTile(Text letter) {
-        if ((this.guessState == GuessState.UNCHECKED) && (this.wordleModel.getColumn() < 4)) {
+        if ((this.guessState == GuessState.UNCHECKED) && (this.wordleModel.getColumn() < (this.wordleModel.getWordLength() - 1))) {
             this.wordleModel.incrementColumn();
             this.wordleView.updateTyping(letter, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }

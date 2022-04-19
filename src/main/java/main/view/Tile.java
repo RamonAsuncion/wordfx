@@ -116,7 +116,6 @@ public class Tile {
      */
     private void createTilePane() {
         // Loop through 6 rows (guesses) and 5 columns (length of word)
-        //TODO change 5 to whatever length customer wants
         for (int i = 0; i < 6; ++i) {
 
             for (int j = 0; j < this.wordLength; ++j) {

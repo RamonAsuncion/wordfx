@@ -21,8 +21,6 @@ public class WordleMain extends Application {
     /** Our Wordle scene where everything is displayed */
     private Scene firstScene, secondScene;
 
-    public Scene getFirstScene() { return firstScene; }
-
     private InitialScreenView initialView;
 
     private Stage window;
@@ -51,7 +49,11 @@ public class WordleMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        firstScene = new Scene(this.initialView.getRoot(), 600, 800);
+        firstScene = new Scene(this.initialView.getBp(), 510, 800);
+
+        firstScene.getStylesheets().add(
+                getClass().getResource("initial-screen.css")
+                        .toExternalForm());
 
         this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
             wordLength = 3;

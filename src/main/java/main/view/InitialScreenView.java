@@ -19,14 +19,19 @@
 package main.view;
 
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import main.tilemvc.WordleMain;
 
 public class InitialScreenView {
 
-    private HBox root;
+    private VBox root;
+
+    private BorderPane bp;
 
     private Button threeLetterBtn, fourLetterBtn, fiveLetterBtn;
 
@@ -36,23 +41,40 @@ public class InitialScreenView {
 
     public Button getFiveLetterBtn() { return fiveLetterBtn; }
 
-    public HBox getRoot() { return root; }
+    public BorderPane getBp() { return bp; }
 
     public InitialScreenView() {
-        root = new HBox();
+        root = new VBox();
+        bp = new BorderPane();
         initSceneGraph();
     }
 
     public void initSceneGraph() {
-        threeLetterBtn = new Button("3 Letter Mode");
-        fourLetterBtn = new Button("4 Letter Mode");
-        fiveLetterBtn = new Button("5 Letter Mode");
+        threeLetterBtn = new Button("3 LETTER MODE");
+        fourLetterBtn = new Button("4 LETTER MODE");
+        fiveLetterBtn = new Button("5 LETTER MODE");
 
-        threeLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
-        fourLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
-        fiveLetterBtn.setStyle("-fx-pref-width: 200; -fx-pref-height: 800; -fx-text-alignment: center; -fx-background-color: grey");
+        threeLetterBtn.setId("three-letter-btn");
+        fourLetterBtn.setId("four-letter-btn");
+        fiveLetterBtn.setId("five-letter-btn");
+
+        Label question = new Label("What mode would\nyou like to play?");
+        HBox topPane = new HBox(question);
+        topPane.setAlignment(Pos.CENTER);
+        question.setId("question");
 
         root.getChildren().addAll(threeLetterBtn, fourLetterBtn, fiveLetterBtn);
-        root.setSpacing(3);
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(20);
+
+        bp.setTop(topPane);
+        bp.setCenter(root);
+    }
+
+    //TODO might need to delete later
+    private void createAndSetBackground(String filename, Button b) {
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/" + filename).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        b.setBackground(background);
     }
 }

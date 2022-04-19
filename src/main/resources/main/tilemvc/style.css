@@ -56,13 +56,13 @@
 }
 
 .tile {
-    -fx-stroke: #d0d0d0;
-    -fx-stroke-width: 2px;
+    -fx-border: #d0d0d0;
+    -fx-border-width: 2px;
     -fx-spacing: 10;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: Arial;
-    -fx-font-size: 25px;
+    -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }

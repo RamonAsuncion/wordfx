@@ -124,10 +124,14 @@ public class WordleView {
         rotation.setAxis(Rotate.X_AXIS);
         rotation.setToAngle(360);
         rotation.play();
+        rotation.setOnFinished(e -> {
+
+        });
     }
 
     // TODO: If the answer is not in the word list shake.
     public void horizontalShakeTiles(ArrayList<Label> badTiles) {
+
     }
 
     /**
