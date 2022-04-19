@@ -140,7 +140,7 @@ public class GuessEvaluator {
             winnerUser();
         }
         // If user runs out of guesses.
-        else if (this.wordleModel.getRow() >= this.wordleModel.getWordLength()) {
+        else if (this.wordleModel.getRow() >= 5) {
             loserUser();
         }
         this.wordleModel.incrementCurrentGuessNumber();
