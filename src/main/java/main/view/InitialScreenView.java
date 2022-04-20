@@ -82,7 +82,7 @@ public class InitialScreenView {
         bp.setCenter(root);
 
         // Placing name of the group
-        Label groupName = new Label("A Game by Liv & Gang");
+        Label groupName = new Label("A Game by Liv & Gang ©");
         groupName.setId("group-name");
         topPane = new HBox(groupName);
         topPane.setAlignment(Pos.CENTER);
