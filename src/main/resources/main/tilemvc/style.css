@@ -50,35 +50,38 @@
 
 #tileLetter {
     -fx-font-family: Arial;
-    -fx-font-size: 25px;
+    -fx-font-size: 27px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
 
 .tile {
-    -fx-stroke: #d0d0d0;
-    -fx-stroke-width: 2px;
-    -fx-spacing: 10;
+    -fx-border: #d0d0d0;
+    -fx-border-width: 2px;
+    -fx-spacing: 5;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: Arial;
-    -fx-font-size: 25px;
+    -fx-font-size: 29px;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
 
 .tile.wrong {
     -fx-background-color: -wrong;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
 .tile.misplaced {
     -fx-background-color: -misplaced;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
 .tile.exact {
     -fx-background-color: -exact;
+    -fx-border-width: 0px;
     -fx-text-fill: white;
 }
 
@@ -158,7 +161,14 @@
     -fx-pref-width: 100;
 }
 
-#winLabel {
+#final-message-rect {
+    -fx-fill: white;
+    -fx-arc-height: 10.0;
+    -fx-arc-width: 10.0;
+    -fx-effect: dropshadow(gaussian, grey, 10.0, 0, 0, 0);
+}
+
+#final-message-label {
     -fx-font-family: Arial;
     -fx-font-size: 25px;
     -fx-font-weight: 400;
@@ -166,7 +176,7 @@
     -fx-alignment: center;
 }
 
-#nameLabel {
+#group-name-label {
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;
@@ -174,11 +184,35 @@
     -fx-alignment: center;
 }
 
-#winButton {
+#play-again-btn {
+    -fx-pref-width: 100;
+    -fx-pref-height: 50;
     -fx-font-family: Arial;
     -fx-font-size: 14px;
     -fx-font-weight: 400;
     -fx-text-fill: black;
     -fx-alignment: center;
-    -fx-background-color: #6aaa64;
+    -fx-background-color: -exact;
+}
+
+#end-screen-header {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+
+#final-message-pane {
+    -fx-max-width: 300;
+    -fx-max-height: 200;
+    -fx-padding: 18;
+    -fx-alignment: center;
+}
+
+#bad-input-message {
+    -fx-background-color: black;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
 }

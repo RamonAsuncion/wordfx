@@ -18,7 +18,6 @@
  */
 package main.view;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -69,7 +68,7 @@ public class Header {
      */
     public Header() {
         // Initialize the title
-        this.title = new Label("Wordle");
+        this.title = new Label("WordFX");
         this.title.setId("titleLabel");
 
         // Initialize header section

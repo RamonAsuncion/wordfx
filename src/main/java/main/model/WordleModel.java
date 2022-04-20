@@ -48,7 +48,7 @@ public class WordleModel {
     private Header header;
 
     /** List of all letters in the keyboard */
-    private ArrayList<Character> letterList;
+    private ArrayList<String> letterList;
 
     /** List of all 6 guesses in the game */
     private ArrayList<ArrayList<Label>> listOfGuesses;
@@ -62,6 +62,12 @@ public class WordleModel {
     private ReadWordsFiles reader;
 
     private String secretWord;
+
+    private int wordLength;
+
+    public void setWordLength(int wordLength) { this.wordLength = wordLength; }
+
+    public int getWordLength() { return wordLength; }
 
     public String getSecretWord() { return secretWord; }
 
@@ -77,7 +83,7 @@ public class WordleModel {
     /**
      * @return List with all letters contained in last given guess
      */
-    public ArrayList<Character> getLetterList() { return letterList; }
+    public ArrayList<String> getLetterList() { return letterList; }
 
     /**
      * @return List with all possible guesses (will be blank labels)
@@ -116,10 +122,12 @@ public class WordleModel {
 
     public GameState getGameState() { return gameState;}
 
-    public WordleModel() {
+    public WordleModel(int wordLength) {
+        this.wordLength = wordLength;
+
         // Three main components of interface
         this.header = new Header();
-        this.tiles = new Tile();
+        this.tiles = new Tile(wordLength);
         this.vk = new VirtualKeyboardView();
 
         // Keep track of where the next letter is typed or deleted
@@ -130,8 +138,30 @@ public class WordleModel {
         this.gameState = GameState.NEW_GAME;
         this.currentWinStreak = 0;
         this.reader = new ReadWordsFiles();
-        this.secretWord = this.reader.createRandomWord("5words.txt");
+
+        readFileOfWords(wordLength);
         initInterface();
+    }
+
+    /**
+     * Reads file of words according to word length user has chosen
+     *
+     * @param wordLength - word length user has chosen (3, 4, or 5)
+     */
+    private void readFileOfWords(int wordLength) {
+        switch (wordLength) {
+            case 3:
+                this.secretWord = this.reader.createRandomWord("3words.txt");
+                break;
+            case 4:
+                this.secretWord = this.reader.createRandomWord("4words.txt");
+                break;
+            default:
+                this.secretWord = this.reader.createRandomWord("5words.txt");
+                this.reader.createFiveLetterWordSet("allowed5words.txt");
+                break;
+
+        }
     }
 
     /**
@@ -184,15 +214,7 @@ public class WordleModel {
      * Sets new column
      * @param col - new value for column
      */
-    public void setColumn(int col) {
-        this.column = col;
-    }
-
-
-    /**
-     * @return the current guess number.
-     */
-    public int getCurrentGuessNumber() { return currentGuessNumber; }
+    public void setColumn(int col) { this.column = col; }
 
     /**
      * Increments the win streak by one
