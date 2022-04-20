@@ -3,6 +3,7 @@ package main.tilemvc;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.controller.HeaderController;
 import main.controller.WordleController;
 import main.model.WordleModel;
 import main.view.InitialScreenView;
@@ -17,6 +18,9 @@ public class WordleMain extends Application {
 
     /** The virtual keyboard controller for handling events like typing */
     private WordleController keyboardController;
+
+    /** The controls for the header */
+    private HeaderController headerController;
 
     /** Our Wordle scene where everything is displayed */
     private Scene firstScene, secondScene;
@@ -90,5 +94,7 @@ public class WordleMain extends Application {
                         .toExternalForm());
 
         keyboardController = new WordleController(this.wordleView, this.wordleModel, secondScene);
+
+        headerController = new HeaderController(this.wordleView, this.wordleModel);
     }
 }
