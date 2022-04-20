@@ -77,7 +77,7 @@ public class WordleMain extends Application {
         window.setScene(firstScene);
 
         // Set the title for the main window
-        window.setTitle("Wordle");
+        window.setTitle("WordFX");
 
         // Display the scene
         window.show();
