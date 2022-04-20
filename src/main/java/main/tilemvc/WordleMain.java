@@ -89,7 +89,7 @@ public class WordleMain extends Application {
         this.wordleView = new WordleView(this.wordleModel);
 
         // Create new scene and use css resources from style.css
-        secondScene = new Scene(this.wordleView.getRoot());
+        secondScene = new Scene(this.wordleView.getRoot(), 600, 850);
         secondScene.getStylesheets().add(
                 getClass().getResource("style.css")
                         .toExternalForm());
