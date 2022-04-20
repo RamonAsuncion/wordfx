@@ -158,6 +158,7 @@ public class WordleModel {
                 break;
             default:
                 this.secretWord = this.reader.createRandomWord("5words.txt");
+                this.reader.createFiveLetterWordSet("allowed5words.txt");
                 break;
 
         }

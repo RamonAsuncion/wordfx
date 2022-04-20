@@ -53,6 +53,8 @@ public class GuessEvaluator {
     /** End message of the game */
     private EndMessageView endMessage;
 
+    private String currentGuess;
+
     /**
      * Simple GuessEvaluator constructor to define the secret word, current guess,
      * and a guess analysis
@@ -106,18 +108,15 @@ public class GuessEvaluator {
             if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
                 this.guessAnalysis.setCharAt(i, '*');
                 this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact", endMessage);
-                //this.wordleView.changeTileColor("exact", i);
                 this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
             }
             else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
                 this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong", endMessage);
-                //this.wordleView.changeTileColor("wrong", i);
                 this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
             }
             else {
                 this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced", endMessage);
                 this.guessAnalysis.setCharAt(i, '+');
-                //this.wordleView.changeTileColor("misplaced", i);
                 this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
             }
         }

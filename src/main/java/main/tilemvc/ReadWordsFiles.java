@@ -33,8 +33,11 @@ public class ReadWordsFiles {
     /** To determine if word is in list */
     private UsedWords usedWords = new UsedWords();
 
-    /** The set of all words in the file */
-    private ArrayList<String> wordSet = new ArrayList<>();
+    /** The set of all possible secret words */
+    private ArrayList<String> secretWordSet = new ArrayList<>();
+
+    /** The set of all possible guesses */
+    private ArrayList<String> guessSet = new ArrayList<>();
 
     /**
      * Reads in the file and creates a set of words, then gets a random
@@ -53,15 +56,15 @@ public class ReadWordsFiles {
             e.printStackTrace();
         }
         while (scnr.hasNext()) {
-            wordSet.add(scnr.next());
+            secretWordSet.add(scnr.next());
         }
         // Find a random word in the list at index randInt
         // and assign to secret word
         Random rand = new Random();
-        int randInt = rand.nextInt((wordSet.size()));
+        int randInt = rand.nextInt((secretWordSet.size()));
         try {
-            if (!this.usedWords.isWordUsed(wordSet.get(randInt))) {
-                secretWord = wordSet.get(randInt);
+            if (!this.usedWords.isWordUsed(secretWordSet.get(randInt))) {
+                secretWord = secretWordSet.get(randInt);
             } else {
                 System.out.println("already used");
             }
@@ -73,12 +76,29 @@ public class ReadWordsFiles {
         return secretWord;
     }
 
+    public void createFiveLetterWordSet(String wordFile) {
+        File file = new File(wordFile);
+        // Scan through file and create a set of all words
+        Scanner scnr = null;
+        try {
+            scnr = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (scnr.hasNext()) {
+            guessSet.add(scnr.next());
+        }
+    }
+
     /**
      * Checks that the user guess is a valid word from the set
      * @param guess - the user guess
      * @return - boolean, whether or not guess is in word set
      */
     public boolean isWordInSet(String guess) {
-        return wordSet.contains(guess);
+        if (guess.length() == 5) {
+            return guessSet.contains(guess);
+        }
+        return secretWordSet.contains(guess);
     }
 }
