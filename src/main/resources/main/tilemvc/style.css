@@ -9,7 +9,7 @@
 }
 
 #background {
-    -fx-background-color: white;
+    /*-fx-background-color: red;*/
 }
 
 #theme1 {
@@ -23,7 +23,7 @@
     -fx-backgroud-color: red;
 }
 
-#topPane {
+#top-pane {
     -fx-orientation: horizontal;
     -fx-alignment: center;
     -fx-spacing: 5;

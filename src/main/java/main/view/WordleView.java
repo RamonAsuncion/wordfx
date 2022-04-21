@@ -24,9 +24,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -60,10 +59,15 @@ public class WordleView {
     /** Play again button to keep playing */
     private Button playAgainBtn;
 
+    /** The object that performs the flips of the tiles when answer is checked */
     private RotateTransition rotation;
 
+    /** Keeps track of when tiles are done flipping */
     private boolean isFlippingDone = true;
 
+    /**
+     * @return true if flipping is done, false if not
+     */
     public boolean isFlippingDone() { return isFlippingDone; }
 
     /**
@@ -101,6 +105,7 @@ public class WordleView {
         this.playAgainBtn = new Button("Play again?");
         this.playAgainBtn.setId("play-again-btn");
         initSceneGraph();
+        changeBackground("img_1.png");
     }
 
     /**
@@ -220,5 +225,16 @@ public class WordleView {
                 !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
             this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
         }
+    }
+
+    /**
+     * Changes the background of the main screen of the game
+     *
+     * @param filename - filename leading to the image to be used as background
+     */
+    private void changeBackground(String filename) {
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/"+filename).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        getRoot().setBackground(background);
     }
 }

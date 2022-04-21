@@ -8,4 +8,5 @@ module csci205_final_project{
     exports main.tilemvc;
     exports main.controller;
     exports main.view;
+    exports main.model;
 }

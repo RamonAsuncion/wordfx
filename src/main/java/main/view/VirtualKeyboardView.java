@@ -39,17 +39,17 @@ public class VirtualKeyboardView {
     private ArrayList<String> keyboardLetters;
 
     /**
-     * @return The list with all letters on the virtual keyboard
+     * @return The {@link ArrayList} with all letters on the virtual keyboard
      */
     public ArrayList<String> getKeyboardLetters() { return keyboardLetters; }
 
     /**
-     * @return the {@link ArrayList} with all the virtual keyboard keys
+     * @return the {@link ArrayList} with all the virtual keyboard keys (letters, enter, and delete)
      */
     public ArrayList<Button> getKeyboardKeys() { return keyboardKeys; }
 
     /**
-     * @return the keyboard node
+     * @return the keyboard node to add to the scene in the view
      */
     public VBox getKeyboard() { return keyboard; }
 
@@ -62,7 +62,7 @@ public class VirtualKeyboardView {
         keyboard.setId("keyboard");
 
         topPane = new HBox();
-        topPane.setId("topPane");
+        topPane.setId("top-pane");
 
         keyboardKeys = new ArrayList<>();
         keyboardLetters = new ArrayList<>();
@@ -115,7 +115,7 @@ public class VirtualKeyboardView {
      */
     public void newTopPane() {
         topPane = new HBox();
-        topPane.setId("topPane");
+        topPane.setId("top-pane");
     }
 
     /**
@@ -135,22 +135,41 @@ public class VirtualKeyboardView {
         );
 
         // Create top row of virtual keyboard
-        for (Character value : topKeyboard) {
-            topPane.getChildren().add(createKey(value));
-        }
-        keyboard.getChildren().add(topPane);
+        createRowOfKeyboard(topKeyboard);
 
         // Create middle row of virtual keyboard
         newTopPane();
-        for (Character character : midKeyboard) {
-            topPane.getChildren().add(createKey(character));
-        }
-        keyboard.getChildren().add(topPane);
+        createRowOfKeyboard(midKeyboard);
 
         // Create enter key, bottom row of virtual keyboard, and delete key
         // in this order.
         newTopPane();
-        topPane.getChildren().add(createEnterKey("ENTER"));
+        createRowOfKeyboard(bottomKeyboard, "ENTER");
+    }
+
+    /**
+     * Creates rows of the virtual keyboard, more specifically top and
+     * middle rows. Also adds them to keyboard node.
+     *
+     * @param keyboardRow - either top row, middle row, or bottom row
+     *                    of keyboard
+     */
+    private void createRowOfKeyboard(ArrayList<Character> keyboardRow) {
+        for (Character value : keyboardRow) {
+            topPane.getChildren().add(createKey(value));
+        }
+        keyboard.getChildren().add(topPane);
+    }
+
+    /**
+     * Creates the row of the keyboard that contains the enter and delete keys (bottom row).
+     * Also adds row to the keyboard node
+     *
+     * @param bottomKeyboard - bottom keys of the keyboard, including enter and delete
+     * @param enterKey - String associated with the enter key ("ENTER")
+     */
+    private void createRowOfKeyboard(ArrayList<Character> bottomKeyboard, String enterKey) {
+        topPane.getChildren().add(createEnterKey(enterKey));
         for (Character character : bottomKeyboard) {
             topPane.getChildren().add(createKey(character));
         }
