@@ -26,9 +26,10 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
 /**
- * Tile class that creates the 30 tiles where the guesses will be typed on
+ * Tile class that creates all the tiles where the
+ * guesses will be typed on
  */
-public class Tile {
+public class TileView {
 
     /**
      * Root node for the scene graph
@@ -55,6 +56,7 @@ public class Tile {
      */
     private ArrayList<ArrayList<Label>> guessList;
 
+    /** Represents length of word (mode) chosen by user */
     private int wordLength;
 
     /**
@@ -88,22 +90,24 @@ public class Tile {
      * Simple constructor for the Tile class. Initializes the tiles and
      * topPane, where the topPane represents each row of tiles.
      */
-    public Tile(int wordLength) {
-        this.wordLength = wordLength;
-        // Set up the tiles for our scene graph
-        tiles = new VBox();
-        tiles.getStyleClass().add("tile");
+    public TileView (int wordLength) {
 
-        // Set up the topPane node for our scene graph
+        this.wordLength = wordLength;
+
+        // Set up the tile pane for our scene graph
+        tiles = new VBox();
+        tiles.setId("tile-pane");
+
+        // Set up the first top pane node for our scene graph
         topPane = new HBox();
-        topPane.setId("topPane");
+        topPane.setId("top-pane");
 
         // Initialize the two arraylists to store all the guesses and
         // letters respectively
         guessList = new ArrayList<ArrayList<Label>>();
         letterList = new ArrayList<>();
 
-        // Create the stack pane for the win screen */
+        // Create the stack pane for the win screen later on
         tileStackPane = new StackPane();
 
         createTilePane();
@@ -114,32 +118,50 @@ public class Tile {
      * words. Tiles (rectangles) are styled using css.
      */
     private void createTilePane() {
-        // Loop through 6 rows (guesses) and 5 columns (length of word)
+        // Loop through 6 rows (guesses) and length of word number of columns
         for (int i = 0; i < 6; ++i) {
 
             for (int j = 0; j < this.wordLength; ++j) {
 
-                // Create new tile and add to top pane
-                rect = new Label();
-                rect.getStyleClass().add("tile");
-                rect.setStyle("-fx-border-color: darkgray;");
-                rect.setPrefSize(62, 62);
-                topPane.getChildren().add(rect);
-
-                // Add label to list of letters
-                letterList.add(rect);
+                createNewTile();
             }
+            // Add each guess to vertical box
             tiles.getChildren().add(topPane);
 
-            // Add all 5 letters to guess list as a guess
-            guessList.add(letterList);
-            // Make sure to create new letterList (new guess)
-            letterList = new ArrayList<>();
-
-            // Create new top pane, meaning new guess on a new horizontal box
-            topPane = new HBox();
-            topPane.setId("topPane");
+            introduceNewGuess();
         }
+
+        // Add all tiles to the stack pane of tiles
         tileStackPane.getChildren().add(tiles);
+    }
+
+    /**
+     * Creates each individual tile (label), styles it, and adds
+     * to the topPane (each row).
+     */
+    private void createNewTile() {
+        // Create new tile and add to top pane
+        rect = new Label();
+        rect.getStyleClass().add("tile");
+        topPane.getChildren().add(rect);
+
+        // Add label to list of letters
+        letterList.add(rect);
+    }
+
+    /**
+     * Introduces new guess. That is, move to the next row of tiles to
+     * create them, add each tile as the letter of a guess, and all 5 tiles
+     * to the {@link ArrayList} guessList as one of the six guesses.
+     */
+    private void introduceNewGuess() {
+        // Add all 5 letters to guess list as a guess
+        guessList.add(letterList);
+        // Make sure to create new letterList (new guess)
+        letterList = new ArrayList<>();
+
+        // Create new top pane, meaning new guess on a new horizontal box
+        topPane = new HBox();
+        topPane.setId("top-pane");
     }
 }

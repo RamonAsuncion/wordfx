@@ -55,16 +55,22 @@
     -fx-text-fill: black;
 }
 
+#tile-pane {
+    -fx-alignment: center;
+    -fx-spacing: 5;
+}
+
 .tile {
-    -fx-border: #d0d0d0;
     -fx-border-width: 2px;
+    -fx-border-color: darkgray;
     -fx-spacing: 5;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: Arial;
     -fx-font-size: 29px;
     -fx-font-weight: bold;
-    -fx-text-fill: black;
+    -fx-pref-height: 62;
+    -fx-pref-width: 62;
 }
 
 .tile.wrong {
