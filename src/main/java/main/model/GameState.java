@@ -3,6 +3,7 @@ package main.model;
 public enum GameState {
     NEW_GAME(true),
     GAME_IN_PROGRESS(true),
+    GAME_PAUSED,
     GAME_WINNER,
     GAME_LOSER;
 
