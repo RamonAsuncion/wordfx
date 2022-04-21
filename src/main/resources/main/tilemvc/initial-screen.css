@@ -34,3 +34,12 @@
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
+
+#header {
+    -fx-alignment: center;
+}
+
+#button-pane {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}

@@ -18,37 +18,61 @@
  */
 package main.view;
 
-import javafx.animation.FillTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.util.Duration;
 
-import java.io.File;
-
+/**
+ * This class takes care of building the initial screen of the game
+ */
 public class InitialScreenView {
 
+    /** Vertical node that will contain each button in our initial screen */
     private VBox root;
 
-    private BorderPane bp;
+    /** Pane to set header, center of screen, and bottom of screen */
+    private BorderPane borderPane;
 
+    /** Each button contained in the initial screen */
     private Button threeLetterBtn, fourLetterBtn, fiveLetterBtn;
-    private HBox topPane;
 
+    /** Pane for the header of the initial screen */
+    private HBox header;
+    private Label initialQuestion;
+
+    /**
+     * @return Three-letter mode button on initial screen
+     */
     public Button getThreeLetterBtn() { return threeLetterBtn; }
 
+    /**
+     * @return Four-letter mode button on initial screen
+     */
     public Button getFourLetterBtn() { return fourLetterBtn; }
 
+    /**
+     * @return Five-letter mode button on initial screen
+     */
     public Button getFiveLetterBtn() { return fiveLetterBtn; }
 
-    public BorderPane getBp() { return bp; }
+    /**
+     * @return The BorderPane of our initial screen to create scene
+     */
+    public BorderPane getBorderPane() { return borderPane; }
 
+    /**
+     * Initialized the initial screen view
+     */
     public InitialScreenView() {
+        // Pane for the buttons
         root = new VBox();
-        bp = new BorderPane();
+        root.setId("button-pane");
+
+        // Main pane
+        borderPane = new BorderPane();
+
         initSceneGraph();
     }
 
@@ -56,8 +80,35 @@ public class InitialScreenView {
 
         BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/new2.jpeg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
-        bp.setBackground(background);
+        borderPane.setBackground(background);
 
+        // Top Part
+        createHeaderPortion();
+
+        // Middle Part
+        createInitialButtons();
+
+        // Bottom Part
+        createGroupNamePortion();
+    }
+
+    /**
+     * Creates header portion, welcoming user and asking to choose
+     * a game mode
+     */
+    private void createHeaderPortion() {
+        initialQuestion = new Label("WELCOME TO WORDFX\nCHOOSE A MODE:");
+        header = new HBox(initialQuestion);
+        header.setId("header");
+        initialQuestion.setId("question");
+        borderPane.setTop(header);
+    }
+
+    /**
+     * Creates the buttons on the initial screen, styles them,
+     * and adds to the main Pane
+     */
+    private void createInitialButtons() {
         //Create three buttons
         threeLetterBtn = new Button("3 LETTER MODE\n(HARD)");
         fourLetterBtn = new Button("4 LETTER MODE\n(MEDIUM)");
@@ -68,31 +119,19 @@ public class InitialScreenView {
         fourLetterBtn.setId("four-letter-btn");
         fiveLetterBtn.setId("five-letter-btn");
 
-        // Title
-        Label question = new Label("WELCOME TO WORDFX\nCHOOSE A MODE:");
-        topPane = new HBox(question);
-        topPane.setAlignment(Pos.CENTER);
-        question.setId("question");
-        bp.setTop(topPane);
-
         // Placing our buttons
         root.getChildren().addAll(threeLetterBtn, fourLetterBtn, fiveLetterBtn);
-        root.setAlignment(Pos.CENTER);
-        root.setSpacing(20);
-        bp.setCenter(root);
-
-        // Placing name of the group
-        Label groupName = new Label("A Game by Liv & Gang ©");
-        groupName.setId("group-name");
-        topPane = new HBox(groupName);
-        topPane.setAlignment(Pos.CENTER);
-        bp.setBottom(topPane);
+        borderPane.setCenter(root);
     }
 
-    //TODO might need to delete later
-    private void createAndSetBackground(String filename, Button b) {
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/" + filename).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        Background background = new Background(backgroundImage);
-        b.setBackground(background);
+    /**
+     * Places the name of our group on the bottom
+     */
+    private void createGroupNamePortion() {
+        Label groupName = new Label("A Game by Liv & Gang ©");
+        groupName.setId("group-name");
+        header = new HBox(groupName);
+        header.setAlignment(Pos.CENTER);
+        borderPane.setBottom(header);
     }
 }
