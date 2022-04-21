@@ -40,6 +40,8 @@ public class InitialScreenView {
 
     /** Pane for the header of the initial screen */
     private HBox header;
+
+    /** Initial question for user: Choose mode */
     private Label initialQuestion;
 
     /**
