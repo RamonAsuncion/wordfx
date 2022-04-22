@@ -23,7 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import main.tilemvc.ReadWordsFiles;
 import main.view.Header;
-import main.view.Tile;
+import main.view.TileView;
 import main.view.VirtualKeyboardView;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class WordleModel {
     private int currentGuessNumber;
 
     /** The 30 tiles representing all possible guesses */
-    private Tile tiles;
+    private TileView tiles;
 
     /** The virtual keyboard which user cna use to type */
     private VirtualKeyboardView vk;
@@ -98,7 +98,7 @@ public class WordleModel {
     /**
      * @return all 30 tiles
      */
-    public Tile getTiles() { return tiles; }
+    public TileView getTiles() { return tiles; }
 
     /**
      * @return the stackpane in the tile class
@@ -127,7 +127,7 @@ public class WordleModel {
 
         // Three main components of interface
         this.header = new Header();
-        this.tiles = new Tile(wordLength);
+        this.tiles = new TileView(wordLength);
         this.vk = new VirtualKeyboardView();
 
         // Keep track of where the next letter is typed or deleted

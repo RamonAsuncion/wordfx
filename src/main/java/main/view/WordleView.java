@@ -105,7 +105,6 @@ public class WordleView {
         this.playAgainBtn = new Button("Play again?");
         this.playAgainBtn.setId("play-again-btn");
         initSceneGraph();
-        changeBackground("img_1.png");
     }
 
     /**

@@ -197,6 +197,7 @@
     -fx-font-weight: 400;
     -fx-text-fill: black;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 #play-again-btn {
@@ -220,6 +221,7 @@
     -fx-max-height: 200;
     -fx-padding: 18;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 #setting-menu {
