@@ -30,9 +30,6 @@ public class ReadWordsFiles {
     /** The secret word for user to guess */
     private String secretWord;
 
-    /** To determine if word is in list */
-    private UsedWords usedWords = new UsedWords();
-
     /** The set of all possible secret words */
     private ArrayList<String> secretWordSet = new ArrayList<>();
 
@@ -62,18 +59,8 @@ public class ReadWordsFiles {
         // and assign to secret word
         Random rand = new Random();
         int randInt = rand.nextInt((secretWordSet.size()));
-        try {
-            if (!this.usedWords.isWordUsed(secretWordSet.get(randInt))) {
-                secretWord = secretWordSet.get(randInt);
-            } else {
-                System.out.println("already used");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return secretWord;
+
+        return secretWordSet.get(randInt);
     }
 
     public void createFiveLetterWordSet(String wordFile) {

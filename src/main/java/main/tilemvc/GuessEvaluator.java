@@ -38,9 +38,6 @@ public class GuessEvaluator {
     /** This is the analysis of the given guess, including correct and incorrect letters */
     private StringBuffer guessAnalysis;
 
-    /** This keeps track of the letters in both the secret word and guessed word */
-    private Map<Character, Character> mapOfLetters;
-
     /** The model of the game */
     private WordleModel wordleModel;
 

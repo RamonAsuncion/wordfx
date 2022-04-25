@@ -31,38 +31,26 @@ import java.util.ArrayList;
  */
 public class TileView {
 
-    /**
-     * Root node for the scene graph
-     */
+    /** Root node for the scene graph */
     private VBox tiles;
 
-    /**
-     * Row of tiles representing each guess
-     */
+    /** Row of tiles representing each guess */
     private HBox topPane;
 
-    /**
-     * Individual tile to be added to our tiles
-     */
+    /** Individual tile to be added to our tiles */
     private Label rect;
 
-    /**
-     * List of labels where letters will be placed
-     */
+    /** List of labels where letters will be placed */
     private ArrayList<Label> letterList;
 
-    /**
-     * List of all guesses, where each guess is a list of labels (letters)
-     */
+    /** List of all guesses, where each guess is a list of labels (letters) */
     private ArrayList<ArrayList<Label>> guessList;
 
     /** Represents length of word (mode) chosen by user */
     private int wordLength;
 
-    /**
-     * Stack Pane with the tiles and win screen
-     */
-    public StackPane tileStackPane;
+    /** Stack Pane with the tiles and win screen */
+    private StackPane tileStackPane;
 
     /**
      * @return the {@ArrayList} of the guesses, containing each list of letters
