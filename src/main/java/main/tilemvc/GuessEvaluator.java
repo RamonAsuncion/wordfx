@@ -55,6 +55,12 @@ public class GuessEvaluator {
 
     private String currentGuess;
 
+    private ArrayList<Character> correctArray;
+
+    private ArrayList<Character> guessArray;
+
+    private Map<Integer, ArrayList<String>> keyboardColors;
+
     /**
      * Simple GuessEvaluator constructor to define the secret word, current guess,
      * and a guess analysis
@@ -64,6 +70,7 @@ public class GuessEvaluator {
         this.wordleView = wordleView;
         this.secretWord = secretWord;
         this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
+        this.keyboardColors = new HashMap<>();
 
         // If used words.txt does not exist, create it
         try {
@@ -98,28 +105,77 @@ public class GuessEvaluator {
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-    public String analyzeGuess(String currentGuess, int wordLength) {
-        // Initially empty
-        this.mapOfLetters = new TreeMap<>();
-        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
+//    public String analyzeGuess(String currentGuess, int wordLength) {
+//        // Initially empty
+//        this.mapOfLetters = new TreeMap<>();
+//        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
+//
+//        //first check for green letters (correct letter, correct position)
+//        for (int i = 0; i < currentGuess.length(); ++i) {
+//            if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
+//                this.guessAnalysis.setCharAt(i, '*');
+//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact", endMessage);
+//                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
+//            }
+//            else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
+//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong", endMessage);
+//                this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
+//            }
+//            else {
+//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced", endMessage);
+//                this.guessAnalysis.setCharAt(i, '+');
+//                this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
+//            }
+//        }
+//        return this.guessAnalysis.toString();
+//    }
 
-        //first check for green letters (correct letter, correct position)
-        for (int i = 0; i < currentGuess.length(); ++i) {
-            if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
+    public Map<Integer, ArrayList<String>> setKeyboardLetterColor(String style, String letter, int index) {
+        // exact = *
+        // misplaced = +
+        // wrong = -
+
+        keyboardColors.put(index, new ArrayList<String>());
+        keyboardColors.get(index).add(style);
+        keyboardColors.get(index).add(letter);
+
+        return keyboardColors;
+    }
+
+    public String analyzeGuess(String currentGuess, int wordLength) {
+        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
+        this.correctArray = new ArrayList<>();
+        this.guessArray = new ArrayList<>();
+
+        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
+        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
+
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.get(i) == guessArray.get(i)) {
                 this.guessAnalysis.setCharAt(i, '*');
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact", endMessage);
-                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
-            }
-            else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong", endMessage);
-                this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
-            }
-            else {
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced", endMessage);
-                this.guessAnalysis.setCharAt(i, '+');
-                this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
+                        i, "exact", this.endMessage, keyboardColors);
+                setKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)), i);
+                this.correctArray.set(i, '#');
+                this.guessArray.set(i, '!');
             }
         }
+
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.contains(guessArray.get(i))) {
+                this.guessAnalysis.setCharAt(i, '+');
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
+                        i, "misplaced", this.endMessage, keyboardColors);
+                setKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)), i);
+                this.correctArray.remove(i);
+            }
+            else {
+                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
+                        i, "wrong", this.endMessage, keyboardColors);
+                setKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)), i);
+            }
+        }
+        System.out.println(this.guessAnalysis.toString());
         return this.guessAnalysis.toString();
     }
 

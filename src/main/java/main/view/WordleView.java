@@ -40,7 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 public class WordleView {
 
@@ -127,7 +127,8 @@ public class WordleView {
      * @param index - index of the tile
      * @param style - style to add to tile (exact, misplaced, wrong)
      */
-    public void performFlip(Label tile, int index, String style, EndMessageView endMessage) {
+    public void performFlip(Label tile, int index, String style, EndMessageView endMessage,
+                            Map<Integer, ArrayList<String>> keyboardColors) {
         isFlippingDone = false;
         rotation = new RotateTransition(Duration.seconds(1), tile);
         rotation.setDelay(Duration.millis(index*500));
@@ -136,6 +137,7 @@ public class WordleView {
         rotation.play();
         rotation.setOnFinished(event -> {
             changeTileColor(style, index);
+            changeKeyboardLetterColor(keyboardColors, index);
             showEndMessage(index, endMessage);
         });
     }
@@ -148,6 +150,7 @@ public class WordleView {
      * @param endMessage - End message either You Won, or You Lost
      */
     private void showEndMessage(int index, EndMessageView endMessage) {
+
         if (index == this.wordleModel.getWordLength() - 1) {
             if (this.wordleModel.getGameState() == GameState.GAME_WINNER) {
                 String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
@@ -155,8 +158,7 @@ public class WordleView {
             }
             else if (this.wordleModel.getGameState() == GameState.GAME_LOSER) {
                 String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
-                endMessage.showEndScreen("You Lost!", message);
-            }
+                endMessage.showEndScreen("You Lost!", message);}
             else {
                 isFlippingDone = true;
             }
@@ -208,21 +210,26 @@ public class WordleView {
      * @param style - css style to style the color of the virtual key (exact, misplaced, or wrong)
      * @param letter - Current letter in guess
      */
-    public void changeKeyboardLetterColor(String style, String letter) {
-        // Obtain the index of current letter in guess and change its style
-        int index = this.wordleModel.getLetterList().indexOf(letter);
+    public void changeKeyboardLetterColor(Map<Integer, ArrayList<String>> keyboardColors, int tileIndex) {
+        //String style, String letter, int wordLength
+        if (tileIndex == 4) {
+            for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+                // Obtain the index of current letter in guess and change its style
+                int index = this.wordleModel.getLetterList().indexOf(keyboardColors.get(i).get(1));
 
-        // Only possibility to change colors is from yellow to green, nothing else
-        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
-            this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
-            this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
-        }
+                // Only possibility to change colors is from yellow to green, nothing else
+                if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (keyboardColors.get(i).get(0).equals("exact"))) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
+                }
 
-        // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
-        else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
-            this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
+                // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
+                else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add(keyboardColors.get(i).get(0));
+                }
+            }
         }
     }
 
