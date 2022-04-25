@@ -27,9 +27,6 @@ import java.util.Scanner;
 
 public class ReadWordsFiles {
 
-    /** The secret word for user to guess */
-    private String secretWord;
-
     /** The set of all possible secret words */
     private ArrayList<String> secretWordSet = new ArrayList<>();
 

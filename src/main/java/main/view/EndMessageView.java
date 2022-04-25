@@ -58,9 +58,6 @@ public class EndMessageView {
     /** The view of the game */
     private WordleView wordleView;
 
-    /** Contains streak count if winner, secret word if loser */
-    private Label winOrLoseInfo;
-
     /** Stack pane for printing message over tiles */
     private StackPane invalidWordStackPane;
 
@@ -130,9 +127,10 @@ public class EndMessageView {
      *                           display secret word if lost
      */
     private void createFinalMessageHeader(String winOrLose, String streakOrSecretWord) {
-        this.winOrLoseInfo = new Label(streakOrSecretWord);
+        /** Contains streak count if winner, secret word if loser */
+        Label winOrLoseInfo = new Label(streakOrSecretWord);
         this.finalMessageLabel.setText(winOrLose);
-        this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, this.winOrLoseInfo);
+        this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, winOrLoseInfo);
     }
 
     /**

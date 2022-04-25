@@ -37,17 +37,11 @@ public class TileView {
     /** Row of tiles representing each guess */
     private HBox topPane;
 
-    /** Individual tile to be added to our tiles */
-    private Label rect;
-
     /** List of labels where letters will be placed */
     private ArrayList<Label> letterList;
 
     /** List of all guesses, where each guess is a list of labels (letters) */
     private ArrayList<ArrayList<Label>> guessList;
-
-    /** Represents length of word (mode) chosen by user */
-    private int wordLength;
 
     /** Stack Pane with the tiles and win screen */
     private StackPane tileStackPane;
@@ -80,8 +74,6 @@ public class TileView {
      */
     public TileView (int wordLength) {
 
-        this.wordLength = wordLength;
-
         // Set up the tile pane for our scene graph
         tiles = new VBox();
         tiles.setId("tile-pane");
@@ -98,20 +90,21 @@ public class TileView {
         // Create the stack pane for the win screen later on
         tileStackPane = new StackPane();
 
-        createTilePane();
+        createTilePane(wordLength);
     }
 
     /**
      * Creates the pane made up of the 30 tiles, meaning 6 guesses of 5-letter
      * words. Tiles (rectangles) are styled using css.
      */
-    private void createTilePane() {
+    private void createTilePane(int wordLength) {
         // Loop through 6 rows (guesses) and length of word number of columns
         for (int i = 0; i < 6; ++i) {
 
-            for (int j = 0; j < this.wordLength; ++j) {
+            for (int j = 0; j < wordLength; ++j) {
 
                 createNewTile();
+
             }
             // Add each guess to vertical box
             tiles.getChildren().add(topPane);
@@ -129,7 +122,7 @@ public class TileView {
      */
     private void createNewTile() {
         // Create new tile and add to top pane
-        rect = new Label();
+        Label rect = new Label();
         rect.getStyleClass().add("tile");
         topPane.getChildren().add(rect);
 
