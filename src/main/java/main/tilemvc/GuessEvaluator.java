@@ -41,9 +41,6 @@ public class GuessEvaluator {
     /** This keeps track of the letters in both the secret word and guessed word */
     private Map<Character, Character> mapOfLetters;
 
-    /** Secret word is added to usedwords.txt through this variable */
-    private UsedWords usedWords;
-
     /** The model of the game */
     private WordleModel wordleModel;
 
@@ -71,69 +68,9 @@ public class GuessEvaluator {
         this.secretWord = secretWord;
         this.endMessage = new EndMessageView(this.wordleModel, this.wordleView);
         this.keyboardColors = new HashMap<>();
-
-        // If used words.txt does not exist, create it
-        try {
-            checkForUsedWordsFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    /**
-     * If used words.txt does not exist, create it. Always add the secret word
-     * to usedwords.txt
-     */
-    private void checkForUsedWordsFile() throws IOException {
-        File usedFile = new File("src/usedwords.txt");
-        FileWriter fw = new FileWriter(usedFile);
-        if (!usedFile.exists()) {
-            try {
-                this.usedWords.createFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        //fw.write(this.secretWord);
-
-    }
-
-    /**
-     * Returns an encoded string with -, +, and * characters indicating
-     * what letters are promising
-     *
-     * @param currentGuess - user guess to be analyzed
-     * @param wordLength - shows what mode user is playing
-     * @return an encoded string with -, +, and * characters indicating
-     * what letters are promising
-     */
-
-    public String analyzeGuess(String currentGuess, int wordLength) {
-        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
-        this.correctArray = new ArrayList<>();
-        this.guessArray = new ArrayList<>();
-
-        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
-        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
-
-        for (int i = 0; i < wordLength; i++) {
-            if (correctArray.get(i) == guessArray.get(i)) {
-                this.guessAnalysis.setCharAt(i, '*');
-                this.correctArray.set(i, '#');
-                this.guessArray.set(i, '!');
-            }
-        }
-
-        for (int i = 0; i < wordLength; i++) {
-            if (correctArray.contains(guessArray.get(i))) {
-                this.guessAnalysis.setCharAt(i, '+');
-                this.correctArray.remove(guessArray.get(i));
-            }
-        }
-        return this.guessAnalysis.toString();
-    }
-
-    public Map<Integer, ArrayList<String>> setKeyboardLetterColor(String style, String letter, int index) {
+    public void setKeyboardLetterColor(String style, String letter, int index) {
         // exact = *
         // misplaced = +
         // wrong = -
@@ -142,17 +79,16 @@ public class GuessEvaluator {
         keyboardColors.get(index).add(style);
         keyboardColors.get(index).add(letter);
 
-        return keyboardColors;
     }
 
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
      * finding if a letter is in the correct position, misplaced, or not even
-     * in the word.
+     * in the word. Analysis is displayed on screen
      *
      * @param guess - Given guess by user
      */
-    public void createEvaluator(String guess) {
+    public void feedback(String guess) {
         // Obtain result from analyzing guess
         String evaluation = analyzeGuess(guess, this.wordleModel.getWordLength());
         showAnalysis(evaluation, guess);
@@ -165,23 +101,69 @@ public class GuessEvaluator {
         else if (this.wordleModel.getRow() >= 5) {
             loserUser();
         }
+
         this.wordleModel.incrementCurrentGuessNumber();
     }
 
-    public void showAnalysis(String evaluation, String currentGuess) {
+    /**
+     * Returns an encoded string with -, +, and * characters indicating
+     * what letters are promising. First, letters in the correct position
+     * will receive a * in the guessAnalysis. Those letters that receive a
+     * asterisk will be 'removed' from both arrays by being replaced with
+     * characters that are not used in the game. Then, take care of letters
+     * that are yet to be checked by comparing to letters that haven't received a
+     * asterisk and if present in the correctArray, letter will receive a +.
+     *
+     * @param currentGuess - user guess to be analyzed
+     * @param wordLength - shows what mode user is playing
+     * @return an encoded string with -, +, and * characters indicating
+     * what letters are promising
+     */
+
+    private String analyzeGuess(String currentGuess, int wordLength) {
+
+        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
+        this.correctArray = new ArrayList<>();
+        this.guessArray = new ArrayList<>();
+
+        // Fill one array with letters from secret word, and another array with letters from user guess
+        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
+        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
+
+        // Take care of letters that are in the correct positioning first
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.get(i) == guessArray.get(i)) {
+                this.guessAnalysis.setCharAt(i, '*');
+                this.correctArray.set(i, '#');
+                this.guessArray.set(i, '!');
+            }
+        }
+
+        // Next, if a letter in the guess is still present in the array
+        // of letters from secret word that didn't get a *, place a +
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.contains(guessArray.get(i))) {
+                this.guessAnalysis.setCharAt(i, '+');
+                this.correctArray.remove(guessArray.get(i));
+            }
+        }
+        return this.guessAnalysis.toString();
+    }
+
+    /**
+     * Shows the analysis on the screen by performing the flip of letters
+     *
+     * @param evaluation - set of *, +, - representing green, yellow, and gray respectively
+     * @param currentGuess - last guess given by user
+     */
+    private void showAnalysis(String evaluation, String currentGuess) {
         String style;
         for (int i = 0; i < wordleModel.getWordLength(); i++) {
-            switch (evaluation.charAt(i)) {
-                case '*':
-                    style = "exact";
-                    break;
-                case '+':
-                    style = "misplaced";
-                    break;
-                default:
-                    style = "wrong";
-                    break;
-            }
+
+            if (evaluation.charAt(i) == '*') style = "exact";
+            else if (evaluation.charAt(i) == '+') style = "misplaced";
+            else  style = "wrong";
+
             this.wordleView.performFlip(this.wordleModel.getLetter(i), i, style, this.endMessage, keyboardColors);
             setKeyboardLetterColor(style, Character.toString(currentGuess.charAt(i)), i);
         }

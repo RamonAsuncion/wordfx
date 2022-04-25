@@ -32,6 +32,11 @@ import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.IOException;
 
+/**
+ * This class takes care of event handling. Some examples are
+ * mouse clicking on the virtual keyboard, typing on physical keyboard,
+ * deleting letters, and entering guesses.
+ */
 public class WordleController {
 
     /** The model of our Wordle implementation */
@@ -52,6 +57,7 @@ public class WordleController {
     /** Evaluates the guess based on the secret word */
     private GuessEvaluator evaluator;
 
+    /** The end message of the game once user is a winner or loser */
     private EndMessageView endMessage;
 
     /**
@@ -104,7 +110,8 @@ public class WordleController {
     }
 
     /**
-     * Starts a new game if user would like to continue
+     * Starts a new game if user would like to continue. Ensures
+     * that screen stays on the same size user was using it.
      *
      * @param event button handler
      */
@@ -189,9 +196,7 @@ public class WordleController {
         switch (event.getCode()) {
             // If user wants to delete a letter
             case BACK_SPACE:
-                if (this.wordleModel.getColumn() >= 0) {
-                    deleteFromTile();
-                }
+                if (this.wordleModel.getColumn() >= 0) { deleteFromTile(); }
                 break;
 
             // If user wants to check a guess
@@ -213,12 +218,12 @@ public class WordleController {
      * and if it is in the word list.
      */
     private void checkInput() {
-        StringBuffer guess = getGuessFromTiles();
+        String guess = getGuessFromTiles().toString().toLowerCase();
         // Ensure guess is valid by length and being in word list
         if (this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) {
-            if (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase())) {
+            if (this.wordleModel.getReader().isWordInSet(guess)) {
                 // Evaluate guess, switch the guess state to checked, and jump to next guess
-                this.evaluator.createEvaluator(guess.toString().toLowerCase());
+                this.evaluator.feedback(guess);
                 this.guessState = GuessState.CHECKED;
                 this.wordleModel.incrementRow();
             }

@@ -165,11 +165,6 @@ public class WordleView {
         }
     }
 
-    // TODO: If the answer is not in the word list shake.
-    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
-
-    }
-
     /**
      * Takes care of binding what is being typed to the labels on the screen
      *
@@ -207,12 +202,12 @@ public class WordleView {
      * Changes the color on the virtual keyboard following the same logic as
      * the color changes in the tiles where letters are typed
      *
-     * @param style - css style to style the color of the virtual key (exact, misplaced, or wrong)
-     * @param letter - Current letter in guess
+     * @param keyboardColors - Map containing keyboard letters and styles to be applied to them
+     * @param tileIndex - index of tile to be updated
      */
     public void changeKeyboardLetterColor(Map<Integer, ArrayList<String>> keyboardColors, int tileIndex) {
         //String style, String letter, int wordLength
-        if (tileIndex == 4) {
+        if (tileIndex == (this.wordleModel.getWordLength() - 1)) {
             for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
                 // Obtain the index of current letter in guess and change its style
                 int index = this.wordleModel.getLetterList().indexOf(keyboardColors.get(i).get(1));
