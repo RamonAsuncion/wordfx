@@ -226,5 +226,7 @@ public class WordleModel {
      */
     public void incrementCurrentGuessNumber() { this.currentGuessNumber++; }
 
+    public Label getLetter(int index) { return getListOfGuesses().get(getRow()).get(index); }
+
 
 }

@@ -102,33 +102,36 @@ public class GuessEvaluator {
      * Returns an encoded string with -, +, and * characters indicating
      * what letters are promising
      *
+     * @param currentGuess - user guess to be analyzed
+     * @param wordLength - shows what mode user is playing
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-//    public String analyzeGuess(String currentGuess, int wordLength) {
-//        // Initially empty
-//        this.mapOfLetters = new TreeMap<>();
-//        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
-//
-//        //first check for green letters (correct letter, correct position)
-//        for (int i = 0; i < currentGuess.length(); ++i) {
-//            if (this.secretWord.charAt(i) == currentGuess.charAt(i)) {
-//                this.guessAnalysis.setCharAt(i, '*');
-//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "exact", endMessage);
-//                this.wordleView.changeKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)));
-//            }
-//            else if (!this.secretWord.contains(Character.toString(currentGuess.charAt(i)))) {
-//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "wrong", endMessage);
-//                this.wordleView.changeKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)));
-//            }
-//            else {
-//                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i), i, "misplaced", endMessage);
-//                this.guessAnalysis.setCharAt(i, '+');
-//                this.wordleView.changeKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)));
-//            }
-//        }
-//        return this.guessAnalysis.toString();
-//    }
+
+    public String analyzeGuess(String currentGuess, int wordLength) {
+        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
+        this.correctArray = new ArrayList<>();
+        this.guessArray = new ArrayList<>();
+
+        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
+        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
+
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.get(i) == guessArray.get(i)) {
+                this.guessAnalysis.setCharAt(i, '*');
+                this.correctArray.set(i, '#');
+                this.guessArray.set(i, '!');
+            }
+        }
+
+        for (int i = 0; i < wordLength; i++) {
+            if (correctArray.contains(guessArray.get(i))) {
+                this.guessAnalysis.setCharAt(i, '+');
+                this.correctArray.remove(guessArray.get(i));
+            }
+        }
+        return this.guessAnalysis.toString();
+    }
 
     public Map<Integer, ArrayList<String>> setKeyboardLetterColor(String style, String letter, int index) {
         // exact = *
@@ -142,43 +145,6 @@ public class GuessEvaluator {
         return keyboardColors;
     }
 
-    public String analyzeGuess(String currentGuess, int wordLength) {
-        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
-        this.correctArray = new ArrayList<>();
-        this.guessArray = new ArrayList<>();
-
-        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
-        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
-
-        for (int i = 0; i < wordLength; i++) {
-            if (correctArray.get(i) == guessArray.get(i)) {
-                this.guessAnalysis.setCharAt(i, '*');
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
-                        i, "exact", this.endMessage, keyboardColors);
-                setKeyboardLetterColor("exact", Character.toString(currentGuess.charAt(i)), i);
-                this.correctArray.set(i, '#');
-                this.guessArray.set(i, '!');
-            }
-        }
-
-        for (int i = 0; i < wordLength; i++) {
-            if (correctArray.contains(guessArray.get(i))) {
-                this.guessAnalysis.setCharAt(i, '+');
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
-                        i, "misplaced", this.endMessage, keyboardColors);
-                setKeyboardLetterColor("misplaced", Character.toString(currentGuess.charAt(i)), i);
-                this.correctArray.remove(i);
-            }
-            else {
-                this.wordleView.performFlip(this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i),
-                        i, "wrong", this.endMessage, keyboardColors);
-                setKeyboardLetterColor("wrong", Character.toString(currentGuess.charAt(i)), i);
-            }
-        }
-        System.out.println(this.guessAnalysis.toString());
-        return this.guessAnalysis.toString();
-    }
-
     /**
      * Creates an evaluator for a given guess. The evaluator will take care of
      * finding if a letter is in the correct position, misplaced, or not even
@@ -189,16 +155,36 @@ public class GuessEvaluator {
     public void createEvaluator(String guess) {
         // Obtain result from analyzing guess
         String evaluation = analyzeGuess(guess, this.wordleModel.getWordLength());
+        showAnalysis(evaluation, guess);
 
-        // If the user gets the right word.
+        // If the user gets the right word
         if (evaluation.equals("*".repeat(this.wordleModel.getWordLength()))) {
             winnerUser();
         }
-        // If user runs out of guesses.
+        // If user runs out of guesses
         else if (this.wordleModel.getRow() >= 5) {
             loserUser();
         }
         this.wordleModel.incrementCurrentGuessNumber();
+    }
+
+    public void showAnalysis(String evaluation, String currentGuess) {
+        String style;
+        for (int i = 0; i < wordleModel.getWordLength(); i++) {
+            switch (evaluation.charAt(i)) {
+                case '*':
+                    style = "exact";
+                    break;
+                case '+':
+                    style = "misplaced";
+                    break;
+                default:
+                    style = "wrong";
+                    break;
+            }
+            this.wordleView.performFlip(this.wordleModel.getLetter(i), i, style, this.endMessage, keyboardColors);
+            setKeyboardLetterColor(style, Character.toString(currentGuess.charAt(i)), i);
+        }
     }
 
     /**
