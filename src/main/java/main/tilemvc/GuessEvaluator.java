@@ -32,11 +32,8 @@ import java.util.*;
  */
 public class GuessEvaluator {
 
-    /** Word to be guessed. "word of the day" in Wordle context */
-    private String secretWord;
-
-    /** This is the analysis of the given guess, including correct and incorrect letters */
-    private StringBuffer guessAnalysis;
+    /** Secret word to be guessed */
+    private final String secretWord;
 
     /** The model of the game */
     private WordleModel wordleModel;
@@ -46,12 +43,6 @@ public class GuessEvaluator {
 
     /** End message of the game */
     private EndMessageView endMessage;
-
-    /** Array that keeps track of letters contained in the secret word */
-    private ArrayList<Character> correctArray;
-
-    /** Array that keeps track of letters contained in the guess word */
-    private ArrayList<Character> guessArray;
 
     /** Stores virtual keyboard letters and new styles for them after a given guess */
     private Map<Integer, ArrayList<String>> keyboardColors;
@@ -119,20 +110,25 @@ public class GuessEvaluator {
      */
     private String analyzeGuess(String currentGuess, int wordLength) {
 
-        this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
-        this.correctArray = new ArrayList<>();
-        this.guessArray = new ArrayList<>();
+        /** This is the analysis of the given guess, including correct and incorrect letters */
+        StringBuffer guessAnalysis = new StringBuffer("-".repeat(wordLength));
+
+        /** Array that keeps track of letters contained in the secret word */
+        ArrayList<Character> correctArray = new ArrayList<>();
+
+        /** Array that keeps track of letters contained in the guess word */
+        ArrayList<Character> guessArray = new ArrayList<>();
 
         // Fill one array with letters from secret word, and another array with letters from user guess
-        for (int i = 0; i < wordLength; i++) { this.correctArray.add(i, this.secretWord.charAt(i)); }
-        for (int i = 0; i < wordLength; i++) { this.guessArray.add(i, currentGuess.charAt(i)); }
+        for (int i = 0; i < wordLength; i++) { correctArray.add(i, this.secretWord.charAt(i)); }
+        for (int i = 0; i < wordLength; i++) { guessArray.add(i, currentGuess.charAt(i)); }
 
         // Take care of letters that are in the correct positioning first
         for (int i = 0; i < wordLength; i++) {
             if (correctArray.get(i) == guessArray.get(i)) {
-                this.guessAnalysis.setCharAt(i, '*');
-                this.correctArray.set(i, '#');
-                this.guessArray.set(i, '!');
+                guessAnalysis.setCharAt(i, '*');
+                correctArray.set(i, '#');
+                guessArray.set(i, '!');
             }
         }
 
@@ -140,11 +136,11 @@ public class GuessEvaluator {
         // of letters from secret word that didn't get a *, place a +
         for (int i = 0; i < wordLength; i++) {
             if (correctArray.contains(guessArray.get(i))) {
-                this.guessAnalysis.setCharAt(i, '+');
-                this.correctArray.remove(guessArray.get(i));
+                guessAnalysis.setCharAt(i, '+');
+                correctArray.remove(guessArray.get(i));
             }
         }
-        return this.guessAnalysis.toString();
+        return guessAnalysis.toString();
     }
 
     /**
