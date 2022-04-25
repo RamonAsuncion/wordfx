@@ -50,12 +50,13 @@ public class GuessEvaluator {
     /** End message of the game */
     private EndMessageView endMessage;
 
-    private String currentGuess;
-
+    /** Array that keeps track of letters contained in the secret word */
     private ArrayList<Character> correctArray;
 
+    /** Array that keeps track of letters contained in the guess word */
     private ArrayList<Character> guessArray;
 
+    /** Stores virtual keyboard letters and new styles for them after a given guess */
     private Map<Integer, ArrayList<String>> keyboardColors;
 
     /**
@@ -119,7 +120,6 @@ public class GuessEvaluator {
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-
     private String analyzeGuess(String currentGuess, int wordLength) {
 
         this.guessAnalysis = new StringBuffer("-".repeat(wordLength));
