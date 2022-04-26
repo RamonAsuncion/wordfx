@@ -1,4 +1,4 @@
-package main.tilemvc;
+package main.main;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

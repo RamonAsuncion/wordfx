@@ -21,7 +21,7 @@ package main.model;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import main.tilemvc.ReadWordsFiles;
+import main.main.ReadWordsFiles;
 import main.view.Header;
 import main.view.TileView;
 import main.view.VirtualKeyboardView;

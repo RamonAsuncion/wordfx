@@ -16,15 +16,13 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.main;
 
 import main.model.GameState;
 import main.model.WordleModel;
 import main.view.EndMessageView;
 import main.view.WordleView;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.*;
 
 /**
