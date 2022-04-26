@@ -26,8 +26,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.model.WordleModel;
-import main.tilemvc.GuessEvaluator;
-import main.tilemvc.WordleMain;
+import main.main.GuessEvaluator;
+import main.main.WordleMain;
 import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.IOException;
@@ -44,9 +44,6 @@ public class WordleController {
 
     /** The view of our Wordle implementation */
     private WordleView wordleView;
-
-    /** The main class or our implementation */
-    private WordleMain wm;
 
     /** The scene, to take care of keyboard typing */
     private Scene scene;
@@ -120,7 +117,8 @@ public class WordleController {
         // new stage is shown.
         Platform.setImplicitExit(false);
 
-        wm = new WordleMain();
+        /** The main class or our implementation */
+        WordleMain wm = new WordleMain();
 
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();

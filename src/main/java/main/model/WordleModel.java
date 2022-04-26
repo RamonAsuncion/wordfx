@@ -21,7 +21,7 @@ package main.model;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import main.tilemvc.ReadWordsFiles;
+import main.main.ReadWordsFiles;
 import main.view.Header;
 import main.view.TileView;
 import main.view.VirtualKeyboardView;
@@ -44,13 +44,13 @@ public class WordleModel {
     private int currentGuessNumber;
 
     /** The 30 tiles representing all possible guesses */
-    private TileView tiles;
+    private final TileView tiles;
 
     /** The virtual keyboard which user cna use to type */
-    private VirtualKeyboardView vk;
+    private final VirtualKeyboardView vk;
 
     /** The "Wordle" header section */
-    private Header header;
+    private final Header header;
 
     /** List of all letters in the keyboard */
     private ArrayList<String> letterList;
@@ -71,7 +71,7 @@ public class WordleModel {
     private String secretWord;
 
     /** Mode that user has chosen (3, 4, or 5-letter words) */
-    private int wordLength;
+    private final int wordLength;
 
     /**
      * @return length of words chosen by user
@@ -150,9 +150,9 @@ public class WordleModel {
 
     /**
      * Simple constructor of our model. Takes in the length of
-     * word chosen by user so it can shape the game accordingly.
+     * word chosen by user, so it can shape the game accordingly.
      *
-     * @param wordLength
+     * @param wordLength - length of word chosen by user
      */
     public WordleModel(int wordLength) {
         this.wordLength = wordLength;
