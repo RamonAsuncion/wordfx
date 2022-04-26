@@ -47,11 +47,11 @@ hard, medium, and easy, respectively. Your streak continues to count even if you
 
 Third-party libraries needed:
 
-![img_2.png](img_2.png)
+![img_2.png](gradle-config.png)
 
 Running the game is very straight forward. After cloning this repo, you must have a\
 gradle configuration similar to the one below, and simply run it! Choose your mode\
 and _have fun_!
 
-![img_1.png](img_1.png)
+![img_1.png](third-parties-needed.png)
 
