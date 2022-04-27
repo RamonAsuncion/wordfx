@@ -272,7 +272,7 @@ public class WordleView {
         if (index >= 19) { index++; } //skip enter key before bottom row
 
         // Only possibility to change colors is from yellow to green, nothing else
-        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
+        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (keyboardColors.get(i).get(0).equals("exact"))) {
             this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
             this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
         }
