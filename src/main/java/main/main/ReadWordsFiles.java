@@ -59,7 +59,7 @@ public class ReadWordsFiles {
         return secretWordSet.get(randInt);
     }
 
-    public void createFiveLetterWordSet(String wordFile) {
+    public void createWordSet(String wordFile) {
         File file = new File(wordFile);
         // Scan through file and create a set of all words
         Scanner scnr = null;

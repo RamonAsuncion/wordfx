@@ -184,13 +184,15 @@ public class WordleModel {
         switch (wordLength) {
             case 3:
                 this.secretWord = this.reader.createRandomWord("3words.txt");
+                this.reader.createWordSet("allowed3words.txt");
                 break;
             case 4:
                 this.secretWord = this.reader.createRandomWord("4words.txt");
+                this.reader.createWordSet("allowed4words.txt");
                 break;
             default:
                 this.secretWord = this.reader.createRandomWord("5words.txt");
-                this.reader.createFiveLetterWordSet("allowed5words.txt");
+                this.reader.createWordSet("allowed5words.txt");
                 break;
 
         }
