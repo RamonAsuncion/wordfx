@@ -19,29 +19,15 @@
 package main.view;
 
 import javafx.animation.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
-import main.tilemvc.GuessEvaluator;
-import main.tilemvc.UsedWords;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class WordleView {
 
@@ -62,7 +48,20 @@ public class WordleView {
 
     private RotateTransition rotation;
 
+    /** Is the flipping animation is done? */
     private boolean isFlippingDone = true;
+
+    /** Is the shaking animation is done? */
+    private boolean isShakingDone = true;
+
+    /** Shift tiles to the left. */
+    private TranslateTransition shakeTileLeft;
+
+    /** Shift tiles to the right. */
+    private TranslateTransition shakeTileRight;
+
+    /** Sequential order for transitions. */
+    private SequentialTransition sequentialTransition;
 
     public boolean isFlippingDone() { return isFlippingDone; }
 
@@ -137,6 +136,46 @@ public class WordleView {
     }
 
     /**
+     * Will perform the action of shaking a tile on the screen for a
+     * given duration
+     */
+    public void horizontalShakeTiles() {
+        // Wait until animation is done to start again.
+        if (!isShakingDone) return;
+        isShakingDone = false;
+
+        for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+            // Get the tiles.
+            Label tile = this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i);
+
+            // Shake the tiles to the left.
+            shakeTileLeft = new TranslateTransition(Duration.millis(45), tile);
+            shakeTileLeft.setFromX(0); // go back to center.
+            shakeTileLeft.setCycleCount(4); // transition go back.
+            shakeTileLeft.setByX(-7.5); // how much shift of tile.
+            shakeTileLeft.setAutoReverse(true); // reverse back automatically.
+
+            // Shake the tiles to the right.
+            shakeTileRight = new TranslateTransition(Duration.millis(45), tile);
+            shakeTileRight.setFromX(0);
+            shakeTileRight.setCycleCount(4);
+            shakeTileRight.setByX(7.5);
+            shakeTileRight.setAutoReverse(true);
+
+            // Shake to the left then right.
+            sequentialTransition = new SequentialTransition(shakeTileLeft, shakeTileRight);
+
+            // Animation can be rerun when done.
+            sequentialTransition.setOnFinished(finish -> {
+                isShakingDone = true;
+            });
+
+            // Play the animation.
+            sequentialTransition.play();
+        }
+    }
+
+    /**
      * Shows end message if user is winner or loser. Also keeps
      * track to see if flipping is done or not.
      *
@@ -157,11 +196,6 @@ public class WordleView {
                 isFlippingDone = true;
             }
         }
-    }
-
-    // TODO: If the answer is not in the word list shake.
-    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
-
     }
 
     /**
@@ -207,6 +241,8 @@ public class WordleView {
     public void changeKeyboardLetterColor(String style, String letter) {
         // Obtain the index of current letter in guess and change its style
         int index = this.wordleModel.getLetterList().indexOf(letter);
+
+        if (index >= 19) { index++; } //skip enter key before bottom row
 
         // Only possibility to change colors is from yellow to green, nothing else
         if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {

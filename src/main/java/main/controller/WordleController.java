@@ -224,10 +224,12 @@ public class WordleController {
             }
             else {
                 this.endMessage.invalidInputScreen("Invalid word");
+                this.wordleView.horizontalShakeTiles();
             }
         }
         else {
             this.endMessage.invalidInputScreen("Not enough letters");
+            this.wordleView.horizontalShakeTiles();
         }
     }
 
