@@ -57,7 +57,14 @@ public class GuessEvaluator {
         this.keyboardColors = new HashMap<>();
     }
 
-    public void setKeyboardLetterColor(String style, String letter, int index) {
+    /**
+     * Creates a map of the keyboard tiles associated with their letter and style
+     *
+     * @param style - the style of the keyboard tile
+     * @param letter - the letter of the keyboard tile
+     * @param index - the index of the keyboard tile
+     */
+    private void setKeyboardLetterColor(String style, String letter, int index) {
         // exact = *
         // misplaced = +
         // wrong = -
