@@ -44,13 +44,13 @@ public class WordleModel {
     private int currentGuessNumber;
 
     /** The 30 tiles representing all possible guesses */
-    private final TileView tiles;
+    private TileView tiles;
 
     /** The virtual keyboard which user cna use to type */
-    private final VirtualKeyboardView vk;
+    private VirtualKeyboardView vk;
 
     /** The "Wordle" header section */
-    private final Header header;
+    private Header header;
 
     /** List of all letters in the keyboard */
     private ArrayList<String> letterList;
@@ -71,12 +71,12 @@ public class WordleModel {
     private String secretWord;
 
     /** Mode that user has chosen (3, 4, or 5-letter words) */
-    private final int wordLength;
+    private final int WORD_LENGTH;
 
     /**
      * @return length of words chosen by user
      */
-    public int getWordLength() { return wordLength; }
+    public int getWordLength() { return WORD_LENGTH; }
 
     /**
      * @return the secret word of the game
@@ -155,7 +155,7 @@ public class WordleModel {
      * @param wordLength - length of word chosen by user
      */
     public WordleModel(int wordLength) {
-        this.wordLength = wordLength;
+        this.WORD_LENGTH = wordLength;
 
         // Three main components of interface
         this.header = new Header();

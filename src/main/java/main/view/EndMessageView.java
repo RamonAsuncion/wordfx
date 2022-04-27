@@ -35,7 +35,7 @@ import main.model.WordleModel;
 public class EndMessageView {
 
     /**  Header of end screen */
-    private final VBox endScreenHeader;
+    private VBox endScreenHeader;
 
     /** The rectangle that shows up when you win */
     private Rectangle finalMessageRect;
@@ -148,7 +148,7 @@ public class EndMessageView {
     /**
      * Makes the win screen fade in
      */
-    public void animateEndScreen() {
+    private void animateEndScreen() {
         FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
         ft.setFromValue(0.1);
         ft.setToValue(1.0);

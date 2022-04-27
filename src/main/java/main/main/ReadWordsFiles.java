@@ -76,7 +76,7 @@ public class ReadWordsFiles {
     /**
      * Checks that the user guess is a valid word from the set
      * @param guess - the user guess
-     * @return - boolean, whether or not guess is in word set
+     * @return - boolean, whether guess is in word set
      */
     public boolean isWordInSet(String guess) {
         if (guess.length() == 5) {

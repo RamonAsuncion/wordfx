@@ -11,26 +11,28 @@ import main.view.WordleView;
 
 public class WordleMain extends Application {
 
-    /** The view of our Wordle game */
+    /** The view of our WordFX game */
     private WordleView wordleView;
 
+    /** The model of our WordFX game */
     private WordleModel wordleModel;
 
-    /** The virtual keyboard controller for handling events like typing */
-    private WordleController keyboardController;
+    /** Initial scene greeting user */
+    private Scene firstScene;
 
-    /** The controls for the header */
-    private HeaderController headerController;
+    /** Second scene displaying the actual game */
+    private Scene secondScene;
 
-    /** Our Wordle scene where everything is displayed */
-    private Scene firstScene, secondScene;
-
+    /** This object takes care of the view of our initial scene */
     private InitialScreenView initialView;
 
+    /** Stage object to be shown */
     private Stage window;
 
+    /** Length of words chosen by user */
     private int wordLength;
 
+    /** User streak from previous games */
     private int currentUserStreak;
 
     public static void main(String[] args) { launch(args); }
@@ -72,6 +74,10 @@ public class WordleMain extends Application {
         window.show();
     }
 
+    /**
+     * Takes care of handling the clicks on the initial screen, where
+     * user will click on the desired mode
+     */
     private void initEventHandlersForInitialScreen() {
         this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
             wordLength = 3;
@@ -90,6 +96,9 @@ public class WordleMain extends Application {
         });
     }
 
+    /**
+     * Creates the second scene, with the model and view
+     */
     private void createSecondScene() {
         this.wordleModel = new WordleModel(wordLength);
         this.wordleModel.setStreak(currentUserStreak);
@@ -101,8 +110,10 @@ public class WordleMain extends Application {
                 getClass().getResource("style.css")
                         .toExternalForm());
 
-        keyboardController = new WordleController(this.wordleView, this.wordleModel, secondScene);
+        //The virtual keyboard controller for handling events like typing
+        WordleController keyboardController = new WordleController(this.wordleView, this.wordleModel, secondScene);
 
-        headerController = new HeaderController(this.wordleView, this.wordleModel);
+        //The controls for the header
+        HeaderController headerController = new HeaderController(this.wordleView, this.wordleModel);
     }
 }
