@@ -1,4 +1,4 @@
-package main.tilemvc;
+package main.main;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -40,7 +40,6 @@ public class WordleMain extends Application {
         super.init();
         this.initialView = new InitialScreenView();
         wordLength = 0;
-
     }
 
     /**
@@ -55,12 +54,25 @@ public class WordleMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        firstScene = new Scene(this.initialView.getBp(), 600, 850);
+        firstScene = new Scene(this.initialView.getBorderPane(), 600, 850);
 
         firstScene.getStylesheets().add(
                 getClass().getResource("initial-screen.css")
                         .toExternalForm());
 
+        initEventHandlersForInitialScreen();
+
+        // Add the scene graph to the stage
+        window.setScene(firstScene);
+
+        // Set the title for the main window
+        window.setTitle("WordFX");
+
+        // Display the scene
+        window.show();
+    }
+
+    private void initEventHandlersForInitialScreen() {
         this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
             wordLength = 3;
             createSecondScene();
@@ -76,15 +88,6 @@ public class WordleMain extends Application {
             createSecondScene();
             window.setScene(secondScene);
         });
-
-        // Add the scene graph to the stage
-        window.setScene(firstScene);
-
-        // Set the title for the main window
-        window.setTitle("WordFX");
-
-        // Display the scene
-        window.show();
     }
 
     private void createSecondScene() {

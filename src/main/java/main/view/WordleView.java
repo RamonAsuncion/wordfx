@@ -19,8 +19,12 @@
 package main.view;
 
 import javafx.animation.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -28,6 +32,9 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class WordleView {
 
@@ -46,11 +53,16 @@ public class WordleView {
     /** Play again button to keep playing */
     private Button playAgainBtn;
 
+    /** The object that performs the flips of the tiles when answer is checked */
     private RotateTransition rotation;
 
+    /** Keeps track of when tiles are done flipping */
     /** Is the flipping animation is done? */
     private boolean isFlippingDone = true;
 
+    /**
+     * @return true if flipping is done, false if not
+     */
     /** Is the shaking animation is done? */
     private boolean isShakingDone = true;
 
@@ -122,7 +134,8 @@ public class WordleView {
      * @param index - index of the tile
      * @param style - style to add to tile (exact, misplaced, wrong)
      */
-    public void performFlip(Label tile, int index, String style, EndMessageView endMessage) {
+    public void performFlip(Label tile, int index, String style, EndMessageView endMessage,
+                            Map<Integer, ArrayList<String>> keyboardColors) {
         isFlippingDone = false;
         rotation = new RotateTransition(Duration.seconds(1), tile);
         rotation.setDelay(Duration.millis(index*500));
@@ -131,6 +144,7 @@ public class WordleView {
         rotation.play();
         rotation.setOnFinished(event -> {
             changeTileColor(style, index);
+            changeKeyboardLetterColor(keyboardColors, index);
             showEndMessage(index, endMessage);
         });
     }
@@ -183,6 +197,7 @@ public class WordleView {
      * @param endMessage - End message either You Won, or You Lost
      */
     private void showEndMessage(int index, EndMessageView endMessage) {
+
         if (index == this.wordleModel.getWordLength() - 1) {
             if (this.wordleModel.getGameState() == GameState.GAME_WINNER) {
                 String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
@@ -190,12 +205,16 @@ public class WordleView {
             }
             else if (this.wordleModel.getGameState() == GameState.GAME_LOSER) {
                 String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
-                endMessage.showEndScreen("You Lost!", message);
-            }
+                endMessage.showEndScreen("You Lost!", message);}
             else {
                 isFlippingDone = true;
             }
         }
+    }
+
+    // TODO: If the answer is not in the word list shake.
+    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
+
     }
 
     /**
@@ -235,13 +254,21 @@ public class WordleView {
      * Changes the color on the virtual keyboard following the same logic as
      * the color changes in the tiles where letters are typed
      *
-     * @param style - css style to style the color of the virtual key (exact, misplaced, or wrong)
-     * @param letter - Current letter in guess
+     * @param keyboardColors - Map containing keyboard letters and styles to be applied to them
+     * @param tileIndex - index of tile to be updated
      */
-    public void changeKeyboardLetterColor(String style, String letter) {
-        // Obtain the index of current letter in guess and change its style
-        int index = this.wordleModel.getLetterList().indexOf(letter);
+    public void changeKeyboardLetterColor(Map<Integer, ArrayList<String>> keyboardColors, int tileIndex) {
+        //String style, String letter, int wordLength
+        if (tileIndex == (this.wordleModel.getWordLength() - 1)) {
+            for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+                // Obtain the index of current letter in guess and change its style
+                int index = this.wordleModel.getLetterList().indexOf(keyboardColors.get(i).get(1));
 
+                // Only possibility to change colors is from yellow to green, nothing else
+                if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (keyboardColors.get(i).get(0).equals("exact"))) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
+                }
         if (index >= 19) { index++; } //skip enter key before bottom row
 
         // Only possibility to change colors is from yellow to green, nothing else
@@ -250,11 +277,24 @@ public class WordleView {
             this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
         }
 
-        // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
-        else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
-            this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
+                // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
+                else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add(keyboardColors.get(i).get(0));
+                }
+            }
         }
+    }
+
+    /**
+     * Changes the background of the main screen of the game
+     *
+     * @param filename - filename leading to the image to be used as background
+     */
+    private void changeBackground(String filename) {
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/"+filename).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        getRoot().setBackground(background);
     }
 }

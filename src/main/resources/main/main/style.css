@@ -9,7 +9,7 @@
 }
 
 #background {
-    -fx-background-color: white;
+    /*-fx-background-color: red;*/
 }
 
 #theme1 {
@@ -23,7 +23,7 @@
     -fx-backgroud-color: red;
 }
 
-#topPane {
+#top-pane {
     -fx-orientation: horizontal;
     -fx-alignment: center;
     -fx-spacing: 5;
@@ -55,16 +55,22 @@
     -fx-text-fill: black;
 }
 
+#tile-pane {
+    -fx-alignment: center;
+    -fx-spacing: 5;
+}
+
 .tile {
-    -fx-border: #d0d0d0;
     -fx-border-width: 2px;
+    -fx-border-color: darkgray;
     -fx-spacing: 5;
     -fx-alignment: center;
     -fx-text-alignment: center;
     -fx-font-family: Arial;
     -fx-font-size: 29px;
     -fx-font-weight: bold;
-    -fx-text-fill: black;
+    -fx-pref-height: 62;
+    -fx-pref-width: 62;
 }
 
 .tile.wrong {
@@ -191,6 +197,7 @@
     -fx-font-weight: 400;
     -fx-text-fill: black;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 #play-again-btn {
@@ -214,6 +221,7 @@
     -fx-max-height: 200;
     -fx-padding: 18;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 #setting-menu {

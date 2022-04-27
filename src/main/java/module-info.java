@@ -5,7 +5,8 @@ module csci205_final_project{
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
-    exports main.tilemvc;
+    exports main.main;
     exports main.controller;
     exports main.view;
+    exports main.model;
 }
