@@ -36,6 +36,9 @@ import main.model.WordleModel;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ *
+ */
 public class WordleView {
 
     /** The root node containing all three nodes above */
@@ -57,12 +60,8 @@ public class WordleView {
     private RotateTransition rotation;
 
     /** Keeps track of when tiles are done flipping */
-    /** Is the flipping animation is done? */
     private boolean isFlippingDone = true;
 
-    /**
-     * @return true if flipping is done, false if not
-     */
     /** Is the shaking animation is done? */
     private boolean isShakingDone = true;
 
@@ -72,9 +71,12 @@ public class WordleView {
     /** Shift tiles to the right. */
     private TranslateTransition shakeTileRight;
 
-    /** Sequential order for transitions. */
+    /** Sequential order for horizontal shake */
     private SequentialTransition sequentialTransition;
 
+    /**
+     * @return true if flipping is done, false if not
+     */
     public boolean isFlippingDone() { return isFlippingDone; }
 
     /**
@@ -210,11 +212,6 @@ public class WordleView {
                 isFlippingDone = true;
             }
         }
-    }
-
-    // TODO: If the answer is not in the word list shake.
-    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
-
     }
 
     /**
