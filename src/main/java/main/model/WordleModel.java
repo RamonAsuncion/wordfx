@@ -148,6 +148,8 @@ public class WordleModel {
      */
     public GameState getGameState() { return gameState;}
 
+    public int getCurrentGuessNumber() { return currentGuessNumber; }
+
     /**
      * Simple constructor of our model. Takes in the length of
      * word chosen by user, so it can shape the game accordingly.

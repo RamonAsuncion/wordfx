@@ -31,6 +31,7 @@ import main.main.WordleMain;
 import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class takes care of event handling. Some examples are
@@ -57,8 +58,11 @@ public class WordleController {
     /** The end message of the game once user is a winner or loser */
     private EndMessageView endMessage;
 
+    private double initialX;
+    private double initialY;
+
     /**
-     * Simple constructor for our Worldle game
+     * Simple constructor for our WorldFX game
      *
      * @param wordleView - The view of the game
      * @param wordleModel - The model of the game
@@ -88,7 +92,9 @@ public class WordleController {
 
         // If virtual keyboard is clicked
         for (Button b : this.wordleModel.getVk().getKeyboardKeys()) {
-            b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
+            if (!makeDraggable(b)) {
+                b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
+            }
         }
 
         // If typed on physical keyboard
@@ -117,7 +123,7 @@ public class WordleController {
         // new stage is shown.
         Platform.setImplicitExit(false);
 
-        /** The main class or our implementation */
+        // The main class or our implementation
         WordleMain wm = new WordleMain();
 
         Button button = (Button) event.getSource();
@@ -269,5 +275,44 @@ public class WordleController {
             this.guessState = GuessState.UNCHECKED;
             this.wordleView.updateTyping(letter, this.wordleModel.getRow(), this.wordleModel.getColumn());
         }
+    }
+
+    private boolean makeDraggable(Button b) {
+
+        AtomicBoolean dragged = new AtomicBoolean(false);
+
+        int guessNum = this.wordleModel.getCurrentGuessNumber();
+
+        double startX = b.getTranslateY();
+        double startY = b.getTranslateX();
+
+        b.setOnMousePressed(event -> {
+            initialX = event.getSceneX() - b.getTranslateX();
+            initialY = event.getSceneY() - b.getTranslateY();
+        });
+
+        b.setOnMouseDragged(event -> {
+            b.setTranslateX(event.getSceneX() - initialX);
+            b.setTranslateY(event.getSceneY() - initialY);
+        });
+
+        b.setOnMouseReleased(event -> {
+            int tileNum = 0;
+            for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+                double tileCoord = this.wordleModel.getLetter(i).getLayoutX();
+                if ((event.getSceneX() < (tileCoord + 50)) && (event.getSceneX() >= tileCoord)) {
+                    if (i <= (this.wordleModel.getColumn() + 1)) {
+                        if (i == (this.wordleModel.getColumn() + 1)) { this.wordleModel.incrementColumn(); }
+                        tileNum = i;
+                        this.wordleView.updateTyping(new Text(b.getText()), guessNum, tileNum);
+                        break;
+                    }
+                }
+            }
+
+            b.setTranslateX(startX);
+            b.setTranslateY(startY);
+        });
+        return dragged.get();
     }
 }
