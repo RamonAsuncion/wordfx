@@ -78,10 +78,5 @@ public class ReadWordsFiles {
      * @param guess - the user guess
      * @return - boolean, whether guess is in word set
      */
-    public boolean isWordInSet(String guess) {
-        if (guess.length() == 5) {
-            return guessSet.contains(guess);
-        }
-        return secretWordSet.contains(guess);
-    }
+    public boolean isWordInSet(String guess) { return guessSet.contains(guess); }
 }

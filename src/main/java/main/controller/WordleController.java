@@ -23,6 +23,7 @@ import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.model.WordleModel;
@@ -58,7 +59,10 @@ public class WordleController {
     /** The end message of the game once user is a winner or loser */
     private EndMessageView endMessage;
 
+    /** Initial x-coordinate of node being dragged */
     private double initialX;
+
+    /** Initial y-coordinate of node being dragged */
     private double initialY;
 
     /**
@@ -92,9 +96,7 @@ public class WordleController {
 
         // If virtual keyboard is clicked
         for (Button b : this.wordleModel.getVk().getKeyboardKeys()) {
-            if (!makeDraggable(b)) {
-                b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
-            }
+            makeDraggable(b);
         }
 
         // If typed on physical keyboard
@@ -230,6 +232,7 @@ public class WordleController {
                 this.evaluator.feedback(guess);
                 this.guessState = GuessState.CHECKED;
                 this.wordleModel.incrementRow();
+                this.wordleModel.setColumn(0);
             }
             else {
                 this.endMessage.invalidInputScreen("Invalid word");
@@ -277,42 +280,71 @@ public class WordleController {
         }
     }
 
-    private boolean makeDraggable(Button b) {
+    /**
+     * Makes every key in the virtual keyboard draggable
+     * @param key - virtual keyboard key
+     */
+    private void makeDraggable(Button key) {
 
-        AtomicBoolean dragged = new AtomicBoolean(false);
+        // Initial x and y coordinates of the key
+        double startX = key.getTranslateY();
+        double startY = key.getTranslateX();
 
-        int guessNum = this.wordleModel.getCurrentGuessNumber();
-
-        double startX = b.getTranslateY();
-        double startY = b.getTranslateX();
-
-        b.setOnMousePressed(event -> {
-            initialX = event.getSceneX() - b.getTranslateX();
-            initialY = event.getSceneY() - b.getTranslateY();
+        key.setOnMousePressed(event -> {
+            // Obtain offset points
+            initialX = event.getSceneX() - key.getTranslateX();
+            initialY = event.getSceneY() - key.getTranslateY();
         });
 
-        b.setOnMouseDragged(event -> {
-            b.setTranslateX(event.getSceneX() - initialX);
-            b.setTranslateY(event.getSceneY() - initialY);
+        key.setOnMouseDragged(event -> {
+            // Set the translations based on offset
+            key.setTranslateX(event.getSceneX() - initialX);
+            key.setTranslateY(event.getSceneY() - initialY);
         });
 
-        b.setOnMouseReleased(event -> {
-            int tileNum = 0;
-            for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
-                double tileCoord = this.wordleModel.getLetter(i).getLayoutX();
-                if ((event.getSceneX() < (tileCoord + 50)) && (event.getSceneX() >= tileCoord)) {
-                    if (i <= (this.wordleModel.getColumn() + 1)) {
-                        if (i == (this.wordleModel.getColumn() + 1)) { this.wordleModel.incrementColumn(); }
-                        tileNum = i;
-                        this.wordleView.updateTyping(new Text(b.getText()), guessNum, tileNum);
+        key.setOnMouseReleased(event -> {
+            checkDraggingConditions(key, event);
+
+            // If letter has barely moved on screen, count it as a single click, not a drag
+            if (Math.abs(key.getTranslateX() - startX) < 10) {
+                System.out.println("By click");key.setOnMouseClicked(e -> takeActionFromVirtualKeyboard(key)); }
+
+            // Send key back to its original position
+            key.setTranslateX(startX);
+            key.setTranslateY(startY);
+        });
+    }
+
+    /**
+     * This method checks if a key from the virtual keyboard is being dragged, and if
+     * so, into what tile it is being dragged. There are many conditions, so follow
+     * the comments if needed.
+     *
+     * @param key - Button b (key from virtual keyboard)
+     * @param event - event of mouse being released
+     */
+    private void checkDraggingConditions(Button key, MouseEvent event) {
+
+        // Iterate through the tiles present in the current guess
+        for (int tileNum = 0; tileNum < this.wordleModel.getWordLength(); tileNum++) {
+            // Get the x-coordinate of the tile and size of tile
+            double tileXCoordinate = this.wordleModel.getLetter(tileNum).getLayoutX();
+            double tileSize = this.wordleModel.getLetter(tileNum).getWidth();
+
+            // Check if the x-position of the dragging event aligns with a given tile
+            if ((event.getSceneX() >= tileXCoordinate) && (event.getSceneX() < (tileXCoordinate + tileSize))) {
+                // Check if key has been dragged outside the virtual keyboard pane (avoid confusion with single click - no drag)
+                if (event.getSceneY() < this.wordleView.getRoot().getBottom().getLayoutY()) {
+                    // Letter can only be added by drag if tile is already in use
+                    // or is the next to be filled
+                    if (tileNum <= (this.wordleModel.getColumn() + 1)) {
+                        if (tileNum == (this.wordleModel.getColumn() + 1)) { this.wordleModel.incrementColumn(); } // If next to be filled, increment column
+                        System.out.println("By drag");
+                        this.wordleView.updateTyping(new Text(key.getText()), this.wordleModel.getRow(), tileNum); // Update typing
                         break;
                     }
                 }
             }
-
-            b.setTranslateX(startX);
-            b.setTranslateY(startY);
-        });
-        return dragged.get();
+        }
     }
 }
