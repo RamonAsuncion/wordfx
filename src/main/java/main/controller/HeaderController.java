@@ -47,9 +47,6 @@ public class HeaderController {
     /** Accounts for the property of the switch button */
     private BooleanProperty switchedOn = new SimpleBooleanProperty(false);
 
-    /** The background of the settings menu */
-    private Rectangle settingsBackground;
-
     /**
      * Construct a header controller for header buttons.
      *
@@ -75,9 +72,6 @@ public class HeaderController {
     private void initEventHandlers() {
         // The setting icon click for game options.
         this.header.getSettingButton().setOnMouseClicked(this::settingsMenu);
-
-        // The question mark icon click for game help.
-        this.header.getQuestionMarkButton().setOnMouseClicked(this::helpMenu);
     }
 
     /**
@@ -93,89 +87,27 @@ public class HeaderController {
     }
 
     /**
-     * Open up the statistics menu.
-     *
-     * @param event button click for statistics menu.
-     */
-    private void statisticsMenu(Event event) {
-        System.out.println("Histogram button being clicked.");
-    }
-
-    /**
-     * Open up the help menu.
-     *
-     * @param event button click for help menu.
-     */
-    private void helpMenu(Event event) {
-        System.out.println("Question mark button being clicked.");
-    }
-
-    /**
-     * Open up the three dash menu.
-     *
-     * @param event button click for three dash menu.
-     */
-    private void threeDashMenu(Event event) {
-        System.out.println("Three dash menu button being clicked");
-    }
-
-
-    /**
      * Method that opens the settings menu
      */
     private void openSettingMenu() {
-        StackPane stackPane = new StackPane(); // Add a node on top of a previous one.
-        settingsBackground = new Rectangle(); // Background of the setting menu.
-        BorderPane borderPane = new BorderPane(); // Align everything in a border.
-        Pane pane = new Pane(); // Add all the nodes on the pane.
-        VBox vBox = new VBox();
-
-        vBox.setId("setting-vertical-box");
-        // Make new labels for the setting menu.
-        Label DarkThemeLabel = new Label("Dark Theme");
-
-        // Add the items in a vertical alignment with border panes to align to elements.
-
-        BorderPane vBoxBorderDT = new BorderPane();
-        DarkThemeLabel.setId("setting-labels");
-        vBox.getChildren().addAll(vBoxBorderDT, new Separator());
-        vBoxBorderDT.setLeft(DarkThemeLabel);
-        vBoxBorderDT.setRight(this.header.getDMSlider());
-
-        // Add the "Setting" and the "X" in the header.
-        BorderPane topHeader = new BorderPane();
-        Button exit = new Button();
-        topHeader.setId("setting-title");
-        topHeader.setCenter(new Label("SETTINGS"));
-        topHeader.setRight(exit);
-        borderPane.setTop(topHeader);
-
-        // Set the styling for the elements
-        exit.getStyleClass().add("menu-setting-close-button");
-
         // Create a rectangle (as background) with a size of the whole screen.
         if (!switchedOn.get()){
-            settingsBackground.setFill(Color.WHITE);
+            this.header.getSettingsBackground().setFill(Color.WHITE);
         }
         else{
             this.wordleView.getRoot().setStyle("-fx-background-color: dimgrey");
-            settingsBackground.setFill(Color.DIMGRAY);
+            this.header.getSettingsBackground().setFill(Color.DIMGRAY);
         }
 
-        settingsBackground.heightProperty().bind(this.wordleView.getRoot().heightProperty());
-        settingsBackground.widthProperty().bind(this.wordleView.getRoot().widthProperty());
-
-        // Add all the children to the setting menu.
-        borderPane.setCenter(vBox);
-        stackPane.getChildren().addAll(settingsBackground, borderPane);
-        pane.getChildren().add(stackPane); // Needs a pane to add the stack pane?
+        this.header.getSettingsBackground().heightProperty().bind(this.wordleView.getRoot().heightProperty());
+        this.header.getSettingsBackground().widthProperty().bind(this.wordleView.getRoot().widthProperty());
 
         // Add overlay to the view.
-        this.wordleView.getRoot().getChildren().add(pane);
+        this.wordleView.getRoot().getChildren().add(this.header.getBackgroundFrame());
 
         // Close the settings menu.
-        exit.setOnMouseClicked(e -> {
-            this.wordleView.getRoot().getChildren().remove(pane);
+        this.header.getExitSettingMenu().setOnMouseClicked(e -> {
+            this.wordleView.getRoot().getChildren().remove(this.header.getBackgroundFrame());
             this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
         });
     }
@@ -190,7 +122,7 @@ public class HeaderController {
             this.header.getAnimation().play();
         });
 
-        this.header.getDMSlider().setOnMouseClicked(event -> {
+        this.header.getDarkModeSlider().setOnMouseClicked(event -> {
             switchedOn.set(!switchedOn.get());
             if (switchedOn.get() ){
             changeBackground("dark-mode");}
@@ -204,11 +136,11 @@ public class HeaderController {
     private void changeBackground(String style) {
         if (style.equals("dark-mode")) {
             this.wordleView.getRoot().setStyle("-fx-background-color: dimgrey");
-            this.settingsBackground.setFill(Color.DIMGRAY);
+            this.header.getSettingsBackground().setFill(Color.DIMGRAY);
         }
         else {
             this.wordleView.getRoot().setStyle("-fx-background-color: white");
-            this.settingsBackground.setFill(Color.WHITE);
+            this.header.getSettingsBackground().setFill(Color.WHITE);
         }
     }
 }
