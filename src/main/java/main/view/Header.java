@@ -18,11 +18,23 @@
  */
 package main.view;
 
+import javafx.animation.FillTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
+import java.awt.image.renderable.ParameterBlock;
 
 /**
  * Header class to create the header section, which includes the "Wordle" header
@@ -53,6 +65,36 @@ public class Header {
 
     /** Menu three dash icon button */
     private Button menuThreeDashes;
+
+    private Pane DarkModeSlider;
+
+    public Pane getDMSlider() {
+        return DarkModeSlider;
+    }
+
+    private Pane timerSlider;
+
+    public Pane getTimerSlider() {
+        return timerSlider;
+    }
+
+    public TranslateTransition getTranslateAnimation() {
+        return translateAnimation;
+    }
+
+    public FillTransition getFillAnimation() {
+        return fillAnimation;
+    }
+
+    public ParallelTransition getAnimation() {
+        return animation;
+    }
+
+    private TranslateTransition translateAnimation = new TranslateTransition(Duration.seconds(0.25));
+    private FillTransition fillAnimation = new FillTransition(Duration.seconds(0.25));
+
+    // get both animations to occur at the same time
+    private ParallelTransition animation = new ParallelTransition(translateAnimation, fillAnimation);
 
     /**
      * @return the headerSection including title and separator
@@ -87,6 +129,9 @@ public class Header {
         this.createHistogramButton();
         this.createQuestionMarkButton();
         this.createThreeDashButton();
+
+        // Create all the sliders in the setting menu.
+        this.createDarkModeSlider();
 
         // Organize items in the header.
         this.headerSection.setCenter(this.title);
@@ -155,5 +200,32 @@ public class Header {
         // Initialize a new button and add styling.
         menuThreeDashes = new Button();
         menuThreeDashes.getStyleClass().add("menu-three-button");
+    }
+
+    private void createDarkModeSlider() {
+        DarkModeSlider = new Pane();
+        DarkModeSlider.setPrefSize(60,10);
+
+        Rectangle background = new Rectangle(150,150);
+        background.setFill(Color.BLACK);
+
+        // create the background of button
+        Rectangle rect = new Rectangle(50, 25);
+        rect.setFill(Color.WHITE);
+        rect.setStroke(Color.LIGHTGRAY);
+        rect.setArcHeight(25);
+        rect.setArcWidth(25);
+
+        // Create the circle overlap
+        Circle trigger = new Circle(12.5);
+        trigger.setCenterX(12.5);
+        trigger.setCenterY(12.5);
+        trigger.setFill(Color.WHITE);
+        trigger.setStroke(Color.LIGHTGRAY);
+
+        translateAnimation.setNode(trigger);
+        fillAnimation.setShape(rect);
+
+        DarkModeSlider.getChildren().addAll(rect,trigger);
     }
 }
