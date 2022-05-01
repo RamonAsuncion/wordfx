@@ -16,22 +16,15 @@
  *
  * ****************************************
  */
-package main.tilemvc;
+package main.main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 public class ReadWordsFiles {
-
-    /** The secret word for user to guess */
-    private String secretWord;
-
-    /** To determine if word is in list */
-    private UsedWords usedWords = new UsedWords();
 
     /** The set of all possible secret words */
     private ArrayList<String> secretWordSet = new ArrayList<>();
@@ -62,21 +55,11 @@ public class ReadWordsFiles {
         // and assign to secret word
         Random rand = new Random();
         int randInt = rand.nextInt((secretWordSet.size()));
-        try {
-            if (!this.usedWords.isWordUsed(secretWordSet.get(randInt))) {
-                secretWord = secretWordSet.get(randInt);
-            } else {
-                System.out.println("already used");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return secretWord;
+
+        return secretWordSet.get(randInt);
     }
 
-    public void createFiveLetterWordSet(String wordFile) {
+    public void createWordSet(String wordFile) {
         File file = new File(wordFile);
         // Scan through file and create a set of all words
         Scanner scnr = null;
@@ -93,12 +76,7 @@ public class ReadWordsFiles {
     /**
      * Checks that the user guess is a valid word from the set
      * @param guess - the user guess
-     * @return - boolean, whether or not guess is in word set
+     * @return - boolean, whether guess is in word set
      */
-    public boolean isWordInSet(String guess) {
-        if (guess.length() == 5) {
-            return guessSet.contains(guess);
-        }
-        return secretWordSet.contains(guess);
-    }
+    public boolean isWordInSet(String guess) { return guessSet.contains(guess); }
 }

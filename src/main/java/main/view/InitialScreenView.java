@@ -41,9 +41,6 @@ public class InitialScreenView {
     /** Pane for the header of the initial screen */
     private HBox header;
 
-    /** Initial question for user: Choose mode */
-    private Label initialQuestion;
-
     /**
      * @return Three-letter mode button on initial screen
      */
@@ -99,7 +96,7 @@ public class InitialScreenView {
      * a game mode
      */
     private void createHeaderPortion() {
-        initialQuestion = new Label("WELCOME TO WORDFX\nCHOOSE A MODE:");
+        Label initialQuestion = new Label("WELCOME TO WORDFX\nCHOOSE A MODE:");
         header = new HBox(initialQuestion);
         header.setId("header");
         initialQuestion.setId("question");

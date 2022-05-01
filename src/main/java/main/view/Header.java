@@ -37,21 +37,21 @@ import javafx.util.Duration;
 import java.awt.image.renderable.ParameterBlock;
 
 /**
- * Header class to create the header section, which includes the "Wordle" header
+ * Header class to create the header section, which includes the "WordFX" header
  * and the long separator line splitting the section.
  */
 public class Header {
 
-    /** Wordle header section */
+    /** WordFX header section */
     private final BorderPane headerSection;
 
-    /** Wordle header section (right side for multiple items) */
+    /** WordFX header section (right side for multiple items) */
     private final HBox rightHeaderSection;
 
-    /** Wordle header section (left side for multiple items) */
+    /** WordFX header section (left side for multiple items) */
     private final HBox leftHeaderSection;
 
-    /** The word "Wordle" */
+    /** The word "WordFX" */
     private final Label title;
 
     /** Histogram icon button */

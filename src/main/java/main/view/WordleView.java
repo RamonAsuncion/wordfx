@@ -19,29 +19,24 @@
 package main.view;
 
 import javafx.animation.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
-import main.tilemvc.GuessEvaluator;
-import main.tilemvc.UsedWords;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
+/**
+ *
+ */
 public class WordleView {
 
     /** The root node containing all three nodes above */
@@ -64,6 +59,18 @@ public class WordleView {
 
     /** Keeps track of when tiles are done flipping */
     private boolean isFlippingDone = true;
+
+    /** Is the shaking animation is done? */
+    private boolean isShakingDone = true;
+
+    /** Shift tiles to the left. */
+    private TranslateTransition shakeTileLeft;
+
+    /** Shift tiles to the right. */
+    private TranslateTransition shakeTileRight;
+
+    /** Sequential order for horizontal shake */
+    private SequentialTransition sequentialTransition;
 
     /**
      * @return true if flipping is done, false if not
@@ -104,6 +111,7 @@ public class WordleView {
 
         this.playAgainBtn = new Button("Play again?");
         this.playAgainBtn.setId("play-again-btn");
+
         initSceneGraph();
     }
 
@@ -127,7 +135,8 @@ public class WordleView {
      * @param index - index of the tile
      * @param style - style to add to tile (exact, misplaced, wrong)
      */
-    public void performFlip(Label tile, int index, String style, EndMessageView endMessage) {
+    public void performFlip(Label tile, int index, String style, EndMessageView endMessage,
+                            Map<Integer, ArrayList<String>> keyboardColors) {
         isFlippingDone = false;
         rotation = new RotateTransition(Duration.seconds(1), tile);
         rotation.setDelay(Duration.millis(index*500));
@@ -136,8 +145,49 @@ public class WordleView {
         rotation.play();
         rotation.setOnFinished(event -> {
             changeTileColor(style, index);
+            changeKeyboardLetterColor(keyboardColors, index);
             showEndMessage(index, endMessage);
         });
+    }
+
+    /**
+     * Will perform the action of shaking a tile on the screen for a
+     * given duration
+     */
+    public void horizontalShakeTiles() {
+        // Wait until animation is done to start again.
+        if (!isShakingDone) return;
+        isShakingDone = false;
+
+        for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+            // Get the tiles.
+            Label tile = this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i);
+
+            // Shake the tiles to the left.
+            shakeTileLeft = new TranslateTransition(Duration.millis(45), tile);
+            shakeTileLeft.setFromX(0); // go back to center.
+            shakeTileLeft.setCycleCount(4); // transition go back.
+            shakeTileLeft.setByX(-7.5); // how much shift of tile.
+            shakeTileLeft.setAutoReverse(true); // reverse back automatically.
+
+            // Shake the tiles to the right.
+            shakeTileRight = new TranslateTransition(Duration.millis(45), tile);
+            shakeTileRight.setFromX(0);
+            shakeTileRight.setCycleCount(4);
+            shakeTileRight.setByX(7.5);
+            shakeTileRight.setAutoReverse(true);
+
+            // Shake to the left then right.
+            sequentialTransition = new SequentialTransition(shakeTileLeft, shakeTileRight);
+
+            // Animation can be rerun when done.
+            sequentialTransition.setOnFinished(finish -> {
+                isShakingDone = true;
+            });
+
+            // Play the animation.
+            sequentialTransition.play();
+        }
     }
 
     /**
@@ -148,6 +198,7 @@ public class WordleView {
      * @param endMessage - End message either You Won, or You Lost
      */
     private void showEndMessage(int index, EndMessageView endMessage) {
+
         if (index == this.wordleModel.getWordLength() - 1) {
             if (this.wordleModel.getGameState() == GameState.GAME_WINNER) {
                 String message = "Your streak: " + this.wordleModel.getCurrentWinStreak();
@@ -155,17 +206,11 @@ public class WordleView {
             }
             else if (this.wordleModel.getGameState() == GameState.GAME_LOSER) {
                 String message = "Secret word was " + this.wordleModel.getSecretWord().toUpperCase();
-                endMessage.showEndScreen("You Lost!", message);
-            }
+                endMessage.showEndScreen("You Lost!", message);}
             else {
                 isFlippingDone = true;
             }
         }
-    }
-
-    // TODO: If the answer is not in the word list shake.
-    public void horizontalShakeTiles(ArrayList<Label> badTiles) {
-
     }
 
     /**
@@ -205,24 +250,36 @@ public class WordleView {
      * Changes the color on the virtual keyboard following the same logic as
      * the color changes in the tiles where letters are typed
      *
-     * @param style - css style to style the color of the virtual key (exact, misplaced, or wrong)
-     * @param letter - Current letter in guess
+     * @param keyboardColors - Map containing keyboard letters and styles to be applied to them
+     * @param tileIndex - index of tile to be updated
      */
-    public void changeKeyboardLetterColor(String style, String letter) {
-        // Obtain the index of current letter in guess and change its style
-        int index = this.wordleModel.getLetterList().indexOf(letter);
+    public void changeKeyboardLetterColor(Map<Integer, ArrayList<String>> keyboardColors, int tileIndex) {
+        //String style, String letter, int wordLength
+        if (tileIndex == (this.wordleModel.getWordLength() - 1)) {
+            for (int i = 0; i < this.wordleModel.getWordLength(); i++) {
+                // Obtain the index of current letter in guess and change its style
+                int index = this.wordleModel.getLetterList().indexOf(keyboardColors.get(i).get(1));
+
+                // Only possibility to change colors is from yellow to green, nothing else
+                if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (keyboardColors.get(i).get(0).equals("exact"))) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
+                }
+        if (index >= 19) { index++; } //skip enter key before bottom row
 
         // Only possibility to change colors is from yellow to green, nothing else
-        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (style.equals("exact"))) {
+        if (this.wordleModel.getKeysList().get(index).getStyleClass().toString().contains("misplaced") && (keyboardColors.get(i).get(0).equals("exact"))) {
             this.wordleModel.getKeysList().get(index).getStyleClass().remove("misplaced");
             this.wordleModel.getKeysList().get(index).getStyleClass().add("exact");
         }
 
-        // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
-        else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
-                !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
-            this.wordleModel.getKeysList().get(index).getStyleClass().add(style);
+                // Only edit the color of the keyboard key if it is not colored yet. Colored remains the same
+                else if (!this.wordleModel.getKeysList().get(index).getStyleClass().contains("misplaced") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("exact") &&
+                        !this.wordleModel.getKeysList().get(index).getStyleClass().contains("wrong")) {
+                    this.wordleModel.getKeysList().get(index).getStyleClass().add(keyboardColors.get(i).get(0));
+                }
+            }
         }
     }
 

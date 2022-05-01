@@ -19,19 +19,13 @@
 package main.view;
 
 import javafx.animation.FadeTransition;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import main.controller.WordleController;
-import main.model.GameState;
 import main.model.WordleModel;
 
 /**
@@ -41,7 +35,7 @@ import main.model.WordleModel;
 public class EndMessageView {
 
     /**  Header of end screen */
-    private final VBox endScreenHeader;
+    private VBox endScreenHeader;
 
     /** The rectangle that shows up when you win */
     private Rectangle finalMessageRect;
@@ -63,9 +57,6 @@ public class EndMessageView {
 
     /** The view of the game */
     private WordleView wordleView;
-
-    /** Contains streak count if winner, secret word if loser */
-    private Label winOrLoseInfo;
 
     /** Stack pane for printing message over tiles */
     private StackPane invalidWordStackPane;
@@ -136,9 +127,10 @@ public class EndMessageView {
      *                           display secret word if lost
      */
     private void createFinalMessageHeader(String winOrLose, String streakOrSecretWord) {
-        this.winOrLoseInfo = new Label(streakOrSecretWord);
+        /** Contains streak count if winner, secret word if loser */
+        Label winOrLoseInfo = new Label(streakOrSecretWord);
         this.finalMessageLabel.setText(winOrLose);
-        this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, this.winOrLoseInfo);
+        this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, winOrLoseInfo);
     }
 
     /**
@@ -156,7 +148,7 @@ public class EndMessageView {
     /**
      * Makes the win screen fade in
      */
-    public void animateEndScreen() {
+    private void animateEndScreen() {
         FadeTransition ft = new FadeTransition(Duration.millis(700), this.winStackPane);
         ft.setFromValue(0.1);
         ft.setToValue(1.0);

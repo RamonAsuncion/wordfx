@@ -23,15 +23,22 @@ import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.model.WordleModel;
-import main.tilemvc.GuessEvaluator;
-import main.tilemvc.WordleMain;
+import main.main.GuessEvaluator;
+import main.main.WordleMain;
 import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class takes care of event handling. Some examples are
+ * mouse clicking on the virtual keyboard, typing on physical keyboard,
+ * deleting letters, and entering guesses.
+ */
 public class WordleController {
 
     /** The model of our Wordle implementation */
@@ -39,9 +46,6 @@ public class WordleController {
 
     /** The view of our Wordle implementation */
     private WordleView wordleView;
-
-    /** The main class or our implementation */
-    private WordleMain wm;
 
     /** The scene, to take care of keyboard typing */
     private Scene scene;
@@ -52,10 +56,17 @@ public class WordleController {
     /** Evaluates the guess based on the secret word */
     private GuessEvaluator evaluator;
 
+    /** The end message of the game once user is a winner or loser */
     private EndMessageView endMessage;
 
+    /** Initial x-coordinate of node being dragged */
+    private double initialX;
+
+    /** Initial y-coordinate of node being dragged */
+    private double initialY;
+
     /**
-     * Simple constructor for our Worldle game
+     * Simple constructor for our WorldFX game
      *
      * @param wordleView - The view of the game
      * @param wordleModel - The model of the game
@@ -85,7 +96,7 @@ public class WordleController {
 
         // If virtual keyboard is clicked
         for (Button b : this.wordleModel.getVk().getKeyboardKeys()) {
-            b.setOnMouseClicked(event -> takeActionFromVirtualKeyboard(b));
+            makeDraggable(b);
         }
 
         // If typed on physical keyboard
@@ -104,7 +115,8 @@ public class WordleController {
     }
 
     /**
-     * Starts a new game if user would like to continue
+     * Starts a new game if user would like to continue. Ensures
+     * that screen stays on the same size user was using it.
      *
      * @param event button handler
      */
@@ -113,7 +125,8 @@ public class WordleController {
         // new stage is shown.
         Platform.setImplicitExit(false);
 
-        wm = new WordleMain();
+        // The main class or our implementation
+        WordleMain wm = new WordleMain();
 
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
@@ -189,9 +202,7 @@ public class WordleController {
         switch (event.getCode()) {
             // If user wants to delete a letter
             case BACK_SPACE:
-                if (this.wordleModel.getColumn() >= 0) {
-                    deleteFromTile();
-                }
+                if (this.wordleModel.getColumn() >= 0) { deleteFromTile(); }
                 break;
 
             // If user wants to check a guess
@@ -213,21 +224,24 @@ public class WordleController {
      * and if it is in the word list.
      */
     private void checkInput() {
-        StringBuffer guess = getGuessFromTiles();
+        String guess = getGuessFromTiles().toString().toLowerCase();
         // Ensure guess is valid by length and being in word list
         if (this.wordleModel.getColumn() == (this.wordleModel.getWordLength() - 1)) {
-            if (this.wordleModel.getReader().isWordInSet(guess.toString().toLowerCase())) {
+            if (this.wordleModel.getReader().isWordInSet(guess)) {
                 // Evaluate guess, switch the guess state to checked, and jump to next guess
-                this.evaluator.createEvaluator(guess.toString().toLowerCase());
+                this.evaluator.feedback(guess);
                 this.guessState = GuessState.CHECKED;
                 this.wordleModel.incrementRow();
+                this.wordleModel.setColumn(0);
             }
             else {
                 this.endMessage.invalidInputScreen("Invalid word");
+                this.wordleView.horizontalShakeTiles();
             }
         }
         else {
             this.endMessage.invalidInputScreen("Not enough letters");
+            this.wordleView.horizontalShakeTiles();
         }
     }
 
@@ -263,6 +277,74 @@ public class WordleController {
             this.wordleModel.setColumn(0);
             this.guessState = GuessState.UNCHECKED;
             this.wordleView.updateTyping(letter, this.wordleModel.getRow(), this.wordleModel.getColumn());
+        }
+    }
+
+    /**
+     * Makes every key in the virtual keyboard draggable
+     * @param key - virtual keyboard key
+     */
+    private void makeDraggable(Button key) {
+
+        // Initial x and y coordinates of the key
+        double startX = key.getTranslateY();
+        double startY = key.getTranslateX();
+
+        key.setOnMousePressed(event -> {
+            // Obtain offset points
+            initialX = event.getSceneX() - key.getTranslateX();
+            initialY = event.getSceneY() - key.getTranslateY();
+        });
+
+        key.setOnMouseDragged(event -> {
+            // Set the translations based on offset
+            key.setTranslateX(event.getSceneX() - initialX);
+            key.setTranslateY(event.getSceneY() - initialY);
+        });
+
+        key.setOnMouseReleased(event -> {
+            checkDraggingConditions(key, event);
+
+            // If letter has barely moved on screen, count it as a single click, not a drag
+            if (Math.abs(key.getTranslateX() - startX) < 10) {
+                System.out.println("By click");key.setOnMouseClicked(e -> takeActionFromVirtualKeyboard(key)); }
+
+            // Send key back to its original position
+            key.setTranslateX(startX);
+            key.setTranslateY(startY);
+        });
+    }
+
+    /**
+     * This method checks if a key from the virtual keyboard is being dragged, and if
+     * so, into what tile it is being dragged. There are many conditions, so follow
+     * the comments if needed.
+     *
+     * @param key - Button b (key from virtual keyboard)
+     * @param event - event of mouse being released
+     */
+    private void checkDraggingConditions(Button key, MouseEvent event) {
+
+        // Iterate through the tiles present in the current guess
+        for (int tileNum = 0; tileNum < this.wordleModel.getWordLength(); tileNum++) {
+            // Get the x-coordinate of the tile and size of tile
+            double tileXCoordinate = this.wordleModel.getLetter(tileNum).getLayoutX();
+            double tileSize = this.wordleModel.getLetter(tileNum).getWidth();
+
+            // Check if the x-position of the dragging event aligns with a given tile
+            if ((event.getSceneX() >= tileXCoordinate) && (event.getSceneX() < (tileXCoordinate + tileSize))) {
+                // Check if key has been dragged outside the virtual keyboard pane (avoid confusion with single click - no drag)
+                if (event.getSceneY() < this.wordleView.getRoot().getBottom().getLayoutY()) {
+                    // Letter can only be added by drag if tile is already in use
+                    // or is the next to be filled
+                    if (tileNum <= (this.wordleModel.getColumn() + 1)) {
+                        if (tileNum == (this.wordleModel.getColumn() + 1)) { this.wordleModel.incrementColumn(); } // If next to be filled, increment column
+                        System.out.println("By drag");
+                        this.wordleView.updateTyping(new Text(key.getText()), this.wordleModel.getRow(), tileNum); // Update typing
+                        break;
+                    }
+                }
+            }
         }
     }
 }

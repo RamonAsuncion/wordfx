@@ -21,13 +21,18 @@ package main.model;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import main.tilemvc.ReadWordsFiles;
+import main.main.ReadWordsFiles;
 import main.view.Header;
 import main.view.TileView;
 import main.view.VirtualKeyboardView;
 
 import java.util.ArrayList;
 
+/**
+ * Wordle model takes care of all the behind the scenes. Keeps track of the row
+ * and column the next letter will be typed in, initializes header, virtual keyboard, and
+ * tiles. Also keeps track of user win streak.
+ */
 public class WordleModel {
     /** Current row that we are on */
     private int row;
@@ -59,18 +64,28 @@ public class WordleModel {
     /** Keeps track of how many games user has won */
     private int currentWinStreak;
 
+    /** Reader object to create secret word/possible guess sets from txt files */
     private ReadWordsFiles reader;
 
+    /** Secret word of current game */
     private String secretWord;
 
-    private int wordLength;
+    /** Mode that user has chosen (3, 4, or 5-letter words) */
+    private final int WORD_LENGTH;
 
-    public void setWordLength(int wordLength) { this.wordLength = wordLength; }
+    /**
+     * @return length of words chosen by user
+     */
+    public int getWordLength() { return WORD_LENGTH; }
 
-    public int getWordLength() { return wordLength; }
-
+    /**
+     * @return the secret word of the game
+     */
     public String getSecretWord() { return secretWord; }
 
+    /**
+     * @return reader object
+     */
     public ReadWordsFiles getReader() { return reader; }
 
     /**
@@ -78,6 +93,10 @@ public class WordleModel {
      */
     public int getCurrentWinStreak() { return currentWinStreak; }
 
+    /**
+     * Sets the win streak
+     * @param currentWinStreak - current win streak of user
+     */
     public void setStreak(int currentWinStreak) { this.currentWinStreak = currentWinStreak; }
 
     /**
@@ -118,12 +137,27 @@ public class WordleModel {
     /** The current state of the game */
     private GameState gameState;
 
+    /**
+     * Sets the game state
+     * @param gameState - a new state for the game (new game, in progress, paused, winner, loser)
+     */
     public void setGameState(GameState gameState) { this.gameState = gameState; }
 
+    /**
+     * @return the state of the game
+     */
     public GameState getGameState() { return gameState;}
 
+    public int getCurrentGuessNumber() { return currentGuessNumber; }
+
+    /**
+     * Simple constructor of our model. Takes in the length of
+     * word chosen by user, so it can shape the game accordingly.
+     *
+     * @param wordLength - length of word chosen by user
+     */
     public WordleModel(int wordLength) {
-        this.wordLength = wordLength;
+        this.WORD_LENGTH = wordLength;
 
         // Three main components of interface
         this.header = new Header();
@@ -152,13 +186,15 @@ public class WordleModel {
         switch (wordLength) {
             case 3:
                 this.secretWord = this.reader.createRandomWord("3words.txt");
+                this.reader.createWordSet("allowed3words.txt");
                 break;
             case 4:
                 this.secretWord = this.reader.createRandomWord("4words.txt");
+                this.reader.createWordSet("allowed4words.txt");
                 break;
             default:
                 this.secretWord = this.reader.createRandomWord("5words.txt");
-                this.reader.createFiveLetterWordSet("allowed5words.txt");
+                this.reader.createWordSet("allowed5words.txt");
                 break;
 
         }
@@ -178,23 +214,18 @@ public class WordleModel {
         this.listOfGuesses = this.tiles.getGuessList();
     }
 
-    /**
-     */
+    /** Increments row value by 1 -> going to a new guess after checking some guess */
     public void incrementRow() {
         this.row++;
     }
 
-    /**
-     */
+    /** Increments column value by 1 -> typing letter */
     public void incrementColumn() {
         this.column++;
     }
 
-    /**
-     */
-    public void decrementColumn() {
-        this.column--;
-    }
+    /** Decreases column value by 1 -> deleting letter */
+    public void decrementColumn() { this.column--; }
 
     /**
      * @return row value
@@ -225,6 +256,12 @@ public class WordleModel {
      * Increments the current guess
      */
     public void incrementCurrentGuessNumber() { this.currentGuessNumber++; }
+
+    /**
+     * @param index - index of guess tile
+     * @return returns a given guess tile by index
+     */
+    public Label getLetter(int index) { return getListOfGuesses().get(getRow()).get(index); }
 
 
 }
