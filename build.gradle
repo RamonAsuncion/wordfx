@@ -48,7 +48,7 @@ dependencies {
 
 application {
     mainModule = 'csci205_final_project'
-    mainClassName = "main.Main"
+    mainClassName = "main.main.WordleMain"
 
     if (project.hasProperty("mainClass")) {
         getMainClass().set(project.getProperty("mainClass"))
