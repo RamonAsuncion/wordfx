@@ -77,7 +77,9 @@ public class InitialScreenView {
 
     public void initSceneGraph() {
 
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/new2.jpeg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        // Set the background to be a drawing we created
+        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/initial-screen.jpeg").toExternalForm()),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
         borderPane.setBackground(background);
 
