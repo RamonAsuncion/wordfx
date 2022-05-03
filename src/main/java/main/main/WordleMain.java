@@ -119,7 +119,7 @@ public class WordleMain extends Application {
         HeaderController headerController = new HeaderController(wordleView, wordleModel);
 
         final Boolean[] darkModeOn = {false};
-        this.wordleModel.getHeader().getSettingButton().setOnMouseClicked(e -> {
+        this.wordleModel.getHeader().getDarkModeButton().setOnMouseClicked(e -> {
             if (!darkModeOn[0]) {
                 switchModes("dark-mode.css");
                 darkModeOn[0] = true;

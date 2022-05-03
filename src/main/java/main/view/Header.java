@@ -49,7 +49,7 @@ public class Header {
     private final Label title;
 
     /** Setting icon button. */
-    private Button setting;
+    private Button darkModeButton;
 
     /**
      * @return the headerSection including title and separator
@@ -86,21 +86,21 @@ public class Header {
         this.headerSection.setBottom(new Separator());
 
         // Add multiple items to the right side of the header.
-        this.leftHeaderSection.getChildren().add(this.setting);
-        this.headerSection.setLeft(this.leftHeaderSection);
+        //this.leftHeaderSection.getChildren().add(this.darkModeButton);
+        this.headerSection.setRight(this.darkModeButton);
         this.headerSection.setCenter(this.title);
     }
     /**
      * @return the button for the settings icon.
      */
-    public Button getSettingButton() { return setting; }
+    public Button getDarkModeButton() { return darkModeButton; }
 
     /**
      * Create a setting button to show the user the game options.
      */
     private void createSettingButton() {
         // Initialize a new button and add styling.
-        setting = new Button();
-        setting.getStyleClass().add("setting-button");
+        darkModeButton = new Button();
+        darkModeButton.getStyleClass().add("setting-button");
     }
 }

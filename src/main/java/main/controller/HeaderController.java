@@ -69,7 +69,7 @@ public class HeaderController {
      */
     private void initEventHandlers() {
         // The setting icon click for game options.
-        this.header.getSettingButton().setOnMouseClicked(this::settingsMenu);
+        this.header.getDarkModeButton().setOnMouseClicked(this::settingsMenu);
     }
 
     /**
