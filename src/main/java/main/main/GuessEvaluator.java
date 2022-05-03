@@ -3,13 +3,13 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/12/22
  * Time: 4:32 PM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
+ * Package: main.controller
  * Class: GuessEvaluator
  *
  * Description:

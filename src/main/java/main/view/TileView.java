@@ -3,13 +3,13 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/6/22
  * Time: 12:46 PM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
+ * Package: main.view
  * Class: TileView
  *
  * Description:
@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
 
 /**
@@ -40,9 +39,8 @@ public class TileView {
     /** List of labels where letters will be placed */
     private ArrayList<Label> listOfTilesInAGuess;
 
+    /** List with each tile placed on the screen */
     private ArrayList<Label> listOfAllTiles;
-
-    public ArrayList<Label> getListOfAllTiles() { return listOfAllTiles; }
 
     /** List of all guesses, where each guess is a list of labels (letters) */
     private ArrayList<ArrayList<Label>> guessList;
@@ -71,8 +69,6 @@ public class TileView {
     public StackPane getTileStackPane() {
         return tileStackPane;
     }
-
-    public ArrayList<Label> getListOfTilesInAGuess() { return listOfTilesInAGuess; }
 
     /**
      * Simple constructor for the Tile class. Initializes the tiles and

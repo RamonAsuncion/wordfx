@@ -3,14 +3,14 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/8/22
  * Time: 11:12 AM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
- * Class: VirtualKeyboardController
+ * Package: main.controller
+ * Class: Wordle Controller
  *
  * Description:
  *
@@ -32,7 +32,6 @@ import main.main.WordleMain;
 import main.view.EndMessageView;
 import main.view.WordleView;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class takes care of event handling. Some examples are
@@ -322,7 +321,6 @@ public class WordleController {
      * @param event - event of mouse being released
      */
     private void checkDraggingConditions(Button key, MouseEvent event) {
-
         // Iterate through the tiles present in the current guess
         for (int tileNum = 0; tileNum < this.wordleModel.getWordLength(); tileNum++) {
             // Get the x-coordinate of the tile and size of tile

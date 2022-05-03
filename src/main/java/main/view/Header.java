@@ -9,7 +9,7 @@
  * Time: 8:13 AM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
+ * Package: main.view
  * Class: Header
  *
  * Description:
@@ -18,17 +18,10 @@
  */
 package main.view;
 
-import javafx.animation.FillTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 /**
  * Header class to create the header section, which includes the "WordFX" header
@@ -38,12 +31,6 @@ public class Header {
 
     /** WordFX header section */
     private final BorderPane headerSection;
-
-    /** WordFX header section (right side for multiple items) */
-    private final HBox rightHeaderSection;
-
-    /** WordFX header section (left side for multiple items) */
-    private final HBox leftHeaderSection;
 
     /** The word "WordFX". */
     private final Label title;
@@ -57,6 +44,11 @@ public class Header {
     public BorderPane getHeaderSection() { return headerSection; }
 
     /**
+     * @return the button for the settings icon.
+     */
+    public Button getDarkModeButton() { return darkModeButton; }
+
+    /**
      * Simple constructor to initialize the title and header section, and their
      * respective css id's
      */
@@ -68,10 +60,6 @@ public class Header {
         // Initialize header section
         this.headerSection = new BorderPane();
         this.headerSection.setId("header");
-
-        // Initialize the right header and left header section as a Horizontal Box.
-        this.rightHeaderSection = new HBox();
-        this.leftHeaderSection = new HBox();
     }
 
     /**
@@ -80,25 +68,20 @@ public class Header {
      */
     public void createHeader() {
         // Create all the button in the header.
-        this.createSettingButton();
+        this.createDarkModeButton();
 
         // Organize items in the header.
         this.headerSection.setBottom(new Separator());
 
-        // Add multiple items to the right side of the header.
-        //this.leftHeaderSection.getChildren().add(this.darkModeButton);
+        // Adjust position of things on header
         this.headerSection.setRight(this.darkModeButton);
         this.headerSection.setCenter(this.title);
     }
-    /**
-     * @return the button for the settings icon.
-     */
-    public Button getDarkModeButton() { return darkModeButton; }
 
     /**
      * Create a setting button to show the user the game options.
      */
-    private void createSettingButton() {
+    private void createDarkModeButton() {
         // Initialize a new button and add styling.
         darkModeButton = new Button();
         darkModeButton.getStyleClass().add("setting-button");

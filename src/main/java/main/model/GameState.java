@@ -1,5 +1,8 @@
 package main.model;
 
+/**
+ * Simple enumeration to take care of the game state
+ */
 public enum GameState {
     NEW_GAME(true),
     GAME_IN_PROGRESS(true),

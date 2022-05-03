@@ -3,14 +3,14 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/6/22
  * Time: 11:35 PM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
- * Class: OnScreenKeyboard
+ * Package: main.view
+ * Class: VirtualKeyboardView
  *
  * Description:
  *

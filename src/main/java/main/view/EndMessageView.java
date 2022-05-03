@@ -3,7 +3,7 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/17/22
  * Time: 4:34 PM

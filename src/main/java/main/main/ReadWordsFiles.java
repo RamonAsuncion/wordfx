@@ -3,13 +3,13 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/15/22
  * Time: 12:05 AM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
+ * Package: main.main
  * Class: ReadWordsFiles
  *
  * Description:
@@ -33,10 +33,11 @@ public class ReadWordsFiles {
     private ArrayList<String> guessSet = new ArrayList<>();
 
     /**
-     * Reads in the file and creates a set of words, then gets a random
-     * word from that set to be the secret word
+     * Reads in the file and creates a set of secret words (only, not the guess)
+     * word from that set to be the secret word, then gets a random word from
+     * the set.
      *
-     * @param wordFile - the 3, 4, or 5 letter word file
+     * @param wordFile - the 3, 4, or 5-letter word file
      * @return - the secret word
      */
     public String createRandomWord(String wordFile) {
@@ -59,6 +60,10 @@ public class ReadWordsFiles {
         return secretWordSet.get(randInt);
     }
 
+    /**
+     * Creates the word set for possible guesses only (not possible secret words)
+     * @param wordFile
+     */
     public void createWordSet(String wordFile) {
         File file = new File(wordFile);
         // Scan through file and create a set of all words

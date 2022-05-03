@@ -3,7 +3,7 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/11/22
  * Time: 11:13 PM
@@ -25,8 +25,6 @@ import main.main.ReadWordsFiles;
 import main.view.Header;
 import main.view.TileView;
 import main.view.VirtualKeyboardView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -263,6 +261,4 @@ public class WordleModel {
      * @return returns a given guess tile by index
      */
     public Label getLetter(int index) { return getListOfGuesses().get(getRow()).get(index); }
-
-    public ArrayList<Label> getAllTiles() { return this.tiles.getListOfAllTiles(); }
 }

@@ -3,13 +3,13 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/8/22
  * Time: 8:24 AM
  *
  * Project: csci205_final_project
- * Package: main.tilemvc
+ * Package: main.view
  * Class: WordleView
  *
  * Description:
@@ -21,8 +21,6 @@ package main.view;
 import javafx.animation.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -30,7 +28,6 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import main.model.GameState;
 import main.model.WordleModel;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -51,23 +48,11 @@ public class WordleView {
     /** Play again button to keep playing */
     private Button playAgainBtn;
 
-    /** The object that performs the flips of the tiles when answer is checked */
-    private RotateTransition rotation;
-
     /** Keeps track of when tiles are done flipping */
     private boolean isFlippingDone = true;
 
     /** Is the shaking animation is done? */
     private boolean isShakingDone = true;
-
-    /** Shift tiles to the left. */
-    private TranslateTransition shakeTileLeft;
-
-    /** Shift tiles to the right. */
-    private TranslateTransition shakeTileRight;
-
-    /** Sequential order for horizontal shake */
-    private SequentialTransition sequentialTransition;
 
     /**
      * @return true if flipping is done, false if not
@@ -128,7 +113,8 @@ public class WordleView {
     public void performFlip(Label tile, int index, String style, EndMessageView endMessage,
                             Map<Integer, ArrayList<String>> keyboardColors) {
         isFlippingDone = false;
-        rotation = new RotateTransition(Duration.seconds(1), tile);
+
+        RotateTransition rotation = new RotateTransition(Duration.seconds(1), tile);
         rotation.setDelay(Duration.millis(index*500));
         rotation.setAxis(Rotate.X_AXIS);
         rotation.setToAngle(360);
@@ -153,22 +139,22 @@ public class WordleView {
             // Get the tiles.
             Label tile = this.wordleModel.getListOfGuesses().get(this.wordleModel.getRow()).get(i);
 
-            // Shake the tiles to the left.
-            shakeTileLeft = new TranslateTransition(Duration.millis(45), tile);
+            /** Shift tiles to the left. */
+            TranslateTransition shakeTileLeft = new TranslateTransition(Duration.millis(45), tile);
             shakeTileLeft.setFromX(0); // go back to center.
             shakeTileLeft.setCycleCount(4); // transition go back.
             shakeTileLeft.setByX(-7.5); // how much shift of tile.
             shakeTileLeft.setAutoReverse(true); // reverse back automatically.
 
-            // Shake the tiles to the right.
-            shakeTileRight = new TranslateTransition(Duration.millis(45), tile);
+            /** Shift tiles to the right. */
+            TranslateTransition shakeTileRight = new TranslateTransition(Duration.millis(45), tile);
             shakeTileRight.setFromX(0);
             shakeTileRight.setCycleCount(4);
             shakeTileRight.setByX(7.5);
             shakeTileRight.setAutoReverse(true);
 
-            // Shake to the left then right.
-            sequentialTransition = new SequentialTransition(shakeTileLeft, shakeTileRight);
+            /** Sequential order for horizontal shake */
+            SequentialTransition sequentialTransition = new SequentialTransition(shakeTileLeft, shakeTileRight);
 
             // Animation can be rerun when done.
             sequentialTransition.setOnFinished(finish -> {

@@ -1,17 +1,18 @@
 package main.main;
 
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.controller.HeaderController;
 import main.controller.WordleController;
 import main.model.WordleModel;
 import main.view.InitialScreenView;
 import main.view.WordleView;
 
-import java.util.concurrent.atomic.AtomicReference;
-
+/**
+ * Main JavaFX class for our WordFX game. Creates the different stages
+ * of the game, as well as handles events that could possibly switch
+ * stages.
+ */
 public class WordleMain extends Application {
 
     /** Initial scene greeting user */
@@ -31,10 +32,12 @@ public class WordleMain extends Application {
 
     /** User streak from previous games */
     private int currentUserStreak;
-    private WordleModel wordleModel;
-    private WordleView wordleView;
 
-    public Scene getSecondScene() { return secondScene; }
+    /** The model of our game */
+    private WordleModel wordleModel;
+
+    /** The view of our game */
+    private WordleView wordleView;
 
     public static void main(String[] args) { launch(args); }
 
@@ -57,6 +60,8 @@ public class WordleMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
+
+        // Create initial screen for user to choose mode
         firstScene = new Scene(this.initialView.getBorderPane(), 600, 850);
 
         firstScene.getStylesheets().add(
@@ -77,7 +82,7 @@ public class WordleMain extends Application {
 
     /**
      * Takes care of handling the clicks on the initial screen, where
-     * user will click on the desired mode
+     * user will click on the desired mode, which will output a new scene
      */
     private void initEventHandlersForInitialScreen() {
         this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
@@ -99,9 +104,12 @@ public class WordleMain extends Application {
     }
 
     /**
-     * Creates the second scene, with the model and view
+     * Creates the second screen with the model and view
+     *
+     * @param style - style of the css to be used on the second screen
      */
     public void createSecondScene(String style) {
+        // Initialize model and view, and also set streak
         wordleModel = new WordleModel(wordLength);
         wordleModel.setStreak(currentUserStreak);
         wordleView = new WordleView(wordleModel);
@@ -115,9 +123,15 @@ public class WordleMain extends Application {
         //The virtual keyboard controller for handling events like typing
         WordleController keyboardController = new WordleController(wordleView, wordleModel, secondScene);
 
-        //The controls for the header
-        HeaderController headerController = new HeaderController(wordleView, wordleModel);
 
+        initBackgroundEventHandlers();
+    }
+
+    /**
+     * Takes care of handling the event of switching to dark or light
+     * mode. Needs the secondScene to work.
+     */
+    private void initBackgroundEventHandlers() {
         final Boolean[] darkModeOn = {false};
         this.wordleModel.getHeader().getDarkModeButton().setOnMouseClicked(e -> {
             if (!darkModeOn[0]) {
@@ -131,6 +145,11 @@ public class WordleMain extends Application {
         });
     }
 
+    /**
+     * Sets the css style according to user preference.
+     *
+     * @param style - css style for light or dark mode
+     */
     private void switchModes(String style) {
         if (style.equals("dark-mode.css")) {
             secondScene.getStylesheets().remove(

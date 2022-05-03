@@ -3,7 +3,7 @@
  * Spring 2022
  * Instructor: Prof. Brian King
  *
- * Name: Pedro Carneiro Passos
+ * Name: Liv & Gang
  * Section: 02 - 11AM
  * Date: 4/17/22
  * Time: 10:25 PM
@@ -127,7 +127,7 @@ public class InitialScreenView {
      * Places the name of our group on the bottom
      */
     private void createGroupNamePortion() {
-        Label groupName = new Label("A Game by Liv & Gang ©");
+        Label groupName = new Label("by Liv & Gang ©");
         groupName.setId("group-name");
         header = new HBox(groupName);
         header.setAlignment(Pos.CENTER);
