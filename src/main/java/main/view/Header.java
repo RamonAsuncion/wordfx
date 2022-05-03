@@ -48,75 +48,8 @@ public class Header {
     /** The word "WordFX". */
     private final Label title;
 
-    /** Histogram icon button. */
-    private Button histogram;
-
     /** Setting icon button. */
     private Button setting;
-
-    /** Question mark icon button. */
-    private Button questionMark;
-
-    /** Menu three dash icon button. */
-    private Button menuThreeDashes;
-
-    /** Slider to turn on dark mode. */
-    private Pane darkModeSlider;
-
-    private Button exitSettingMenu;
-
-    private Pane backgroundFrame;
-
-    private Label settingsHeader;
-
-    private Label darkThemeLabel;
-
-    private BorderPane topHeader;
-
-    public BorderPane getTopHeader() { return topHeader; }
-
-    public Label getDarkThemeLabel() { return darkThemeLabel; }
-
-    public Label getSettingsHeader() { return settingsHeader; }
-
-    public Pane getBackgroundFrame() {
-        return backgroundFrame;
-    }
-
-    public Button getExitSettingMenu() {
-        return exitSettingMenu;
-    }
-
-    public TranslateTransition getTranslateAnimation() {
-        return translateAnimation;
-    }
-
-    public FillTransition getFillAnimation() {
-        return fillAnimation;
-    }
-
-    public ParallelTransition getAnimation() {
-        return animation;
-    }
-
-    public Pane getDarkModeSlider() {
-        return darkModeSlider;
-    }
-
-    public Label getTitle() { return title; }
-
-    private final TranslateTransition translateAnimation = new TranslateTransition(Duration.seconds(0.25));
-    private final FillTransition fillAnimation = new FillTransition(Duration.seconds(0.25));
-
-    /** The background of the settings menu */
-    private Rectangle settingsBackground;
-
-    public Rectangle getSettingsBackground() {
-        return settingsBackground;
-    }
-
-    // get both animations to occur at the same time
-    private final ParallelTransition animation = new ParallelTransition(translateAnimation, fillAnimation);
 
     /**
      * @return the headerSection including title and separator
@@ -148,26 +81,14 @@ public class Header {
     public void createHeader() {
         // Create all the button in the header.
         this.createSettingButton();
-        this.createHistogramButton();
-        this.createQuestionMarkButton();
-        this.createThreeDashButton();
-
-        // Create all the sliders in the setting menu.
-        this.createDarkModeSlider();
-        this.createSettingMenu();
-
 
         // Organize items in the header.
-        this.headerSection.setCenter(this.title);
         this.headerSection.setBottom(new Separator());
 
         // Add multiple items to the right side of the header.
-        this.leftHeaderSection.getChildren().addAll(this.menuThreeDashes, this.questionMark);
+        this.leftHeaderSection.getChildren().add(this.setting);
         this.headerSection.setLeft(this.leftHeaderSection);
-
-        // Add multiple items to the right side of the header.
-        this.rightHeaderSection.getChildren().addAll(this.histogram, this.setting);
-        this.headerSection.setRight(this.rightHeaderSection);
+        this.headerSection.setCenter(this.title);
     }
     /**
      * @return the button for the settings icon.
@@ -181,97 +102,5 @@ public class Header {
         // Initialize a new button and add styling.
         setting = new Button();
         setting.getStyleClass().add("setting-button");
-    }
-
-    /**
-     * Create a histogram button to show the user their statistics.
-     */
-    private void createHistogramButton() {
-        // Initialize a new button and add styling.
-        histogram = new Button();
-        histogram.getStyleClass().add("histogram-button");
-    }
-
-    /**
-     * Create a question mark button to show the user the help menu.
-     */
-    private void createQuestionMarkButton() {
-        // Initialize a new button and add styling.
-        questionMark = new Button();
-        questionMark.getStyleClass().add("question-mark-button");
-    }
-
-    /**
-     * Create a three dash menu to show the user other modes
-     */
-    private void createThreeDashButton() {
-        // Initialize a new button and add styling.
-        menuThreeDashes = new Button();
-        menuThreeDashes.getStyleClass().add("menu-three-button");
-    }
-
-    private void createDarkModeSlider() {
-        darkModeSlider = new Pane();
-        darkModeSlider.setPrefSize(60,10);
-
-        Rectangle background = new Rectangle(150,150);
-        background.setFill(Color.BLACK);
-
-        // create the background of button
-        Rectangle rect = new Rectangle(50, 25);
-        rect.setFill(Color.WHITE);
-        rect.setStroke(Color.LIGHTGRAY);
-        rect.setArcHeight(25);
-        rect.setArcWidth(25);
-
-        // Create the circle overlap
-        Circle trigger = new Circle(12.5);
-        trigger.setCenterX(12.5);
-        trigger.setCenterY(12.5);
-        trigger.setFill(Color.WHITE);
-        trigger.setStroke(Color.LIGHTGRAY);
-
-        translateAnimation.setNode(trigger);
-        fillAnimation.setShape(rect);
-
-        darkModeSlider.getChildren().addAll(rect,trigger);
-    }
-
-    private void createSettingMenu() {
-        // Add all the nodes on the pane.
-        backgroundFrame = new Pane();
-        StackPane stackPane = new StackPane(); // Add a node on top of a previous one.
-        settingsBackground = new Rectangle(); // Background of the setting menu.
-        BorderPane borderPane = new BorderPane(); // Align everything in a border.
-        VBox vBox = new VBox();
-
-        vBox.setId("setting-vertical-box");
-        // Make new labels for the setting menu.
-        darkThemeLabel = new Label("Dark Theme");
-
-        // Add the items in a vertical alignment with border panes to align to elements.
-        BorderPane vBoxBorderDT = new BorderPane();
-        darkThemeLabel.getStyleClass().add("setting-labels");
-        vBox.getChildren().addAll(vBoxBorderDT, new Separator());
-        vBoxBorderDT.setLeft(darkThemeLabel);
-        vBoxBorderDT.setRight(darkModeSlider);
-
-        // Add the "Setting" and the "X" in the header.
-        topHeader = new BorderPane();
-        exitSettingMenu = new Button();
-        settingsHeader = new Label("SETTINGS");
-        topHeader.getStyleClass().add("settings-title");
-        settingsHeader.getStyleClass().add("settings-title");
-        topHeader.setCenter(settingsHeader);
-        topHeader.setRight(exitSettingMenu);
-        borderPane.setTop(topHeader);
-
-        // Add all the children to the setting menu.
-        borderPane.setCenter(vBox);
-        stackPane.getChildren().addAll(settingsBackground, borderPane);
-        backgroundFrame.getChildren().add(stackPane);
-
-        // Set the styling for the elements
-        exitSettingMenu.getStyleClass().add("menu-setting-close-button");
     }
 }

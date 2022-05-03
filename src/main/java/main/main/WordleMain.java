@@ -1,6 +1,7 @@
 package main.main;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.controller.HeaderController;
@@ -8,6 +9,8 @@ import main.controller.WordleController;
 import main.model.WordleModel;
 import main.view.InitialScreenView;
 import main.view.WordleView;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class WordleMain extends Application {
 
@@ -115,31 +118,30 @@ public class WordleMain extends Application {
         //The controls for the header
         HeaderController headerController = new HeaderController(wordleView, wordleModel);
 
-        this.wordleModel.getHeader().getDarkModeSlider().setOnMouseClicked(e -> {
-            if (!headerController.isSwitchedOn()) {
-                switchToDarkMode("dark-mode.css");
-                headerController.switchedOnProperty().set(true);
+        final Boolean[] darkModeOn = {false};
+        this.wordleModel.getHeader().getSettingButton().setOnMouseClicked(e -> {
+            if (!darkModeOn[0]) {
+                switchModes("dark-mode.css");
+                darkModeOn[0] = true;
             }
             else {
-                switchToLightMode("style.css");
-                headerController.switchedOnProperty().set(false);
+                switchModes("style.css");
+                darkModeOn[0] = false;
             }
         });
     }
 
-    public void switchToDarkMode(String style) {
-        secondScene.getStylesheets().remove(
-                getClass().getResource("style.css")
-                        .toExternalForm());
-        secondScene.getStylesheets().add(
-                getClass().getResource(style)
-                        .toExternalForm());
-    }
-
-    public void switchToLightMode(String style) {
-        secondScene.getStylesheets().remove(
-                getClass().getResource("dark-mode.css")
-                        .toExternalForm());
+    private void switchModes(String style) {
+        if (style.equals("dark-mode.css")) {
+            secondScene.getStylesheets().remove(
+                    getClass().getResource("style.css")
+                            .toExternalForm());
+        }
+        else {
+            secondScene.getStylesheets().remove(
+                    getClass().getResource("dark-mode.css")
+                            .toExternalForm());
+        }
         secondScene.getStylesheets().add(
                 getClass().getResource(style)
                         .toExternalForm());

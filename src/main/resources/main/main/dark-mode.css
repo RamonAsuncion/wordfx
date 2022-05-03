@@ -122,26 +122,8 @@
 }
 
 .setting-button {
-    -fx-graphic: url("https://img.icons8.com/ios-glyphs/45/000000/do-not-disturb-2.png");
-    -fx-pref-width: 45;
-}
-
-.histogram-button {
-    -fx-graphic: url("https://i.ibb.co/Lxgt1gN/histrogram.png");
+    -fx-graphic: url("https://img.icons8.com/pastel-glyph/60/ffffff/light--v1.png");
     -fx-background-color: transparent;
-    -fx-pref-width: 45;
-}
-
-.question-mark-button {
-    -fx-graphic: url("https://i.ibb.co/NnLxTfy/question-mark.png");
-    -fx-background-color: transparent;
-    -fx-pref-width: 45;
-}
-
-.menu-three-button {
-    -fx-graphic: url("https://img.icons8.com/ios-glyphs/30/000000/menu-rounded.png");
-    -fx-background-color: transparent;
-    -fx-pref-width: 45;
 }
 
 .menu-setting-close-button {
@@ -195,6 +177,7 @@
     -fx-padding: 18;
     -fx-alignment: center;
     -fx-text-alignment: center;
+    -fx-text-fill: white;
 }
 
 .setting-labels {

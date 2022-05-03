@@ -46,15 +46,6 @@ public class HeaderController {
     /** The games header */
     private final Header header;
 
-    /** Accounts for the property of the switch button */
-    private BooleanProperty switchedOn = new SimpleBooleanProperty(false);
-
-    private TileView tileView;
-
-    public boolean isSwitchedOn() { return switchedOn.get(); }
-
-    public BooleanProperty switchedOnProperty() { return switchedOn; }
-
     /**
      * Construct a header controller for header buttons.
      *
@@ -70,7 +61,6 @@ public class HeaderController {
 
         // Initialize all the buttons
         this.initEventHandlers();
-        this.toggleSwitch();
     }
 
     /**
@@ -90,47 +80,6 @@ public class HeaderController {
     private void settingsMenu(Event event) {
         // Set the game state to pause.
         this.wordleModel.setGameState(GameState.GAME_PAUSED);
-
-        openSettingMenu();
     }
 
-    /**
-     * Method that opens the settings menu
-     */
-    private void openSettingMenu() {
-        // Create a rectangle (as background) with a size of the whole screen.
-//        if (!switchedOn.get()){
-//            changeBackground("style.css");
-//        }
-//        else{
-//            changeBackground("dark-mode.css");
-//        }
-
-        this.header.getSettingsBackground().heightProperty().bind(this.wordleView.getRoot().heightProperty());
-        this.header.getSettingsBackground().widthProperty().bind(this.wordleView.getRoot().widthProperty());
-
-        // Add overlay to the view.
-        this.wordleView.getRoot().getChildren().add(this.header.getBackgroundFrame());
-
-        // Close the settings menu.
-        this.header.getExitSettingMenu().setOnMouseClicked(e -> {
-            this.wordleView.getRoot().getChildren().remove(this.header.getBackgroundFrame());
-            this.wordleModel.setGameState(GameState.GAME_IN_PROGRESS);
-        });
-    }
-
-    public void toggleSwitch(){
-        switchedOn.addListener((obs, oldState, newState) -> {
-            boolean isOn = newState;
-            // switch from left to right 50 is midpoint of rect
-            this.header.getTranslateAnimation().setToX(isOn ? 25 : 0);
-            this.header.getFillAnimation().setFromValue(isOn ? Color.WHITE : Color.LIGHTGRAY);
-            this.header.getFillAnimation().setToValue(isOn ? Color.GREEN : Color.WHITE);
-            this.header.getAnimation().play();
-        });
-
-        this.header.getDarkModeSlider().setOnMouseClicked(event -> {
-            switchedOn.set(!switchedOn.get());
-        });
-    }
 }

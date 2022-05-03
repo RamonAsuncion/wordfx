@@ -133,27 +133,9 @@
 }
 
 .setting-button {
-    -fx-graphic: url("https://img.icons8.com/ios-glyphs/30/000000/do-not-disturb-2.png");
+    -fx-graphic: url("https://img.icons8.com/ios/30/000000/do-not-disturb-2.png");
     -fx-background-color: transparent;
     -fx-pref-width: 30;
-}
-
-.histogram-button {
-    -fx-graphic: url("https://i.ibb.co/Lxgt1gN/histrogram.png");
-    -fx-background-color: transparent;
-    -fx-pref-width: 45;
-}
-
-.question-mark-button {
-    -fx-graphic: url("https://i.ibb.co/NnLxTfy/question-mark.png");
-    -fx-background-color: transparent;
-    -fx-pref-width: 45;
-}
-
-.menu-three-button {
-    -fx-graphic: url("https://img.icons8.com/ios-glyphs/30/000000/menu-rounded.png");
-    -fx-background-color: transparent;
-    -fx-pref-width: 45;
 }
 
 .menu-setting-close-button {
