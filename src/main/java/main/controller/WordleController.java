@@ -109,9 +109,6 @@ public class WordleController {
         });
 
         this.wordleView.getPlayAgainBtn().setOnMouseClicked(this::restartGame);
-
-        // If this button is pressed, change to dark mode.
-        this.wordleView.getDarkMode().setOnMouseClicked(event -> this.wordleView.getRoot().setId("theme1"));
     }
 
     /**
@@ -307,7 +304,8 @@ public class WordleController {
 
             // If letter has barely moved on screen, count it as a single click, not a drag
             if (Math.abs(key.getTranslateX() - startX) < 10) {
-                System.out.println("By click");key.setOnMouseClicked(e -> takeActionFromVirtualKeyboard(key)); }
+                key.setOnMouseClicked(e -> takeActionFromVirtualKeyboard(key));
+            }
 
             // Send key back to its original position
             key.setTranslateX(startX);
@@ -339,7 +337,6 @@ public class WordleController {
                     // or is the next to be filled
                     if (tileNum <= (this.wordleModel.getColumn() + 1)) {
                         if (tileNum == (this.wordleModel.getColumn() + 1)) { this.wordleModel.incrementColumn(); } // If next to be filled, increment column
-                        System.out.println("By drag");
                         this.wordleView.updateTyping(new Text(key.getText()), this.wordleModel.getRow(), tileNum); // Update typing
                         break;
                     }

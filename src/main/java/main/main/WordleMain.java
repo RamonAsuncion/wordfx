@@ -11,12 +11,6 @@ import main.view.WordleView;
 
 public class WordleMain extends Application {
 
-    /** The view of our WordFX game */
-    private WordleView wordleView;
-
-    /** The model of our WordFX game */
-    private WordleModel wordleModel;
-
     /** Initial scene greeting user */
     private Scene firstScene;
 
@@ -34,6 +28,10 @@ public class WordleMain extends Application {
 
     /** User streak from previous games */
     private int currentUserStreak;
+    private WordleModel wordleModel;
+    private WordleView wordleView;
+
+    public Scene getSecondScene() { return secondScene; }
 
     public static void main(String[] args) { launch(args); }
 
@@ -81,39 +79,69 @@ public class WordleMain extends Application {
     private void initEventHandlersForInitialScreen() {
         this.initialView.getThreeLetterBtn().setOnMouseClicked(event -> {
             wordLength = 3;
-            createSecondScene();
+            createSecondScene("style.css");
             window.setScene(secondScene);
         });
         this.initialView.getFourLetterBtn().setOnMouseClicked(event -> {
             wordLength = 4;
-            createSecondScene();
+            createSecondScene("style.css");
             window.setScene(secondScene);
         });
         this.initialView.getFiveLetterBtn().setOnMouseClicked(event -> {
             wordLength = 5;
-            createSecondScene();
+            createSecondScene("style.css");
             window.setScene(secondScene);
         });
+
     }
 
     /**
      * Creates the second scene, with the model and view
      */
-    private void createSecondScene() {
-        this.wordleModel = new WordleModel(wordLength);
-        this.wordleModel.setStreak(currentUserStreak);
-        this.wordleView = new WordleView(this.wordleModel);
+    public void createSecondScene(String style) {
+        wordleModel = new WordleModel(wordLength);
+        wordleModel.setStreak(currentUserStreak);
+        wordleView = new WordleView(wordleModel);
 
         // Create new scene and use css resources from style.css
-        secondScene = new Scene(this.wordleView.getRoot(), 600, 850);
+        secondScene = new Scene(wordleView.getRoot(), 600, 850);
         secondScene.getStylesheets().add(
-                getClass().getResource("style.css")
+                getClass().getResource(style)
                         .toExternalForm());
 
         //The virtual keyboard controller for handling events like typing
-        WordleController keyboardController = new WordleController(this.wordleView, this.wordleModel, secondScene);
+        WordleController keyboardController = new WordleController(wordleView, wordleModel, secondScene);
 
         //The controls for the header
-        HeaderController headerController = new HeaderController(this.wordleView, this.wordleModel);
+        HeaderController headerController = new HeaderController(wordleView, wordleModel);
+
+        this.wordleModel.getHeader().getDarkModeSlider().setOnMouseClicked(e -> {
+            if (!headerController.isSwitchedOn()) {
+                switchToDarkMode("dark-mode.css");
+                headerController.switchedOnProperty().set(true);
+            }
+            else {
+                switchToLightMode("style.css");
+                headerController.switchedOnProperty().set(false);
+            }
+        });
+    }
+
+    public void switchToDarkMode(String style) {
+        secondScene.getStylesheets().remove(
+                getClass().getResource("style.css")
+                        .toExternalForm());
+        secondScene.getStylesheets().add(
+                getClass().getResource(style)
+                        .toExternalForm());
+    }
+
+    public void switchToLightMode(String style) {
+        secondScene.getStylesheets().remove(
+                getClass().getResource("dark-mode.css")
+                        .toExternalForm());
+        secondScene.getStylesheets().add(
+                getClass().getResource(style)
+                        .toExternalForm());
     }
 }

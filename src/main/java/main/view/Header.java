@@ -67,6 +67,18 @@ public class Header {
 
     private Pane backgroundFrame;
 
+    private Label settingsHeader;
+
+    private Label darkThemeLabel;
+
+    private BorderPane topHeader;
+
+    public BorderPane getTopHeader() { return topHeader; }
+
+    public Label getDarkThemeLabel() { return darkThemeLabel; }
+
+    public Label getSettingsHeader() { return settingsHeader; }
+
     public Pane getBackgroundFrame() {
         return backgroundFrame;
     }
@@ -90,6 +102,8 @@ public class Header {
     public Pane getDarkModeSlider() {
         return darkModeSlider;
     }
+
+    public Label getTitle() { return title; }
 
     private final TranslateTransition translateAnimation = new TranslateTransition(Duration.seconds(0.25));
     private final FillTransition fillAnimation = new FillTransition(Duration.seconds(0.25));
@@ -116,7 +130,7 @@ public class Header {
     public Header() {
         // Initialize the title
         this.title = new Label("WordFX");
-        this.title.setId("titleLabel");
+        this.title.getStyleClass().add("titleLabel");
 
         // Initialize header section
         this.headerSection = new BorderPane();
@@ -233,21 +247,22 @@ public class Header {
 
         vBox.setId("setting-vertical-box");
         // Make new labels for the setting menu.
-        Label DarkThemeLabel = new Label("Dark Theme");
+        darkThemeLabel = new Label("Dark Theme");
 
         // Add the items in a vertical alignment with border panes to align to elements.
         BorderPane vBoxBorderDT = new BorderPane();
-        DarkThemeLabel.setId("setting-labels");
+        darkThemeLabel.getStyleClass().add("setting-labels");
         vBox.getChildren().addAll(vBoxBorderDT, new Separator());
-        vBoxBorderDT.setLeft(DarkThemeLabel);
+        vBoxBorderDT.setLeft(darkThemeLabel);
         vBoxBorderDT.setRight(darkModeSlider);
 
         // Add the "Setting" and the "X" in the header.
-        BorderPane topHeader = new BorderPane();
+        topHeader = new BorderPane();
         exitSettingMenu = new Button();
-        topHeader.setId("setting-title");
-        topHeader.setCenter(new Label("SETTINGS"));
-        topHeader.setBottom(new Separator());
+        settingsHeader = new Label("SETTINGS");
+        topHeader.getStyleClass().add("settings-title");
+        settingsHeader.getStyleClass().add("settings-title");
+        topHeader.setCenter(settingsHeader);
         topHeader.setRight(exitSettingMenu);
         borderPane.setTop(topHeader);
 

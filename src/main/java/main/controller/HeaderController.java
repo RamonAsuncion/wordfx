@@ -25,9 +25,11 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import main.main.WordleMain;
 import main.model.GameState;
 import main.model.WordleModel;
 import main.view.Header;
+import main.view.TileView;
 import main.view.WordleView;
 
 /**
@@ -47,6 +49,12 @@ public class HeaderController {
     /** Accounts for the property of the switch button */
     private BooleanProperty switchedOn = new SimpleBooleanProperty(false);
 
+    private TileView tileView;
+
+    public boolean isSwitchedOn() { return switchedOn.get(); }
+
+    public BooleanProperty switchedOnProperty() { return switchedOn; }
+
     /**
      * Construct a header controller for header buttons.
      *
@@ -62,7 +70,7 @@ public class HeaderController {
 
         // Initialize all the buttons
         this.initEventHandlers();
-        this.ToggleSwitch();
+        this.toggleSwitch();
     }
 
     /**
@@ -91,13 +99,12 @@ public class HeaderController {
      */
     private void openSettingMenu() {
         // Create a rectangle (as background) with a size of the whole screen.
-        if (!switchedOn.get()){
-            this.header.getSettingsBackground().setFill(Color.WHITE);
-        }
-        else{
-            this.wordleView.getRoot().setStyle("-fx-background-color: dimgrey");
-            this.header.getSettingsBackground().setFill(Color.DIMGRAY);
-        }
+//        if (!switchedOn.get()){
+//            changeBackground("style.css");
+//        }
+//        else{
+//            changeBackground("dark-mode.css");
+//        }
 
         this.header.getSettingsBackground().heightProperty().bind(this.wordleView.getRoot().heightProperty());
         this.header.getSettingsBackground().widthProperty().bind(this.wordleView.getRoot().widthProperty());
@@ -112,35 +119,18 @@ public class HeaderController {
         });
     }
 
-    public void ToggleSwitch(){
+    public void toggleSwitch(){
         switchedOn.addListener((obs, oldState, newState) -> {
             boolean isOn = newState;
             // switch from left to right 50 is midpoint of rect
             this.header.getTranslateAnimation().setToX(isOn ? 25 : 0);
             this.header.getFillAnimation().setFromValue(isOn ? Color.WHITE : Color.LIGHTGRAY);
-            this.header.getFillAnimation().setToValue(isOn ? Color.LIGHTGRAY : Color.WHITE);
+            this.header.getFillAnimation().setToValue(isOn ? Color.GREEN : Color.WHITE);
             this.header.getAnimation().play();
         });
 
         this.header.getDarkModeSlider().setOnMouseClicked(event -> {
             switchedOn.set(!switchedOn.get());
-            if (switchedOn.get() ){
-            changeBackground("dark-mode");}
-            else{
-                changeBackground("light-mode");
-            }
-
         });
-    }
-
-    private void changeBackground(String style) {
-        if (style.equals("dark-mode")) {
-            this.wordleView.getRoot().setStyle("-fx-background-color: dimgrey");
-            this.header.getSettingsBackground().setFill(Color.DIMGRAY);
-        }
-        else {
-            this.wordleView.getRoot().setStyle("-fx-background-color: white");
-            this.header.getSettingsBackground().setFill(Color.WHITE);
-        }
     }
 }

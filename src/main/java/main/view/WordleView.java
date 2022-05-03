@@ -45,9 +45,6 @@ public class WordleView {
     /** The model of the game */
     private WordleModel wordleModel;
 
-    /** Create button for darkmode */
-    private Button darkMode;
-
     /** Stackpane to contain tiles and win screen */
     private StackPane tileStack;
 
@@ -88,11 +85,6 @@ public class WordleView {
     public StackPane getTileStack() { return tileStack; }
 
     /**
-     * @return The button to create the dark mode
-     */
-    public Button getDarkMode() { return darkMode; }
-
-    /**
      * @return the root containing header, tiles, and keyboard, to create our scene
      */
     public BorderPane getRoot() { return root; }
@@ -106,8 +98,6 @@ public class WordleView {
         // Initialize the root for our display
         this.root = new BorderPane();
         this.root.setId("background");
-        this.darkMode = new Button("DARK\n MODE");
-        this.darkMode.getStyleClass().add("dark-mode-button");
 
         this.playAgainBtn = new Button("Play again?");
         this.playAgainBtn.setId("play-again-btn");
@@ -281,16 +271,5 @@ public class WordleView {
                 }
             }
         }
-    }
-
-    /**
-     * Changes the background of the main screen of the game
-     *
-     * @param filename - filename leading to the image to be used as background
-     */
-    private void changeBackground(String filename) {
-        BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource("/images/"+filename).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        Background background = new Background(backgroundImage);
-        getRoot().setBackground(background);
     }
 }

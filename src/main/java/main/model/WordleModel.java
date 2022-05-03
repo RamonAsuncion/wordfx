@@ -26,6 +26,7 @@ import main.view.Header;
 import main.view.TileView;
 import main.view.VirtualKeyboardView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -263,5 +264,5 @@ public class WordleModel {
      */
     public Label getLetter(int index) { return getListOfGuesses().get(getRow()).get(index); }
 
-
+    public ArrayList<Label> getAllTiles() { return this.tiles.getListOfAllTiles(); }
 }

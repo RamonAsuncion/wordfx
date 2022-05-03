@@ -38,7 +38,11 @@ public class TileView {
     private HBox topPane;
 
     /** List of labels where letters will be placed */
-    private ArrayList<Label> letterList;
+    private ArrayList<Label> listOfTilesInAGuess;
+
+    private ArrayList<Label> listOfAllTiles;
+
+    public ArrayList<Label> getListOfAllTiles() { return listOfAllTiles; }
 
     /** List of all guesses, where each guess is a list of labels (letters) */
     private ArrayList<ArrayList<Label>> guessList;
@@ -68,6 +72,8 @@ public class TileView {
         return tileStackPane;
     }
 
+    public ArrayList<Label> getListOfTilesInAGuess() { return listOfTilesInAGuess; }
+
     /**
      * Simple constructor for the Tile class. Initializes the tiles and
      * topPane, where the topPane represents each row of tiles.
@@ -85,12 +91,14 @@ public class TileView {
         // Initialize the two arraylists to store all the guesses and
         // letters respectively
         guessList = new ArrayList<ArrayList<Label>>();
-        letterList = new ArrayList<>();
+        listOfTilesInAGuess = new ArrayList<>();
+        listOfAllTiles = new ArrayList<>();
 
         // Create the stack pane for the win screen later on
         tileStackPane = new StackPane();
 
         createTilePane(wordLength);
+
     }
 
     /**
@@ -127,7 +135,8 @@ public class TileView {
         topPane.getChildren().add(rect);
 
         // Add label to list of letters
-        letterList.add(rect);
+        listOfTilesInAGuess.add(rect);
+        listOfAllTiles.add(rect);
     }
 
     /**
@@ -137,9 +146,9 @@ public class TileView {
      */
     private void introduceNewGuess() {
         // Add all 5 letters to guess list as a guess
-        guessList.add(letterList);
-        // Make sure to create new letterList (new guess)
-        letterList = new ArrayList<>();
+        guessList.add(listOfTilesInAGuess);
+        // Make sure to create new listOfTilesInAGuess (new guess)
+        listOfTilesInAGuess = new ArrayList<>();
 
         // Create new top pane, meaning new guess on a new horizontal box
         topPane = new HBox();
