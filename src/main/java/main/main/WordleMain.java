@@ -134,6 +134,7 @@ public class WordleMain extends Application {
     private void initBackgroundEventHandlers() {
         final Boolean[] darkModeOn = {false};
         this.wordleModel.getHeader().getDarkModeButton().setOnMouseClicked(e -> {
+            // If dark mode is off, change to dark-mode.css style
             if (!darkModeOn[0]) {
                 switchModes("dark-mode.css");
                 darkModeOn[0] = true;

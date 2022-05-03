@@ -24,6 +24,10 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This class creates the virtual keyboard, with all letter keys
+ * as well and enter key and delete key.
+ */
 public class VirtualKeyboardView {
 
     /** Virtual keyboard node to later be added to scene */

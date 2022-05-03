@@ -32,7 +32,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- *
+ * This is the class that will update the interface that the user
+ * sees. It will take care of the typing showing on the screen, as
+ * well as clicks on virtual keyboard, flipping tiles, shaking tiles
+ * horizontally, showing end messages.
  */
 public class WordleView {
 

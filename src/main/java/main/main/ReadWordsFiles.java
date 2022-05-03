@@ -24,6 +24,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * This class takes care of reading the words.txt files and
+ * creating two sets: one for allowed guesses, one for allowed secret
+ * words.
+ */
 public class ReadWordsFiles {
 
     /** The set of all possible secret words */

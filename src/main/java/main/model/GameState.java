@@ -10,16 +10,26 @@ public enum GameState {
     GAME_WINNER,
     GAME_LOSER;
 
+    /** True is game is playable, false otherwise */
     final boolean playable;
 
+    /**
+     * Make all states false by default
+     */
     GameState() {
         this(false);
     }
 
-    GameState(boolean playable) {
-        this.playable = playable;
-    }
+    /**
+     * Simple constructor that will take a parameters in case
+     * game is in progress of if it is a new game
+     * @param playable - true if playable, false otherwise
+     */
+    GameState(boolean playable) { this.playable = playable; }
 
+    /**
+     * @return true if game is playable, false otherwise
+     */
     public boolean isPlayable() {
         return playable;
     }
