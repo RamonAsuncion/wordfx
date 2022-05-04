@@ -150,6 +150,7 @@ public class WordleController {
         // Start the stage again.
         wm.start(stage);
 
+        // Finish stage once closed
         stage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
