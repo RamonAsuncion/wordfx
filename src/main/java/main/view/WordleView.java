@@ -102,7 +102,6 @@ public class WordleView {
         this.root.setCenter(this.tileStack);
         this.root.setBottom(this.wordleModel.getVk().getKeyboard());
         this.root.setTop(this.wordleModel.getHeader().getHeaderSection());
-        System.out.println("Secret word " + this.wordleModel.getSecretWord());
     }
 
     /**
