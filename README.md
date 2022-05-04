@@ -25,8 +25,6 @@ Composition at Bucknell University.
 
 ## Project Information
 
-Package Structure: csci205_final_project/src/main/java/main
-
 The project is named WordFX. It takes the game Wordle, which has been going viral\
 since the beginning of 2022, and adds more functionalities. If you have never played\
 the viral game before, here is a brief explanation of how it works: You get 6 chances\
@@ -44,6 +42,16 @@ you can choose to play a 3-letter mode, 4-letter mode, or 5-letter mode. Those m
 hard, medium, and easy, respectively. Your streak continues to count even if you change modes.
 
 **Challenge your friends and have fun!**
+
+## Package Structure
+
+![img.png](img.png)
+
+Using the MVC framework, we split the package structure into four parts.\
+Model, View, Controller, and Main. The Model is where all the data structure\
+is defined. The view displays the interface to the user (whatever needs to be\
+displayed goes here). The Controller handles any kind of events. Lastly, Main is\
+where the main JavaFX class is located.
 
 ## How to run it
 
