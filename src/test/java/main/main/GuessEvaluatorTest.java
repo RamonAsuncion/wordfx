@@ -1,8 +1,4 @@
-/**
- * This class is the only class that needs a test. However, because it depends on the model,
- * we are getting a {@ExceptionInInitializerError} which we can't solve. We have tested the game as
- * regular players and the game seems to be working fine (We wish we could have fixed this on time).
- */
+
 
 package main.main;
 
@@ -15,6 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Simple JUnit test for guess analyzer. This is the class that analyzes
+ * all guesses input by users. Notice that you must close the application to
+ * see test results. Each method must be tested individually. Don't
+ * run the entire test!
+ */
 class GuessEvaluatorTest {
 
     private GuessEvaluator evaluator3;
@@ -36,13 +38,13 @@ class GuessEvaluatorTest {
         wordleView3 = new WordleView(wordleModel3);
         evaluator3 = new GuessEvaluator(wordleModel3, wordleView3, "row");
 
-//        wordleModel4 = new WordleModel(4);
-//        wordleView4 = new WordleView(wordleModel4);
-//        evaluator4 = new GuessEvaluator(wordleModel4, wordleView4, "time");
-//
-//        wordleModel5 = new WordleModel(5);
-//        wordleView5 = new WordleView(wordleModel5);
-//        evaluator5 = new GuessEvaluator(wordleModel5, wordleView5, "state");
+        wordleModel4 = new WordleModel(4);
+        wordleView4 = new WordleView(wordleModel4);
+        evaluator4 = new GuessEvaluator(wordleModel4, wordleView4, "time");
+
+        wordleModel5 = new WordleModel(5);
+        wordleView5 = new WordleView(wordleModel5);
+        evaluator5 = new GuessEvaluator(wordleModel5, wordleView5, "state");
 
     }
 
@@ -50,11 +52,11 @@ class GuessEvaluatorTest {
         String analysis3 = evaluator3.analyzeGuess("row", 3);
         assertEquals(analysis3, "***");
 
-//        String analysis4 = evaluator4.analyzeGuess("time", 4);
-//        assertEquals(analysis4, "****");
-//
-//        String analysis5 = evaluator5.analyzeGuess("state", 5);
-//        assertEquals(analysis5, "*****");
+        String analysis4 = evaluator4.analyzeGuess("time", 4);
+        assertEquals(analysis4, "****");
+
+        String analysis5 = evaluator5.analyzeGuess("state", 5);
+        assertEquals(analysis5, "*****");
     }
 
     void guessWrong() {
@@ -80,18 +82,22 @@ class GuessEvaluatorTest {
     @Test
     void loserUser() {
         guessWrong();
-        assertEquals(wordleModel3.getGameState(), GameState.NEW_GAME);
+        evaluator3.loserUser();
+        assertEquals(wordleModel3.getGameState(), GameState.GAME_LOSER);
         assertEquals(wordleModel3.getCurrentWinStreak(), 0);
     }
 
     @Test
     void winnerUser() {
         guessCorrect();
-        assertEquals(wordleModel3.getGameState(), GameState.NEW_GAME); //due to closing app (stays as game winner before closing)
+        evaluator3.winnerUser();
+        evaluator4.winnerUser();
+        evaluator5.winnerUser();
+        assertEquals(wordleModel3.getGameState(), GameState.GAME_WINNER); //due to closing app (stays as game winner before closing)
         assertEquals(wordleModel3.getCurrentWinStreak(), 1);
-//        assertEquals(wordleModel4.getGameState(), GameState.NEW_GAME); //due to closing app (stays as game winner before closing)
-//        assertEquals(wordleModel4.getCurrentWinStreak(), 1);
-//        assertEquals(wordleModel5.getGameState(), GameState.NEW_GAME); //due to closing app (stays as game winner before closing)
-//        assertEquals(wordleModel5.getCurrentWinStreak(), 1);
+        assertEquals(wordleModel4.getGameState(), GameState.GAME_WINNER); //due to closing app (stays as game winner before closing)
+        assertEquals(wordleModel4.getCurrentWinStreak(), 1);
+        assertEquals(wordleModel5.getGameState(), GameState.GAME_WINNER); //due to closing app (stays as game winner before closing)
+        assertEquals(wordleModel5.getCurrentWinStreak(), 1);
     }
 }
