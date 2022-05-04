@@ -25,6 +25,8 @@ Composition at Bucknell University.
 
 ## Project Information
 
+Package Structure: csci205_final_project/src/main/java/main
+
 The project is named WordFX. It takes the game Wordle, which has been going viral\
 since the beginning of 2022, and adds more functionalities. If you have never played\
 the viral game before, here is a brief explanation of how it works: You get 6 chances\
@@ -45,13 +47,13 @@ hard, medium, and easy, respectively. Your streak continues to count even if you
 
 ## How to run it
 
-Third-party libraries needed:
+Third-party libraries needed: JavaFX\
+Version: 17\
+Modules: javafx.graphics, javafx.controls, javafx.fxml\
+Reference: https://openjfx.io/
 
-![img_2.png](gradle-config.png)
+Running the game is very straight forward. After cloning this repo, you must just need\
+to use gradle simply run it by doing gradle run!\
 
-Running the game is very straight forward. After cloning this repo, you must have a\
-gradle configuration similar to the one below, and simply run it! Choose your mode\
-and _have fun_!
-
-![img_1.png](third-parties-needed.png)
+Choose your mode and _have fun_!
 
