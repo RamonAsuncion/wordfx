@@ -61,7 +61,7 @@ Modules: javafx.graphics, javafx.controls, javafx.fxml\
 Reference: https://openjfx.io/
 
 Running the game is very straight forward. After cloning this repo, you must just need\
-to use gradle simply run it by doing gradle run!
+to use gradle simply run it by using the command **-gradle run**!
 
 Choose your mode and _have fun_!
 
