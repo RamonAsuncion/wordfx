@@ -113,7 +113,7 @@ public class GuessEvaluator {
      * @return an encoded string with -, +, and * characters indicating
      * what letters are promising
      */
-    private String analyzeGuess(String currentGuess, int wordLength) {
+    public String analyzeGuess(String currentGuess, int wordLength) {
 
         /** This is the analysis of the given guess, including correct and incorrect letters */
         StringBuffer guessAnalysis = new StringBuffer("-".repeat(wordLength));
@@ -154,7 +154,7 @@ public class GuessEvaluator {
      * @param evaluation - set of *, +, - representing green, yellow, and gray respectively
      * @param currentGuess - last guess given by user
      */
-    private void showAnalysis(String evaluation, String currentGuess) {
+    public void showAnalysis(String evaluation, String currentGuess) {
         String style;
         for (int i = 0; i < wordleModel.getWordLength(); i++) {
 
