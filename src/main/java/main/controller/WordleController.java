@@ -20,12 +20,14 @@ package main.controller;
 
 import javafx.application.Platform;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.model.WordleModel;
 import main.main.GuessEvaluator;
 import main.main.WordleMain;
@@ -134,7 +136,6 @@ public class WordleController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // Set the streak of the game.
         wm.setStreak(this.wordleModel.getCurrentWinStreak());
 
@@ -148,6 +149,11 @@ public class WordleController {
 
         // Start the stage again.
         wm.start(stage);
+
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     /**
