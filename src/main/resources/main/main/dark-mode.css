@@ -181,6 +181,10 @@
     -fx-text-fill: white;
 }
 
+#win-or-lose {
+    -fx-text-fill: white;
+}
+
 #bad-input-message {
     -fx-background-color: black;
     -fx-alignment: center;

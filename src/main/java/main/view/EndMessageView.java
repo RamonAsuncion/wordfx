@@ -129,6 +129,7 @@ public class EndMessageView {
     private void createFinalMessageHeader(String winOrLose, String streakOrSecretWord) {
         /** Contains streak count if winner, secret word if loser */
         Label winOrLoseInfo = new Label(streakOrSecretWord);
+        winOrLoseInfo.setId("win-or-lose");
         this.finalMessageLabel.setText(winOrLose);
         this.endScreenHeader.getChildren().addAll(this.finalMessageLabel, winOrLoseInfo);
     }
