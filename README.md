@@ -45,7 +45,7 @@ hard, medium, and easy, respectively. Your streak continues to count even if you
 
 ## Package Structure
 
-![img.png](img.png)
+![img.png](src/main/resources/images/img.png)
 
 Using the MVC framework, we split the package structure into four parts.\
 Model, View, Controller, and Main. The Model is where all the data structure\
