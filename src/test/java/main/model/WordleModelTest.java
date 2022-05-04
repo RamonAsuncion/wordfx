@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Simple JUnit test for the WordleModel. Notice that you must close the application to
+ * see test results. Each method must be tested individually. Don't
+ * run the entire test!
+ */
 class WordleModelTest {
 
     private WordleModel wordleModel;
