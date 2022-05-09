@@ -65,3 +65,6 @@ to use gradle simply run it by using the command **-gradle run**!
 
 Choose your mode and _have fun_!
 
+## Video Presentation
+
+_Link_: https://mediaspace.bucknell.edu/media/t/1_3gkknshi
