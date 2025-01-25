@@ -1,27 +1,7 @@
 
-# CSCI 205 - Software Engineering and Design Bucknell University
-Lewisburg, PA
-### Course Info
-Instructor: Professor King\
-Semester: Spring 2022
-## Team Information: Liv & Gang
+# WordFX
+
 Members : Pedro Carneiro Passos, Ramón Asunción, Alvin Huynh, and Olivia Peters
-
-**Scrum Master**\
-Pedro Carneiro Passos is currently a Junior majoring in Computer Engineering at\
-Bucknell University. Pedro is also getting a minor in Mathematics and Computer\
-Science.
-
-**Project Manager**\
-Alvin Huynh is currently a Junior majoring in Computer Engineering at Bucknell\
-University. Alvin is getting a minor in Management.
-
-**Developer**\
-Ramon Asunción is currently a Freshman that is undeclared at Bucknell University. 
-
-**Developer**\
-Olivia Peters is currently a Sophomore majoring in Computer Science and Music\
-Composition at Bucknell University. 
 
 ## Project Information
 
@@ -64,7 +44,3 @@ Running the game is very straight forward. After cloning this repo, you must jus
 to use gradle simply run it by using the command **-gradle run**!
 
 Choose your mode and _have fun_!
-
-## Video Presentation
-
-_Link_: https://mediaspace.bucknell.edu/media/t/1_3gkknshi
